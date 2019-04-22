@@ -1,15 +1,14 @@
 package com.deflatedpickle.faosdance
 
-// import org.dyn4j.dynamics.World
-// import org.dyn4j.geometry.Vector2
 import java.awt.*
 import java.awt.event.ActionListener
 import javax.swing.JFrame
-import javax.swing.JLabel
 import javax.swing.Timer
 import java.awt.Color
 import java.awt.GradientPaint
 import java.awt.AlphaComposite
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import javax.swing.JPanel
 
@@ -17,7 +16,7 @@ import javax.swing.JPanel
 @Suppress("KDocMissingDocumentation")
 fun main(args: Array<String>) {
     val sheet = SpriteSheet("", 8, 10)
-    var currentAction = "Waiting"
+    var currentAction = sheet.spriteMap.keys.first()
 
     var animFrame = 0
 
@@ -30,6 +29,37 @@ fun main(args: Array<String>) {
     var yMultiplier = 0.5
 
     val frame = JFrame("FAOSDance")
+
+    var isGrabbed = false
+    var clickedPoint = Point()
+    var animation = currentAction
+    frame.addMouseListener(object : MouseAdapter() {
+        override fun mousePressed(e: MouseEvent) {
+            super.mousePressed(e)
+
+            isGrabbed = true
+            clickedPoint = e.point
+
+            animation = currentAction
+            currentAction = sheet.spriteMap.keys.last()
+        }
+
+        override fun mouseReleased(e: MouseEvent) {
+            super.mouseReleased(e)
+
+            isGrabbed = false
+
+            currentAction = animation
+        }
+
+        override fun mouseDragged(e: MouseEvent) {
+            super.mouseDragged(e)
+
+            if (isGrabbed) {
+                frame.location = Point(e.xOnScreen - clickedPoint.x, e.yOnScreen - clickedPoint.y)
+            }
+        }
+    }.apply { frame.addMouseMotionListener(this) })
 
     val panel = object : JPanel() {
         init {
