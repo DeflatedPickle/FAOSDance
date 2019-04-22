@@ -2,15 +2,14 @@ package com.deflatedpickle.faosdance
 
 import java.awt.*
 import java.awt.event.ActionListener
-import javax.swing.JFrame
-import javax.swing.Timer
 import java.awt.Color
 import java.awt.GradientPaint
 import java.awt.AlphaComposite
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
-import javax.swing.JPanel
+import javax.swing.*
+import javax.swing.filechooser.FileNameExtensionFilter
 
 
 @Suppress("KDocMissingDocumentation")
@@ -28,7 +27,109 @@ fun main(args: Array<String>) {
     var xMultiplier = 0.5
     var yMultiplier = 0.5
 
+    fun addLabelSliderSpinner(parent: JComponent, gridBagLayout: GridBagLayout, text: String, defaultValue: Number, maxNumber: Number, minNumber: Number): Triple<JLabel, JSlider, JSpinner> {
+        val label = JLabel(text)
+        val slider = JSlider((minNumber.toFloat() * 100).toInt(), (maxNumber.toFloat() * 100).toInt(), (defaultValue.toFloat() * 100).toInt())
+        val spinner = JSpinner(SpinnerNumberModel(defaultValue.toDouble(), minNumber.toDouble(), maxNumber.toDouble(), 0.01))
+
+        slider.value = (defaultValue.toFloat() * 100).toInt()
+        spinner.value = defaultValue
+
+        slider.addChangeListener { spinner.value = slider.value.toDouble() / 100 }
+        spinner.addChangeListener { slider.value = (spinner.value as Double * 100).toInt() }
+
+        parent.add(label)
+        parent.add(slider)
+        parent.add(spinner)
+
+        gridBagLayout.setConstraints(slider, GridBagConstraints().apply {
+            fill = GridBagConstraints.HORIZONTAL
+            weightx = 1.0
+        })
+
+        gridBagLayout.setConstraints(spinner, GridBagConstraints().apply {
+            gridwidth = GridBagConstraints.REMAINDER
+        })
+
+        return Triple(label, slider, spinner)
+    }
+
     val frame = JFrame("FAOSDance")
+    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+    SwingUtilities.updateComponentTreeUI(frame)
+
+    val dialog = JDialog(frame, "FAOSDance Settings", true).apply {
+        this.isResizable = false
+        val gridBagLayout = GridBagLayout()
+
+        this.add(JLabel("Action:"))
+        this.add(JComboBox<String>(sheet.spriteMap.keys.toTypedArray()).apply {
+            selectedIndex = sheet.spriteMap.keys.indexOf(selectedItem as String)
+            addActionListener { currentAction = (it.source as JComboBox<*>).selectedItem as String }
+
+            gridBagLayout.setConstraints(this, GridBagConstraints().apply {
+                fill = GridBagConstraints.HORIZONTAL
+                weightx = 1.0
+                gridwidth = GridBagConstraints.REMAINDER
+            })
+        })
+
+        this.add(JPanel().apply {
+            this.border = BorderFactory.createTitledBorder("Size")
+            this.layout = GridBagLayout()
+
+            addLabelSliderSpinner(this, this.layout as GridBagLayout, "Width:", xMultiplier, 5.0, 0.1).third.addChangeListener { xMultiplier = (it.source as JSpinner).model.value as Double }
+
+            addLabelSliderSpinner(this, this.layout as GridBagLayout, "Height:", yMultiplier, 5.0, 0.1).third.addChangeListener { yMultiplier = (it.source as JSpinner).model.value as Double }
+
+            gridBagLayout.setConstraints(this, GridBagConstraints().apply {
+                fill = GridBagConstraints.BOTH
+                weightx = 1.0
+                gridwidth = GridBagConstraints.REMAINDER
+            })
+        })
+
+        this.add(JPanel().apply {
+            this.border = BorderFactory.createTitledBorder("Reflection")
+            this.layout = GridBagLayout()
+
+            addLabelSliderSpinner(this, this.layout as GridBagLayout, "Padding:", reflectionPadding, 50.0, 0.0).third.addChangeListener { reflectionPadding = (it.source as JSpinner).model.value as Double }
+
+            this.add(JPanel().apply {
+                this.border = BorderFactory.createTitledBorder("Fade")
+                this.layout = GridBagLayout()
+
+                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Height:", fadeHeight, 0.9, 0.1).third.addChangeListener { fadeHeight = ((it.source as JSpinner).model.value as Double).toFloat() }
+
+                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Opacity:", fadeOpacity, 0.9, 0.1).third.addChangeListener { fadeOpacity = ((it.source as JSpinner).model.value as Double).toFloat() }
+            }.also {
+                (this.layout as GridBagLayout).setConstraints(it, GridBagConstraints().apply {
+                    fill = GridBagConstraints.BOTH
+                    weightx = 1.0
+                    gridwidth = GridBagConstraints.REMAINDER
+                })
+            })
+
+            gridBagLayout.setConstraints(this, GridBagConstraints().apply {
+                fill = GridBagConstraints.BOTH
+                weightx = 1.0
+                gridwidth = GridBagConstraints.REMAINDER
+            })
+        })
+
+        this.layout = gridBagLayout
+    }
+
+    val contextMenu = JPopupMenu().apply {
+        this.add(JMenuItem("Settings").apply {
+            addActionListener {
+                dialog.size = Dimension(400, 260)
+                dialog.setLocationRelativeTo(frame)
+
+                dialog.isVisible = true
+            }
+        })
+    }
 
     var isGrabbed = false
     var clickedPoint = Point()
@@ -37,19 +138,26 @@ fun main(args: Array<String>) {
         override fun mousePressed(e: MouseEvent) {
             super.mousePressed(e)
 
-            isGrabbed = true
-            clickedPoint = e.point
+            if (e.button == 1) {
+                isGrabbed = true
+                clickedPoint = e.point
 
-            animation = currentAction
-            currentAction = sheet.spriteMap.keys.last()
+                animation = currentAction
+                currentAction = sheet.spriteMap.keys.last()
+            }
+            else if (e.button == 3) {
+                contextMenu.show(frame, e.x, e.y)
+            }
         }
 
         override fun mouseReleased(e: MouseEvent) {
             super.mouseReleased(e)
 
-            isGrabbed = false
+            if (e.button == 1) {
+                isGrabbed = false
 
-            currentAction = animation
+                currentAction = animation
+            }
         }
 
         override fun mouseDragged(e: MouseEvent) {
