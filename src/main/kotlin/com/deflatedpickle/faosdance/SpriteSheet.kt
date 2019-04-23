@@ -1,6 +1,5 @@
 package com.deflatedpickle.faosdance
 
-import java.awt.Image
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
@@ -9,7 +8,7 @@ import javax.imageio.ImageIO
 /**
  * A sprite sheet
  */
-class SpriteSheet(image: String, spriteNumX: Int, spriteNumY: Int) {
+class SpriteSheet(image: String, spriteNumX: Int = 8, var spriteNumY: Int? = null) {
     /**
      * The map of sprites cut from the sheet
      */
@@ -30,8 +29,12 @@ class SpriteSheet(image: String, spriteNumX: Int, spriteNumY: Int) {
         val sheet = ImageIO.read(File("$image.png"))!!
         val animations = File("$image.txt").readText()
 
+        if (spriteNumY == null) {
+            spriteNumY = animations.lines().size
+        }
+
         spriteWidth = sheet.width / spriteNumX
-        spriteHeight = sheet.height / spriteNumY
+        spriteHeight = sheet.height / spriteNumY!!
 
         var gridX = 0
         var gridY = 0
