@@ -1,5 +1,8 @@
 package com.deflatedpickle.faosdance
 
+import javax.swing.JFrame
+import javax.swing.Timer
+
 object GlobalValues {
     var sheet: SpriteSheet? = null
     var currentAction = ""
@@ -14,5 +17,15 @@ object GlobalValues {
     var xMultiplier = 0.5
     var yMultiplier = 0.5
 
+    var delay = 120
+
+    var isVisible = true
+    var isSolid = true
+    var isTopLevel = true
+
     var currentPath = System.getProperty("user.home")
+
+    var timer: Timer? = null
+
+    var frame: JFrame? = null
 }

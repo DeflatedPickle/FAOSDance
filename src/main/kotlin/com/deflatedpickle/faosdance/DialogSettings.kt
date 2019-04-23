@@ -1,11 +1,9 @@
 package com.deflatedpickle.faosdance
 
-import java.awt.Dimension
-import java.awt.Frame
-import java.awt.GridBagConstraints
-import java.awt.GridBagLayout
+import java.awt.*
 import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
+import kotlin.math.roundToInt
 
 class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) {
     val gridBagLayout = GridBagLayout()
@@ -14,6 +12,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         this.isResizable = false
 
         createWidgets()
+        this.size = Dimension(400, 320)
 
         this.layout = gridBagLayout
     }
@@ -47,6 +46,8 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     GlobalValues.currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
                     resize()
 
+                    GlobalValues.currentPath = fileChooser.selectedFile.parentFile.absolutePath
+
                     createWidgets()
                 }
             }
@@ -63,6 +64,32 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         })
 
         if (GlobalValues.sheet != null) {
+            addLabelSliderSpinner(this, gridBagLayout, "Frame Delay:", GlobalValues.delay, 120.0 * 4, 1.0).third.addChangeListener {
+                GlobalValues.delay = ((it.source as JSpinner).model.value as Double).roundToInt()
+                GlobalValues.timer!!.delay = GlobalValues.delay
+            }
+
+            this.add(JCheckBox("Visible").apply {
+                isSelected = GlobalValues.isVisible
+
+                addActionListener { GlobalValues.isVisible = this.isSelected }
+            })
+            this.add(JCheckBox("Solid").apply {
+                isSelected = GlobalValues.isSolid
+
+                addActionListener { GlobalValues.isSolid = this.isSelected }
+            })
+            this.add(JCheckBox("Always On Top").apply {
+                isSelected = GlobalValues.isTopLevel
+
+                addActionListener {
+                    GlobalValues.isTopLevel = this.isSelected
+                    GlobalValues.frame!!.isAlwaysOnTop = GlobalValues.isTopLevel
+                }
+
+                gridBagLayout.setConstraints(this, GridBagConstraints().apply { gridwidth = GridBagConstraints.REMAINDER })
+            })
+
             this.add(JPanel().apply {
                 this.border = BorderFactory.createTitledBorder("Size")
                 this.layout = GridBagLayout()
@@ -111,7 +138,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         repaint()
     }
 
-    private fun addLabelSliderSpinner(parent: JComponent, gridBagLayout: GridBagLayout, text: String, defaultValue: Number, maxNumber: Number, minNumber: Number): Triple<JLabel, JSlider, JSpinner> {
+    private fun addLabelSliderSpinner(parent: Container, gridBagLayout: GridBagLayout, text: String, defaultValue: Number, maxNumber: Number, minNumber: Number): Triple<JLabel, JSlider, JSpinner> {
         val label = JLabel(text)
         val slider = JSlider((minNumber.toFloat() * 100).toInt(), (maxNumber.toFloat() * 100).toInt(), (defaultValue.toFloat() * 100).toInt())
         val spinner = JSpinner(SpinnerNumberModel(defaultValue.toDouble(), minNumber.toDouble(), maxNumber.toDouble(), 0.01))

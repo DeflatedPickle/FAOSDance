@@ -1,15 +1,12 @@
 package com.deflatedpickle.faosdance
 
 import java.awt.*
-import java.awt.event.ActionListener
-import java.awt.Color
-import java.awt.GradientPaint
 import java.awt.AlphaComposite
+import java.awt.event.ActionListener
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import javax.swing.*
-import javax.swing.filechooser.FileNameExtensionFilter
 
 
 @Suppress("KDocMissingDocumentation")
@@ -18,11 +15,17 @@ fun main(args: Array<String>) {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     SwingUtilities.updateComponentTreeUI(frame)
 
+    frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+
+    frame.isUndecorated = true
+    frame.background = Color(0, 0, 0, 0)
+
+    GlobalValues.frame = frame
+
     val contextMenu = JPopupMenu().apply {
         this.add(JMenuItem("Settings").apply {
             addActionListener {
                 val dialog = DialogSettings(frame)
-                dialog.size = Dimension(400, 260)
                 dialog.setLocationRelativeTo(frame)
 
                 dialog.isVisible = true
@@ -37,7 +40,7 @@ fun main(args: Array<String>) {
         override fun mousePressed(e: MouseEvent) {
             super.mousePressed(e)
 
-            if (e.button == 1) {
+            if (e.button == 1 && GlobalValues.isSolid) {
                 isGrabbed = true
                 clickedPoint = e.point
 
@@ -55,7 +58,7 @@ fun main(args: Array<String>) {
         override fun mouseReleased(e: MouseEvent) {
             super.mouseReleased(e)
 
-            if (e.button == 1) {
+            if (e.button == 1 && GlobalValues.isSolid) {
                 isGrabbed = false
 
                 GlobalValues.currentAction = animation
@@ -79,7 +82,7 @@ fun main(args: Array<String>) {
         override fun paintComponent(g: Graphics) {
             super.paintComponent(g)
 
-            if (GlobalValues.sheet == null) return
+            if (GlobalValues.sheet == null || !GlobalValues.isVisible) return
 
             val g2D = g as Graphics2D
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
@@ -106,13 +109,7 @@ fun main(args: Array<String>) {
     }
     frame.add(panel)
 
-    frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-
-    frame.isUndecorated = true
-    frame.isAlwaysOnTop = true
-    frame.background = Color(0, 0, 0, 0)
-
-    val timer = Timer(120, ActionListener {
+    GlobalValues.timer = Timer(GlobalValues.delay, ActionListener {
         GlobalValues.animFrame++
 
         if (GlobalValues.animFrame >= 8) {
@@ -122,7 +119,7 @@ fun main(args: Array<String>) {
         frame.revalidate()
         frame.repaint()
     })
-    timer.start()
+    GlobalValues.timer!!.start()
 
     frame.pack()
     frame.isVisible = true
@@ -130,7 +127,6 @@ fun main(args: Array<String>) {
     frame.setLocationRelativeTo(null)
 
     val dialog = DialogSettings(frame)
-    dialog.size = Dimension(400, 260)
     dialog.setLocationRelativeTo(frame)
 
     dialog.isVisible = true
