@@ -1,0 +1,26 @@
+os: windows
+language: shell
+install: true
+branches:
+  only:
+    - master
+cache:
+  directories:
+    - java8
+    - gradle
+before_script:
+  - choco install jdk8 -params 'installdir=c:\\java8'
+  - export PATH=$PATH:"/c/java8/bin"
+  - choco install gradle --version 4.10 -params 'installdir=c:\\gradle'
+  - export PATH=$PATH:"/c/gradle/bin"
+script:
+  - gradle build
+deploy:
+  provider: releases
+  api_key:
+    secure: n3RwgIqZ62jMUTS/eKl7MkX75QI2qnabPPJpmZ/utNg0+eNcnzTSAH/1sDcamIWMMiRORm6xEHXsrdy5k6DaoHU+A2FwFgL7XwX3Pr39lYCdpCMTBwcLehqmP+XUcfpVOk8f5RdSaFZJUOixwuQi407CWXEoy1k7dV58rfgs1piMpq2MtjxY6vg0w5V721+cgolkZ/qmJnBnlR4wY9qouHEkU2lAUmZOeDxb2oehKcfKVIvJV87LcH63Z3B1bRItCV0FluDMXFZPE4pjH9C5cUT783OEeQvG03VvtyiX4jCXyUomdSHycswMGh9InMp6+Wlb8gpflfxPU7rI2uy2IQPQmy/tEVVGQNW9nkzrhe+fjORFci/WxQuOqZKsLS653TQazAXf5Lc/WRcLXt9FJ3ybj0PCwS1PM80Xw9WxfUtQ6/vE7zNvoWbU7PX7f32xdL8rdtqh9L/pqIz2wgRlX6RhhkyW3GXZC/uI+0NkEDJvgQq/Jfq9TlaCsatACdu592emjBLR6JRIDcKI5rsGaNWizCnhdoz7MQIgRsuD2hez8hCLgLcjw2Q9AoBbN7WCNTvxyEI6T+k0b3uxhKeHf47Qg2Go5SZieI3Zp1AtFzgRjb06MgZjyWExooItX8o5+EeaFDhEbvDBo7Bi6m1qa9NMmPp/uMdpyuY4cV0TaJs=
+  file: 'c:\\Users\\travis\\build\\DeflatedPickle\\FAOSDance\\build\\libs\\FAOSDance.jar'
+  on:
+    repo: DeflatedPickle/FAOSDance
+  draft: true
+  skip_cleanup: true
