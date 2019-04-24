@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     SwingUtilities.updateComponentTreeUI(frame)
 
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-
+    frame.isAlwaysOnTop = true
     frame.isUndecorated = true
     frame.background = Color(0, 0, 0, 0)
 

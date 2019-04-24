@@ -13,5 +13,5 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 - Download the FL-Chan (or similar) sprite sheet and text file (can be found in the FL Studio files, or you can [download a big version](http://www.image-line.com/support/FLHelp/content/FLChan_HD.zip))
 - Run the program
     - Click the big "Open" button
-        - Locate the Fl-Chan (or similar) sprite sheet and text file
+        - Locate the FL-Chan (or similar) sprite sheet and text file
             - Double-click either one, or click it and then click "Open"
