@@ -4,6 +4,8 @@ import javax.swing.JFrame
 import javax.swing.Timer
 
 object GlobalValues {
+    val maxSize = 10.0
+
     var sheet: SpriteSheet? = null
     var currentAction = ""
 

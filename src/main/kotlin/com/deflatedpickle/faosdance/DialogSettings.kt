@@ -94,9 +94,15 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 this.border = BorderFactory.createTitledBorder("Size")
                 this.layout = GridBagLayout()
 
-                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Width:", GlobalValues.xMultiplier, 5.0, 0.1).third.addChangeListener { GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double }
+                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Width:", GlobalValues.xMultiplier, GlobalValues.maxSize, 0.1).third.addChangeListener {
+                    GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double
+                    resize()
+                }
 
-                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Height:", GlobalValues.yMultiplier, 5.0, 0.1).third.addChangeListener { GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double }
+                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Height:", GlobalValues.yMultiplier, GlobalValues.maxSize, 0.1).third.addChangeListener {
+                    GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double
+                    resize()
+                }
 
                 gridBagLayout.setConstraints(this, GridBagConstraints().apply {
                     fill = GridBagConstraints.BOTH
@@ -109,7 +115,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 this.border = BorderFactory.createTitledBorder("Reflection")
                 this.layout = GridBagLayout()
 
-                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Padding:", GlobalValues.reflectionPadding, 50.0, 0.0).third.addChangeListener { GlobalValues.reflectionPadding = (it.source as JSpinner).model.value as Double }
+                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Padding:", GlobalValues.reflectionPadding, 100.0, -100.0).third.addChangeListener { GlobalValues.reflectionPadding = (it.source as JSpinner).model.value as Double }
 
                 this.add(JPanel().apply {
                     this.border = BorderFactory.createTitledBorder("Fade")
