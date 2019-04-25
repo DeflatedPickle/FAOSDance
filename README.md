@@ -1,5 +1,10 @@
-# FAOSDance
+# FAOSDance ![GitHub Last Commit](https://img.shields.io/github/last-commit/DeflatedPickle/FAOSDance.svg) [![Build Status](https://travis-ci.org/DeflatedPickle/FAOSDance.svg?branch=master)](https://travis-ci.org/DeflatedPickle/FAOSDance)
 A stand-alone, free and open-source implementation of the Fruity Dance plugin from FL Studio.
+
+| | Downloads |
+|---|---|
+| **Latest** | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.2-alpha/total.svg) |
+| | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.0-alpha/total.svg) |
 
 ### Comparison With Fruity Dance
 | | Fruity Dance | FAOSDance |
