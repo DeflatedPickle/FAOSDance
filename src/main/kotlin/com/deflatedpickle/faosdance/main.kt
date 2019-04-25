@@ -5,13 +5,17 @@ import java.awt.AlphaComposite
 import java.awt.event.ActionListener
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import java.awt.event.WindowEvent
 import java.awt.image.BufferedImage
 import javax.swing.*
 
 
 @Suppress("KDocMissingDocumentation")
 fun main(args: Array<String>) {
+    val icon = ImageIcon(ClassLoader.getSystemResource("Icon.png"), "FAOSDance")
+
     val frame = JFrame("FAOSDance")
+    frame.iconImage = icon.image
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     SwingUtilities.updateComponentTreeUI(frame)
 
@@ -19,18 +23,69 @@ fun main(args: Array<String>) {
     frame.isAlwaysOnTop = true
     frame.isUndecorated = true
     frame.background = Color(0, 0, 0, 0)
+    frame.type = Window.Type.UTILITY
 
     GlobalValues.frame = frame
 
-    val contextMenu = JPopupMenu().apply {
-        this.add(JMenuItem("Settings").apply {
-            addActionListener {
-                val dialog = DialogSettings(frame)
-                dialog.setLocationRelativeTo(frame)
+    val contextMenu = JPopupMenu()
+    val menuItems = mutableListOf<JComponent>()
 
-                dialog.isVisible = true
+    JMenuItem("Move to Centre").apply {
+        contextMenu.add(this)
+        menuItems.add(this)
+
+        addActionListener {
+            frame.setLocationRelativeTo(null)
+        }
+    }
+
+    JSeparator().apply {
+        contextMenu.add(this)
+        menuItems.add(this)
+    }
+
+    JMenuItem("Settings").apply {
+        contextMenu.add(this)
+        menuItems.add(this)
+
+        addActionListener {
+            val dialog = DialogSettings(frame)
+            dialog.setLocationRelativeTo(frame)
+
+            dialog.isVisible = true
+        }
+    }
+
+    JSeparator().apply {
+        contextMenu.add(this)
+        menuItems.add(this)
+    }
+
+    JMenuItem("Exit").apply {
+        contextMenu.add(this)
+        menuItems.add(this)
+
+        addActionListener {
+            frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
+        }
+    }
+
+    if (SystemTray.isSupported()) {
+        val systemTray = SystemTray.getSystemTray()
+
+        val trayIcon = TrayIcon(icon.image, frame.title, object : PopupMenu() {
+            init {
+                for (i in menuItems) {
+                    if (i is JMenuItem) {
+                        this.add(MenuItem(i.text).apply { addActionListener(i.actionListeners[0]) })
+                    }
+                    else if (i is JSeparator) {
+                        this.addSeparator()
+                    }
+                }
             }
-        })
+        }).apply { isImageAutoSize = true }
+        systemTray.add(trayIcon)
     }
 
     var isGrabbed = false
@@ -49,8 +104,7 @@ fun main(args: Array<String>) {
                 if (GlobalValues.sheet != null) {
                     GlobalValues.currentAction = GlobalValues.sheet!!.spriteMap.keys.last()
                 }
-            }
-            else if (e.button == 3) {
+            } else if (e.button == 3) {
                 contextMenu.show(frame, e.x, e.y)
             }
         }
@@ -87,21 +141,46 @@ fun main(args: Array<String>) {
             val g2D = g as Graphics2D
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
 
-            g2D.translate((this.width - GlobalValues.sheet!!.spriteWidth * GlobalValues.xMultiplier) / 2, (this.height - GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2)
+            g2D.translate(
+                (this.width - GlobalValues.sheet!!.spriteWidth * GlobalValues.xMultiplier) / 2,
+                (this.height - GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2
+            )
 
-            g2D.translate(0.0, -(GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2 - GlobalValues.reflectionPadding)
+            g2D.translate(
+                0.0,
+                -(GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2 - GlobalValues.reflectionPadding
+            )
             g2D.scale(GlobalValues.xMultiplier, GlobalValues.yMultiplier)
-            g2D.drawRenderedImage(GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame], null)
+            g2D.drawRenderedImage(
+                GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame],
+                null
+            )
 
-            g2D.translate(0.0, (GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) * 4 + (GlobalValues.reflectionPadding * 4))
+            g2D.translate(
+                0.0,
+                (GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) * 4 + (GlobalValues.reflectionPadding * 4)
+            )
             g2D.scale(1.0, -1.0)
 
-            val reflection = BufferedImage(GlobalValues.sheet!!.spriteWidth, GlobalValues.sheet!!.spriteHeight, BufferedImage.TYPE_INT_ARGB)
+            val reflection = BufferedImage(
+                GlobalValues.sheet!!.spriteWidth,
+                GlobalValues.sheet!!.spriteHeight,
+                BufferedImage.TYPE_INT_ARGB
+            )
             val rg = reflection.createGraphics()
-            rg.drawRenderedImage(GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame], null)
+            rg.drawRenderedImage(
+                GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame],
+                null
+            )
             rg.composite = AlphaComposite.getInstance(AlphaComposite.DST_IN)
-            rg.paint = GradientPaint(0f, GlobalValues.sheet!!.spriteHeight.toFloat() * GlobalValues.fadeHeight, Color(0.0f, 0.0f, 0.0f, 0.0f),
-                    0f, GlobalValues.sheet!!.spriteHeight.toFloat(), Color(0.0f, 0.0f, 0.0f, GlobalValues.fadeOpacity))
+            rg.paint = GradientPaint(
+                0f,
+                GlobalValues.sheet!!.spriteHeight.toFloat() * GlobalValues.fadeHeight,
+                Color(0.0f, 0.0f, 0.0f, 0.0f),
+                0f,
+                GlobalValues.sheet!!.spriteHeight.toFloat(),
+                Color(0.0f, 0.0f, 0.0f, GlobalValues.fadeOpacity)
+            )
             rg.fillRect(0, 0, GlobalValues.sheet!!.spriteWidth, GlobalValues.sheet!!.spriteHeight)
             rg.dispose()
             g2D.drawRenderedImage(reflection, null)
