@@ -42,13 +42,17 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 val returnValue = fileChooser.showOpenDialog(owner)
 
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    GlobalValues.sheet = SpriteSheet(fileChooser.selectedFile.absolutePath.substringBeforeLast("."))
-                    GlobalValues.currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
-                    resize()
+                    val tempSheet = SpriteSheet(fileChooser.selectedFile.absolutePath.substringBeforeLast("."))
 
-                    GlobalValues.currentPath = fileChooser.selectedFile.parentFile.absolutePath
+                    if (tempSheet.loadedImage && tempSheet.loadedText) {
+                        GlobalValues.sheet = tempSheet
+                        GlobalValues.currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
+                        resize()
 
-                    createWidgets()
+                        GlobalValues.currentPath = fileChooser.selectedFile.parentFile.absolutePath
+
+                        createWidgets()
+                    }
                 }
             }
 
