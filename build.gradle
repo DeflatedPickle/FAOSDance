@@ -19,6 +19,8 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    compile 'com.electronwill.night-config:toml:3.6.0'
 }
 
 compileKotlin {

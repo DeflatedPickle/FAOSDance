@@ -1,5 +1,6 @@
 package com.deflatedpickle.faosdance
 
+import java.awt.Dimension
 import javax.swing.JFrame
 import javax.swing.Timer
 
@@ -30,4 +31,18 @@ object GlobalValues {
     var timer: Timer? = null
 
     var frame: JFrame? = null
+
+    fun resize() {
+        val width = ((((sheet!!.spriteWidth * xMultiplier) * 2) * 100) / 100).toInt()
+        val height = ((((sheet!!.spriteHeight * yMultiplier) * 2) * 100) / 100).toInt()
+
+        frame!!.minimumSize = Dimension(width, height)
+        frame!!.setSize(width, height)
+    }
+
+    fun configureSpriteSheet(sheet: SpriteSheet) {
+        GlobalValues.sheet = sheet
+        GlobalValues.currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
+        GlobalValues.resize()
+    }
 }

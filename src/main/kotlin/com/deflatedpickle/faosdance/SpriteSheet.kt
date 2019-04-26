@@ -2,7 +2,6 @@ package com.deflatedpickle.faosdance
 
 import java.awt.image.BufferedImage
 import java.io.File
-import java.io.FileNotFoundException
 import javax.imageio.ImageIO
 import javax.swing.JOptionPane
 

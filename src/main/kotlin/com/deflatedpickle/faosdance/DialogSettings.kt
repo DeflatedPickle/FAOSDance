@@ -45,10 +45,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     val tempSheet = SpriteSheet(fileChooser.selectedFile.absolutePath.substringBeforeLast("."))
 
                     if (tempSheet.loadedImage && tempSheet.loadedText) {
-                        GlobalValues.sheet = tempSheet
-                        GlobalValues.currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
-                        resize()
-
+                        GlobalValues.configureSpriteSheet(tempSheet)
                         GlobalValues.currentPath = fileChooser.selectedFile.parentFile.absolutePath
 
                         createWidgets()
@@ -100,12 +97,12 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
 
                 addLabelSliderSpinner(this, this.layout as GridBagLayout, "Width:", GlobalValues.xMultiplier, GlobalValues.maxSize, 0.1).third.addChangeListener {
                     GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double
-                    resize()
+                    GlobalValues.resize()
                 }
 
                 addLabelSliderSpinner(this, this.layout as GridBagLayout, "Height:", GlobalValues.yMultiplier, GlobalValues.maxSize, 0.1).third.addChangeListener {
                     GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double
-                    resize()
+                    GlobalValues.resize()
                 }
 
                 gridBagLayout.setConstraints(this, GridBagConstraints().apply {
@@ -173,14 +170,5 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         })
 
         return Triple(label, slider, spinner)
-    }
-
-
-    fun resize() {
-        val width = ((((GlobalValues.sheet!!.spriteWidth * GlobalValues.xMultiplier) * 2) * 100) / 100).toInt()
-        val height = ((((GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) * 2) * 100) / 100).toInt()
-
-        owner.minimumSize = Dimension(width, height)
-        owner.setSize(width, height)
     }
 }

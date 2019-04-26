@@ -27,6 +27,8 @@ fun main(args: Array<String>) {
 
     GlobalValues.frame = frame
 
+    ConfigFile.loadAndUseConfig()
+
     val contextMenu = JPopupMenu()
     val menuItems = mutableListOf<JComponent>()
 
@@ -205,8 +207,10 @@ fun main(args: Array<String>) {
 
     frame.setLocationRelativeTo(null)
 
-    val dialog = DialogSettings(frame)
-    dialog.setLocationRelativeTo(frame)
+    if (GlobalValues.sheet == null) {
+        val dialog = DialogSettings(frame)
+        dialog.setLocationRelativeTo(frame)
 
-    dialog.isVisible = true
+        dialog.isVisible = true
+    }
 }
