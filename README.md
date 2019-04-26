@@ -3,7 +3,8 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 
 | | Downloads |
 |---|---|
-| **Latest** | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.2-alpha/total.svg) |
+| **Latest** | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.5-alpha/total.svg) |
+| | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.2-alpha/total.svg) |
 | | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.0-alpha/total.svg) |
 
 ### Comparison With Fruity Dance
@@ -13,10 +14,59 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 | **Pros** | Has a frame blending slider | Free and stand-alone, more customizable |
 | **Cons** | Requires owning (paid or trial) and running FL Studio | Doesn't have drag-and-drop for images |
 
+---
+
 ### How To Use
+#### Setting Up
 - Download the JAR from the [latest release](https://github.com/DeflatedPickle/FAOSDance/releases/latest)
 - Download the FL-Chan (or similar) sprite sheet and text file (can be found in the FL Studio files, or you can [download a big version](http://www.image-line.com/support/FLHelp/content/FLChan_HD.zip))
 - Run the program
     - Click the big "Open" button
         - Locate the FL-Chan (or similar) sprite sheet and text file
             - Double-click either one, or click it and then click "Open"
+            
+### Using The Config
+#### Showing File Extensions
+- Using the File Explorer, navigate to the `View` menu, click it
+    - Navigate to the `Options` button, click it
+        - Change to the `View` tab
+            - Untick the `Hide extensions for known file types` checkbox
+                - Click the `Ok` button
+#### Editing Files In The Program
+##### Option 1
+- Right-click on the program file
+    - Select the `Rename` option
+        - Change the extension (the text shown after the dot) to `zip`
+- Double-click the program file
+- Open the `config.toml` file and configure it using the details below
+
+##### Option 2
+- Right-click the program file
+    - Open it with an archiving program, such as; WinRAR, 7-Zip or WinZip
+- Open the `config.toml` file and configure it using the details below
+
+#### Config Options
+| Option | Description |
+|---|---|
+| `sprite.sheet` | The path to the sprite sheet name to use, without any extensions |
+| `sprite.action` | The action to start play through |
+| `sprite.frame_delay` | The amount of delay between each frame |
+| `sprite.visible` | Whether or not the sprite is visible |
+| `sprite.solid` | Whether or not the sprite can be clicked and dragged |
+| `sprite.always_on_top` | Whether or not the program stays above other windows |
+| `size.width` | The width of the sprite |
+| `size.height` | The height of the sprite |
+| `reflection.padding` | The amount of padding (centered) between the sprite and the reflection |
+| `reflection.fade.height` | The amount of the reflection hidden, from the bottom up |
+| `reflection.fade.opacity` | The opacity of the reflection |
+#### Config Example
+```toml
+[sprite]
+sheet="path/to/file/without/extensions"
+action="Zitabata"
+frame_delay=1
+
+[size]
+width=1.0
+height=1.0
+```
