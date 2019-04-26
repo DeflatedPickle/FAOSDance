@@ -12,7 +12,7 @@ import javax.swing.*
 
 @Suppress("KDocMissingDocumentation")
 fun main(args: Array<String>) {
-    val icon = ImageIcon(ClassLoader.getSystemResource("Icon.png"), "FAOSDance")
+    val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
 
     val frame = JFrame("FAOSDance")
     frame.iconImage = icon.image
@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
 
     GlobalValues.frame = frame
 
-    ConfigFile.loadAndUseConfig()
+    val config = ConfigFile.loadAndUseConfig()
 
     val contextMenu = JPopupMenu()
     val menuItems = mutableListOf<JComponent>()
@@ -207,7 +207,7 @@ fun main(args: Array<String>) {
 
     frame.setLocationRelativeTo(null)
 
-    if (GlobalValues.sheet == null) {
+    if (!config) {
         val dialog = DialogSettings(frame)
         dialog.setLocationRelativeTo(frame)
 
