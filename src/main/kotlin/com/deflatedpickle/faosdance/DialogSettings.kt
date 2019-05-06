@@ -1,6 +1,11 @@
 package com.deflatedpickle.faosdance
 
 import java.awt.*
+import java.awt.datatransfer.DataFlavor
+import java.awt.dnd.DnDConstants
+import java.awt.dnd.DropTarget
+import java.awt.dnd.DropTargetDropEvent
+import java.io.File
 import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.math.roundToInt
@@ -21,7 +26,11 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         contentPane.removeAll()
 
         if (GlobalValues.sheet != null) {
-            this.add(JLabel("Action:"))
+            this.add(JLabel("Action:").also {
+                gridBagLayout.setConstraints(it, GridBagConstraints().apply {
+                    anchor = GridBagConstraints.EAST
+                })
+            })
 
             this.add(JComboBox<String>(GlobalValues.sheet!!.spriteMap.keys.toTypedArray()).apply {
                 selectedIndex = GlobalValues.sheet!!.spriteMap.keys.indexOf(selectedItem as String)
@@ -35,9 +44,33 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         }
 
         this.add(JButton("Open").apply {
+            dropTarget = object : DropTarget() {
+                override fun drop(dtde: DropTargetDropEvent) {
+                    // super.drop(dtde)
+
+                    dtde.acceptDrop(DnDConstants.ACTION_COPY)
+                    val droppedFiles = dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>
+
+                    if (droppedFiles.size == 1) {
+                        val tempSheet = SpriteSheet(droppedFiles[0].absolutePath.substringBeforeLast("."))
+
+                        if (tempSheet.loadedImage && tempSheet.loadedText) {
+                            GlobalValues.configureSpriteSheet(tempSheet)
+                            GlobalValues.currentPath = droppedFiles[0].parentFile.absolutePath
+
+                            createWidgets()
+                        }
+                    }
+                }
+            }
+
             addActionListener {
                 val fileChooser = JFileChooser(GlobalValues.currentPath)
-                fileChooser.addChoosableFileFilter(FileNameExtensionFilter("PNG (*.png)", "png").also { fileChooser.fileFilter = it })
+                fileChooser.addChoosableFileFilter(
+                    FileNameExtensionFilter(
+                        "PNG (*.png)",
+                        "png"
+                    ).also { fileChooser.fileFilter = it })
                 fileChooser.addChoosableFileFilter(FileNameExtensionFilter("JPEG (*.jpg; *.jpeg)", "jpg", "jpeg"))
                 val returnValue = fileChooser.showOpenDialog(owner)
 
@@ -65,7 +98,14 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         })
 
         if (GlobalValues.sheet != null) {
-            addLabelSliderSpinner(this, gridBagLayout, "Frames Per Second:", GlobalValues.fps, 144.0, 1.0).third.addChangeListener {
+            addLabelSliderSpinner(
+                this,
+                gridBagLayout,
+                "Frames Per Second:",
+                GlobalValues.fps,
+                144.0,
+                1.0
+            ).third.addChangeListener {
                 GlobalValues.fps = ((it.source as JSpinner).model.value as Double).roundToInt()
                 GlobalValues.timer!!.delay = 1000 / GlobalValues.fps
             }
@@ -88,19 +128,35 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     GlobalValues.frame!!.isAlwaysOnTop = GlobalValues.isTopLevel
                 }
 
-                gridBagLayout.setConstraints(this, GridBagConstraints().apply { gridwidth = GridBagConstraints.REMAINDER })
+                gridBagLayout.setConstraints(
+                    this,
+                    GridBagConstraints().apply { gridwidth = GridBagConstraints.REMAINDER })
             })
 
             this.add(JPanel().apply {
                 this.border = BorderFactory.createTitledBorder("Size")
                 this.layout = GridBagLayout()
 
-                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Width:", GlobalValues.xMultiplier, GlobalValues.maxSize, 0.1).third.addChangeListener {
+                addLabelSliderSpinner(
+                    this,
+                    this.layout as GridBagLayout,
+                    "Width:",
+                    GlobalValues.xMultiplier,
+                    GlobalValues.maxSize,
+                    0.1
+                ).third.addChangeListener {
                     GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double
                     GlobalValues.resize()
                 }
 
-                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Height:", GlobalValues.yMultiplier, GlobalValues.maxSize, 0.1).third.addChangeListener {
+                addLabelSliderSpinner(
+                    this,
+                    this.layout as GridBagLayout,
+                    "Height:",
+                    GlobalValues.yMultiplier,
+                    GlobalValues.maxSize,
+                    0.1
+                ).third.addChangeListener {
                     GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double
                     GlobalValues.resize()
                 }
@@ -113,18 +169,46 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
             })
 
             this.add(JPanel().apply {
+                // TODO: Add a visibility setting for the reflection
                 this.border = BorderFactory.createTitledBorder("Reflection")
                 this.layout = GridBagLayout()
 
-                addLabelSliderSpinner(this, this.layout as GridBagLayout, "Padding:", GlobalValues.reflectionPadding, 100.0, -100.0).third.addChangeListener { GlobalValues.reflectionPadding = (it.source as JSpinner).model.value as Double }
+                addLabelSliderSpinner(
+                    this,
+                    this.layout as GridBagLayout,
+                    "Padding:",
+                    GlobalValues.reflectionPadding,
+                    100.0,
+                    -100.0
+                ).third.addChangeListener {
+                    GlobalValues.reflectionPadding = (it.source as JSpinner).model.value as Double
+                }
 
                 this.add(JPanel().apply {
                     this.border = BorderFactory.createTitledBorder("Fade")
                     this.layout = GridBagLayout()
 
-                    addLabelSliderSpinner(this, this.layout as GridBagLayout, "Height:", GlobalValues.fadeHeight, 0.9, 0.1).third.addChangeListener { GlobalValues.fadeHeight = ((it.source as JSpinner).model.value as Double).toFloat() }
+                    addLabelSliderSpinner(
+                        this,
+                        this.layout as GridBagLayout,
+                        "Height:",
+                        GlobalValues.fadeHeight,
+                        0.9,
+                        0.1
+                    ).third.addChangeListener {
+                        GlobalValues.fadeHeight = ((it.source as JSpinner).model.value as Double).toFloat()
+                    }
 
-                    addLabelSliderSpinner(this, this.layout as GridBagLayout, "Opacity:", GlobalValues.fadeOpacity, 0.9, 0.1).third.addChangeListener { GlobalValues.fadeOpacity = ((it.source as JSpinner).model.value as Double).toFloat() }
+                    addLabelSliderSpinner(
+                        this,
+                        this.layout as GridBagLayout,
+                        "Opacity:",
+                        GlobalValues.fadeOpacity,
+                        0.9,
+                        0.1
+                    ).third.addChangeListener {
+                        GlobalValues.fadeOpacity = ((it.source as JSpinner).model.value as Double).toFloat()
+                    }
                 }.also {
                     (this.layout as GridBagLayout).setConstraints(it, GridBagConstraints().apply {
                         fill = GridBagConstraints.BOTH
@@ -145,10 +229,22 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         repaint()
     }
 
-    private fun addLabelSliderSpinner(parent: Container, gridBagLayout: GridBagLayout, text: String, defaultValue: Number, maxNumber: Number, minNumber: Number): Triple<JLabel, JSlider, JSpinner> {
+    private fun addLabelSliderSpinner(
+        parent: Container,
+        gridBagLayout: GridBagLayout,
+        text: String,
+        defaultValue: Number,
+        maxNumber: Number,
+        minNumber: Number
+    ): Triple<JLabel, JSlider, JSpinner> {
         val label = JLabel(text)
-        val slider = JSlider((minNumber.toFloat() * 100).toInt(), (maxNumber.toFloat() * 100).toInt(), (defaultValue.toFloat() * 100).toInt())
-        val spinner = JSpinner(SpinnerNumberModel(defaultValue.toDouble(), minNumber.toDouble(), maxNumber.toDouble(), 0.01))
+        val slider = JSlider(
+            (minNumber.toFloat() * 100).toInt(),
+            (maxNumber.toFloat() * 100).toInt(),
+            (defaultValue.toFloat() * 100).toInt()
+        )
+        val spinner =
+            JSpinner(SpinnerNumberModel(defaultValue.toDouble(), minNumber.toDouble(), maxNumber.toDouble(), 0.01))
 
         slider.value = (defaultValue.toFloat() * 100).toInt()
         spinner.value = defaultValue
@@ -159,6 +255,10 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         parent.add(label)
         parent.add(slider)
         parent.add(spinner)
+
+        gridBagLayout.setConstraints(label, GridBagConstraints().apply {
+            anchor = GridBagConstraints.EAST
+        })
 
         gridBagLayout.setConstraints(slider, GridBagConstraints().apply {
             fill = GridBagConstraints.HORIZONTAL

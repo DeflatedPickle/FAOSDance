@@ -2,11 +2,16 @@ package com.deflatedpickle.faosdance
 
 import java.awt.*
 import java.awt.AlphaComposite
+import java.awt.datatransfer.DataFlavor
+import java.awt.dnd.DnDConstants
+import java.awt.dnd.DropTarget
+import java.awt.dnd.DropTargetDropEvent
 import java.awt.event.ActionListener
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.WindowEvent
 import java.awt.image.BufferedImage
+import java.io.File
 import javax.swing.*
 
 
@@ -133,6 +138,24 @@ fun main(args: Array<String>) {
     val panel = object : JPanel() {
         init {
             isOpaque = false
+
+            dropTarget = object : DropTarget() {
+                override fun drop(dtde: DropTargetDropEvent) {
+                    // super.drop(dtde)
+
+                    dtde.acceptDrop(DnDConstants.ACTION_COPY)
+                    val droppedFiles = dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>
+
+                    if (droppedFiles.size == 1) {
+                        val tempSheet = SpriteSheet(droppedFiles[0].absolutePath.substringBeforeLast("."))
+
+                        if (tempSheet.loadedImage && tempSheet.loadedText) {
+                            GlobalValues.configureSpriteSheet(tempSheet)
+                            GlobalValues.currentPath = droppedFiles[0].parentFile.absolutePath
+                        }
+                    }
+                }
+            }
         }
 
         override fun paintComponent(g: Graphics) {
