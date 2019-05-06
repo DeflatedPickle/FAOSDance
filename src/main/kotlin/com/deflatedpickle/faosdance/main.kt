@@ -190,7 +190,7 @@ fun main(args: Array<String>) {
     }
     frame.add(panel)
 
-    GlobalValues.timer = Timer(GlobalValues.delay, ActionListener {
+    GlobalValues.timer = Timer(1000 / GlobalValues.fps, ActionListener {
         GlobalValues.animFrame++
 
         if (GlobalValues.animFrame >= 8) {

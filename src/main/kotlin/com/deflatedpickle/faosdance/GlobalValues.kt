@@ -20,7 +20,7 @@ object GlobalValues {
     var xMultiplier = 0.5
     var yMultiplier = 0.5
 
-    var delay = 120
+    var fps = 8
 
     var isVisible = true
     var isSolid = true

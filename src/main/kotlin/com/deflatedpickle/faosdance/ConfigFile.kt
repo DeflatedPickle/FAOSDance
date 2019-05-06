@@ -12,11 +12,11 @@ object ConfigFile {
     }
 
     fun loadAndUseConfig(): Boolean {
-        val config = ConfigFile.openConfig()
+        val config = openConfig()
         // Sprite
         val sheet = config.getString("sprite.sheet")
         val action = config.getString("sprite.action")
-        val frameDelay = config.getLong("sprite.frame_delay")
+        val fps = config.getLong("sprite.fps")
         val visible = config.getBoolean("sprite.visible")
         val solid = config.getBoolean("sprite.solid")
         val alwaysOnTop = config.getBoolean("sprite.always_on_top")
@@ -32,7 +32,7 @@ object ConfigFile {
         // Sprite
         if (sheet != null) { GlobalValues.configureSpriteSheet(SpriteSheet(sheet)) } else { return false }
         if (action != null) { GlobalValues.currentAction = action }
-        if (frameDelay != null) { GlobalValues.delay = frameDelay.toInt() }
+        if (fps != null) { GlobalValues.fps = fps.toInt() }
         if (visible != null) { GlobalValues.isVisible = visible }
         if (solid != null) { GlobalValues.isSolid = solid }
         if (alwaysOnTop != null) { GlobalValues.isTopLevel = alwaysOnTop }

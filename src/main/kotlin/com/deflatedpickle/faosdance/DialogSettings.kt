@@ -65,9 +65,9 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         })
 
         if (GlobalValues.sheet != null) {
-            addLabelSliderSpinner(this, gridBagLayout, "Frame Delay:", GlobalValues.delay, 120.0 * 4, 1.0).third.addChangeListener {
-                GlobalValues.delay = ((it.source as JSpinner).model.value as Double).roundToInt()
-                GlobalValues.timer!!.delay = GlobalValues.delay
+            addLabelSliderSpinner(this, gridBagLayout, "Frames Per Second:", GlobalValues.fps, 144.0, 1.0).third.addChangeListener {
+                GlobalValues.fps = ((it.source as JSpinner).model.value as Double).roundToInt()
+                GlobalValues.timer!!.delay = 1000 / GlobalValues.fps
             }
 
             this.add(JCheckBox("Visible").apply {
