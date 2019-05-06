@@ -11,13 +11,13 @@ import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.math.roundToInt
 
 class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) {
-    val gridBagLayout = GridBagLayout()
+    private val gridBagLayout = GridBagLayout()
 
     init {
         this.isResizable = false
 
         createWidgets()
-        this.size = Dimension(440, 360)
+        this.size = Dimension(440, 460)
 
         this.layout = gridBagLayout
     }
@@ -106,14 +106,10 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 144,
                 1
             ).third.addChangeListener {
-                GlobalValues.fps = if ((it.source as JSpinner).model.value is Int) {
-                    (it.source as JSpinner).model.value as Int
-                }
-                else if ((it.source as JSpinner).model.value is Double) {
-                    ((it.source as JSpinner).model.value as Double).roundToInt()
-                }
-                else {
-                    0
+                GlobalValues.fps = when {
+                    (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
+                    (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
+                    else -> 0
                 }
                 GlobalValues.timer!!.delay = 1000 / GlobalValues.fps
             }
@@ -170,20 +166,162 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     0
                 ).apply {
                     third.addChangeListener {
-                        GlobalValues.animFrame = if ((it.source as JSpinner).model.value is Int) {
-                            (it.source as JSpinner).model.value as Int
-                        }
-                        else if ((it.source as JSpinner).model.value is Double) {
-                            ((it.source as JSpinner).model.value as Double).roundToInt()
-                        }
-                        else {
-                            0
+                        GlobalValues.animFrame = when {
+                            (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
+                            (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
+                            else -> 0
                         }
 
                         GlobalValues.frame!!.revalidate()
                         GlobalValues.frame!!.repaint()
                     }
                 }
+
+                gridBagLayout.setConstraints(this, GridBagConstraints().apply {
+                    fill = GridBagConstraints.BOTH
+                    weightx = 1.0
+                    gridwidth = GridBagConstraints.REMAINDER
+                })
+            })
+
+            this.add(JPanel().apply {
+                this.border = BorderFactory.createTitledBorder("Location")
+                this.layout = GridBagLayout()
+
+                val effectiveSize = getEffectiveScreenSize()
+
+                val gridLayout = this.layout as GridBagLayout
+
+                var comboBox: JComboBox<String>? = null
+
+                val xComponents = addComponentSliderSpinner<Double>(
+                    this,
+                    this.layout as GridBagLayout,
+                    JLabel("X:"),
+                    effectiveSize.width / 2,
+                    effectiveSize.width,
+                    0.0
+                ).apply {
+                    third.addChangeListener {
+                        comboBox!!.selectedIndex = HookPoint.values().size - 1
+                        when {
+                            (it.source as JSpinner).model.value is Int -> GlobalValues.frame!!.setLocation(
+                                (it.source as JSpinner).model.value as Int,
+                                GlobalValues.frame!!.y
+                            )
+                            (it.source as JSpinner).model.value is Double -> GlobalValues.frame!!.setLocation(
+                                ((it.source as JSpinner).model.value as Double).roundToInt(),
+                                GlobalValues.frame!!.y
+                            )
+                        }
+                    }
+                }
+                val xEntry = xComponents.third
+
+                val yComponents = addComponentSliderSpinner<Double>(
+                    this,
+                    this.layout as GridBagLayout,
+                    JLabel("Y:"),
+                    effectiveSize.height / 2,
+                    effectiveSize.height,
+                    0.0
+                ).apply {
+                    third.addChangeListener {
+                        comboBox!!.selectedIndex = HookPoint.values().size - 1
+                        when {
+                            (it.source as JSpinner).model.value is Int -> GlobalValues.frame!!.setLocation(
+                                GlobalValues.frame!!.x,
+                                (it.source as JSpinner).model.value as Int
+                            )
+                            (it.source as JSpinner).model.value is Double -> GlobalValues.frame!!.setLocation(
+                                GlobalValues.frame!!.x,
+                                ((it.source as JSpinner).model.value as Double).roundToInt()
+                            )
+                        }
+                    }
+                }
+                val yEntry = yComponents.third
+
+                this.add(JComboBox<String>(HookPoint.values().map { enumItem ->
+                    enumItem.name
+                        .replace("_", " ")
+                        .toLowerCase().split(" ")
+                        .joinToString(" ") { subStr -> subStr.capitalize() }
+                }.toTypedArray()).apply {
+                    comboBox = this
+                    selectedIndex = HookPoint.values().size - 1
+                    addActionListener {
+                        when (HookPoint.valueOf(
+                            ((it.source as JComboBox<*>).selectedItem as String).toUpperCase().replace(
+                                " ",
+                                "_"
+                            )
+                        )) {
+                            HookPoint.TOP_LEFT -> {
+                                val selected = this.selectedIndex
+                                xEntry.value = 0.0
+                                yEntry.value = 0.0
+                                this.selectedIndex = selected
+                            }
+                            HookPoint.TOP_CENTRE -> {
+                                val selected = this.selectedIndex
+                                xEntry.value = effectiveSize.width / 2.0
+                                yEntry.value = 0.0
+                                this.selectedIndex = selected
+                            }
+                            HookPoint.TOP_RIGHT -> {
+                                val selected = this.selectedIndex
+                                xEntry.value = effectiveSize.width.toDouble()
+                                yEntry.value = 0.0
+                                this.selectedIndex = selected
+                            }
+                            HookPoint.MIDDLE_LEFT -> {
+                                val selected = this.selectedIndex
+                                xEntry.value = 0.0
+                                yEntry.value = effectiveSize.height / 2.0
+                                this.selectedIndex = selected
+                            }
+                            HookPoint.MIDDLE_CENTRE -> {
+                                val selected = this.selectedIndex
+                                xEntry.value = effectiveSize.width / 2.0
+                                yEntry.value = effectiveSize.height / 2.0
+                                this.selectedIndex = selected
+                            }
+                            HookPoint.MIDDLE_RIGHT -> {
+                                val selected = this.selectedIndex
+                                xEntry.value = effectiveSize.width.toDouble()
+                                yEntry.value = effectiveSize.height / 2.0
+                                this.selectedIndex = selected
+                            }
+                            HookPoint.BOTTOM_LEFT -> {
+                                val selected = this.selectedIndex
+                                xEntry.value = 0.0
+                                yEntry.value = effectiveSize.height.toDouble()
+                                this.selectedIndex = selected
+                            }
+                            HookPoint.BOTTOM_CENTRE -> {
+                                val selected = this.selectedIndex
+                                xEntry.value = effectiveSize.width / 2.0
+                                yEntry.value = effectiveSize.height.toDouble()
+                                this.selectedIndex = selected
+                            }
+                            HookPoint.BOTTOM_RIGHT -> {
+                                val selected = this.selectedIndex
+                                xEntry.value = effectiveSize.width.toDouble()
+                                yEntry.value = effectiveSize.height.toDouble()
+                                this.selectedIndex = selected
+                            }
+                            HookPoint.CUSTOM -> {
+                            }
+                        }
+                    }
+
+                    gridLayout.setConstraints(this, GridBagConstraints().apply {
+                        fill = GridBagConstraints.HORIZONTAL
+                        weightx = 1.0
+                        gridwidth = GridBagConstraints.REMAINDER
+                    })
+                })
 
                 gridBagLayout.setConstraints(this, GridBagConstraints().apply {
                     fill = GridBagConstraints.BOTH
@@ -333,14 +471,10 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         }
         spinner.addChangeListener {
             slider.value = when (T::class) {
-                Int::class -> if (spinner.value is Int) {
-                    spinner.value as Int
-                }
-                else if (spinner.value is Double) {
-                    (spinner.value as Double).roundToInt()
-                }
-                else {
-                    0
+                Int::class -> when {
+                    spinner.value is Int -> spinner.value as Int
+                    spinner.value is Double -> (spinner.value as Double).roundToInt()
+                    else -> 0
                 }
                 Double::class -> (spinner.value as Double * 100).toInt()
                 else -> 0
@@ -365,5 +499,23 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         })
 
         return Triple(component, slider, spinner)
+    }
+
+    // https://stackoverflow.com/a/29177069
+    private fun getEffectiveScreenSize(): Rectangle {
+        val rectangle = Rectangle()
+
+        val screenSize = Toolkit.getDefaultToolkit().screenSize
+        val bounds = Toolkit.getDefaultToolkit().getScreenInsets(graphicsConfiguration)
+
+        rectangle.width =
+            (screenSize.getWidth() - bounds.left.toDouble() - bounds.right.toDouble()).toInt() - GlobalValues.frame!!.width
+        rectangle.height =
+            (screenSize.getHeight() - bounds.top.toDouble() - bounds.bottom.toDouble()).toInt() - GlobalValues.frame!!.height
+
+        rectangle.x = ((screenSize.getHeight() - height) / 2.0).toInt()
+        rectangle.y = ((screenSize.getWidth() - width) / 2.0).toInt()
+
+        return rectangle
     }
 }
