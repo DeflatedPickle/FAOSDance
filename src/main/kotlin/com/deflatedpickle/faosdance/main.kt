@@ -16,7 +16,7 @@ import javax.swing.*
 
 
 @Suppress("KDocMissingDocumentation")
-fun main(args: Array<String>) {
+fun main() {
     val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
 
     val frame = JFrame("FAOSDance")
@@ -214,14 +214,27 @@ fun main(args: Array<String>) {
     frame.add(panel)
 
     GlobalValues.timer = Timer(1000 / GlobalValues.fps, ActionListener {
-        GlobalValues.animFrame++
+        if (GlobalValues.play) {
+            if (GlobalValues.rewind) {
+                GlobalValues.animFrame--
 
-        if (GlobalValues.animFrame >= 8) {
-            GlobalValues.animFrame = 0
+                if (GlobalValues.animFrame <= 0) {
+                    GlobalValues.animFrame = 7
+                }
+            }
+            else {
+                GlobalValues.animFrame++
+
+                if (GlobalValues.animFrame >= 8) {
+                    GlobalValues.animFrame = 0
+                }
+            }
+
+            GlobalValues.animationControls?.second?.value = GlobalValues.animFrame
+
+            frame.revalidate()
+            frame.repaint()
         }
-
-        frame.revalidate()
-        frame.repaint()
     })
     GlobalValues.timer!!.start()
 

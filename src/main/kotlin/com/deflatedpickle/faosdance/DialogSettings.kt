@@ -17,7 +17,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         this.isResizable = false
 
         createWidgets()
-        this.size = Dimension(400, 320)
+        this.size = Dimension(440, 360)
 
         this.layout = gridBagLayout
     }
@@ -98,15 +98,23 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         })
 
         if (GlobalValues.sheet != null) {
-            addLabelSliderSpinner(
+            addComponentSliderSpinner<Int>(
                 this,
                 gridBagLayout,
-                "Frames Per Second:",
+                JLabel("Frames Per Second:"),
                 GlobalValues.fps,
-                144.0,
-                1.0
+                144,
+                1
             ).third.addChangeListener {
-                GlobalValues.fps = ((it.source as JSpinner).model.value as Double).roundToInt()
+                GlobalValues.fps = if ((it.source as JSpinner).model.value is Int) {
+                    (it.source as JSpinner).model.value as Int
+                }
+                else if ((it.source as JSpinner).model.value is Double) {
+                    ((it.source as JSpinner).model.value as Double).roundToInt()
+                }
+                else {
+                    0
+                }
                 GlobalValues.timer!!.delay = 1000 / GlobalValues.fps
             }
 
@@ -134,13 +142,64 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
             })
 
             this.add(JPanel().apply {
+                this.border = BorderFactory.createTitledBorder("Animation")
+                this.layout = GridBagLayout()
+
+                val rewind = JCheckBox("Rewind").apply {
+                    addActionListener {
+                        GlobalValues.rewind = this.isSelected
+                    }
+                }
+                val play = JCheckBox("Play").apply {
+                    isSelected = true
+
+                    addActionListener {
+                        GlobalValues.play = this.isSelected
+                        rewind.isEnabled = isSelected
+                    }
+                }
+                GlobalValues.animationControls = addComponentSliderSpinner<Int>(
+                    this,
+                    this.layout as GridBagLayout,
+                    JPanel().apply {
+                        this.add(play)
+                        this.add(rewind)
+                    },
+                    GlobalValues.animFrame,
+                    7,
+                    0
+                ).apply {
+                    third.addChangeListener {
+                        GlobalValues.animFrame = if ((it.source as JSpinner).model.value is Int) {
+                            (it.source as JSpinner).model.value as Int
+                        }
+                        else if ((it.source as JSpinner).model.value is Double) {
+                            ((it.source as JSpinner).model.value as Double).roundToInt()
+                        }
+                        else {
+                            0
+                        }
+
+                        GlobalValues.frame!!.revalidate()
+                        GlobalValues.frame!!.repaint()
+                    }
+                }
+
+                gridBagLayout.setConstraints(this, GridBagConstraints().apply {
+                    fill = GridBagConstraints.BOTH
+                    weightx = 1.0
+                    gridwidth = GridBagConstraints.REMAINDER
+                })
+            })
+
+            this.add(JPanel().apply {
                 this.border = BorderFactory.createTitledBorder("Size")
                 this.layout = GridBagLayout()
 
-                addLabelSliderSpinner(
+                addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
-                    "Width:",
+                    JLabel("Width:"),
                     GlobalValues.xMultiplier,
                     GlobalValues.maxSize,
                     0.1
@@ -149,10 +208,10 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     GlobalValues.resize()
                 }
 
-                addLabelSliderSpinner(
+                addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
-                    "Height:",
+                    JLabel("Height:"),
                     GlobalValues.yMultiplier,
                     GlobalValues.maxSize,
                     0.1
@@ -173,10 +232,10 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 this.border = BorderFactory.createTitledBorder("Reflection")
                 this.layout = GridBagLayout()
 
-                addLabelSliderSpinner(
+                addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
-                    "Padding:",
+                    JLabel("Padding:"),
                     GlobalValues.reflectionPadding,
                     100.0,
                     -100.0
@@ -188,10 +247,10 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     this.border = BorderFactory.createTitledBorder("Fade")
                     this.layout = GridBagLayout()
 
-                    addLabelSliderSpinner(
+                    addComponentSliderSpinner<Double>(
                         this,
                         this.layout as GridBagLayout,
-                        "Height:",
+                        JLabel("Height:"),
                         GlobalValues.fadeHeight,
                         0.9,
                         0.1
@@ -199,10 +258,10 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                         GlobalValues.fadeHeight = ((it.source as JSpinner).model.value as Double).toFloat()
                     }
 
-                    addLabelSliderSpinner(
+                    addComponentSliderSpinner<Double>(
                         this,
                         this.layout as GridBagLayout,
-                        "Opacity:",
+                        JLabel("Opacity:"),
                         GlobalValues.fadeOpacity,
                         0.9,
                         0.1
@@ -229,34 +288,70 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         repaint()
     }
 
-    private fun addLabelSliderSpinner(
+    private inline fun <reified T : Number> addComponentSliderSpinner(
         parent: Container,
         gridBagLayout: GridBagLayout,
-        text: String,
+        component: JComponent,
         defaultValue: Number,
         maxNumber: Number,
         minNumber: Number
-    ): Triple<JLabel, JSlider, JSpinner> {
-        val label = JLabel(text)
-        val slider = JSlider(
-            (minNumber.toFloat() * 100).toInt(),
-            (maxNumber.toFloat() * 100).toInt(),
-            (defaultValue.toFloat() * 100).toInt()
-        )
-        val spinner =
-            JSpinner(SpinnerNumberModel(defaultValue.toDouble(), minNumber.toDouble(), maxNumber.toDouble(), 0.01))
+    ): Triple<JComponent, JSlider, JSpinner> {
+        val slider = when (T::class) {
+            Int::class -> JSlider(minNumber.toInt(), maxNumber.toInt(), defaultValue.toInt())
+            Double::class -> JDoubleSlider(minNumber.toDouble(), maxNumber.toDouble(), defaultValue.toDouble(), 100.0)
+            else -> JSlider()
+        }
 
-        slider.value = (defaultValue.toFloat() * 100).toInt()
+        val stepSize = when (T::class) {
+            Int::class -> 1 as T
+            Double::class -> 0.01 as T
+            else -> 0 as T
+        }
+
+        val spinner = JSpinner(
+            SpinnerNumberModel(
+                defaultValue.toDouble(),
+                minNumber.toDouble(),
+                maxNumber.toDouble(),
+                stepSize
+            )
+        )
+
+        slider.value = when (T::class) {
+            Int::class -> defaultValue.toInt()
+            Double::class -> (defaultValue.toFloat() * 100).toInt()
+            else -> 0
+        }
         spinner.value = defaultValue
 
-        slider.addChangeListener { spinner.value = slider.value.toDouble() / 100 }
-        spinner.addChangeListener { slider.value = (spinner.value as Double * 100).toInt() }
+        slider.addChangeListener {
+            spinner.value = when (T::class) {
+                Int::class -> slider.value
+                Double::class -> slider.value.toDouble() / 100
+                else -> 0
+            }
+        }
+        spinner.addChangeListener {
+            slider.value = when (T::class) {
+                Int::class -> if (spinner.value is Int) {
+                    spinner.value as Int
+                }
+                else if (spinner.value is Double) {
+                    (spinner.value as Double).roundToInt()
+                }
+                else {
+                    0
+                }
+                Double::class -> (spinner.value as Double * 100).toInt()
+                else -> 0
+            }
+        }
 
-        parent.add(label)
+        parent.add(component)
         parent.add(slider)
         parent.add(spinner)
 
-        gridBagLayout.setConstraints(label, GridBagConstraints().apply {
+        gridBagLayout.setConstraints(component, GridBagConstraints().apply {
             anchor = GridBagConstraints.EAST
         })
 
@@ -269,6 +364,6 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
             gridwidth = GridBagConstraints.REMAINDER
         })
 
-        return Triple(label, slider, spinner)
+        return Triple(component, slider, spinner)
     }
 }

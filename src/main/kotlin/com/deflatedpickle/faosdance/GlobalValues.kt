@@ -1,8 +1,7 @@
 package com.deflatedpickle.faosdance
 
 import java.awt.Dimension
-import javax.swing.JFrame
-import javax.swing.Timer
+import javax.swing.*
 
 object GlobalValues {
     val maxSize = 10.0
@@ -11,6 +10,8 @@ object GlobalValues {
     var currentAction = ""
 
     var animFrame = 0
+
+    var play = true
 
     var reflectionPadding = 0.0
 
@@ -21,6 +22,7 @@ object GlobalValues {
     var yMultiplier = 0.5
 
     var fps = 8
+    var rewind = false
 
     var isVisible = true
     var isSolid = true
@@ -31,6 +33,8 @@ object GlobalValues {
     var timer: Timer? = null
 
     var frame: JFrame? = null
+
+    var animationControls: Triple<JComponent, JSlider, JSpinner>? = null
 
     fun resize() {
         val width = ((((sheet!!.spriteWidth * xMultiplier) * 2) * 100) / 100).toInt()
