@@ -37,7 +37,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         this.add(JButton("Open").apply {
             addActionListener {
                 val fileChooser = JFileChooser(GlobalValues.currentPath)
-                fileChooser.addChoosableFileFilter(FileNameExtensionFilter("PNG (*.png)", "png"))
+                fileChooser.addChoosableFileFilter(FileNameExtensionFilter("PNG (*.png)", "png").also { fileChooser.fileFilter = it })
                 fileChooser.addChoosableFileFilter(FileNameExtensionFilter("JPEG (*.jpg; *.jpeg)", "jpg", "jpeg"))
                 val returnValue = fileChooser.showOpenDialog(owner)
 
