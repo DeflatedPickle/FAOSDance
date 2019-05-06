@@ -1,6 +1,7 @@
 package com.deflatedpickle.faosdance
 
 import java.awt.Dimension
+import java.awt.Point
 import javax.swing.*
 
 object GlobalValues {
@@ -36,17 +37,31 @@ object GlobalValues {
 
     var animationControls: Triple<JComponent, JSlider, JSpinner>? = null
 
-    fun resize() {
+    var oldWidth = 0
+    var oldHeight = 0
+
+    fun resize(direction: Direction? = null) {
         val width = ((((sheet!!.spriteWidth * xMultiplier) * 2) * 100) / 100).toInt()
         val height = ((((sheet!!.spriteHeight * yMultiplier) * 2) * 100) / 100).toInt()
 
         frame!!.minimumSize = Dimension(width, height)
         frame!!.setSize(width, height)
+
+        when (direction) {
+            Direction.HORIZONTAL -> {
+                frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
+                oldWidth = frame!!.width
+            }
+            Direction.VERTICAL -> {
+                frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
+                oldHeight = frame!!.height
+            }
+        }
     }
 
     fun configureSpriteSheet(sheet: SpriteSheet) {
         GlobalValues.sheet = sheet
-        GlobalValues.currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
-        GlobalValues.resize()
+        currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
+        resize()
     }
 }

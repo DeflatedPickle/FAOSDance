@@ -205,7 +205,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     0.1
                 ).third.addChangeListener {
                     GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double
-                    GlobalValues.resize()
+                    GlobalValues.resize(Direction.HORIZONTAL)
                 }
 
                 addComponentSliderSpinner<Double>(
@@ -217,7 +217,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     0.1
                 ).third.addChangeListener {
                     GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double
-                    GlobalValues.resize()
+                    GlobalValues.resize(Direction.VERTICAL)
                 }
 
                 gridBagLayout.setConstraints(this, GridBagConstraints().apply {
