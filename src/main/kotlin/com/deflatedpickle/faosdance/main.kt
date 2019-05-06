@@ -183,7 +183,7 @@ fun main() {
 
             g2D.translate(
                 0.0,
-                (GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) * 4 + (GlobalValues.reflectionPadding * 4)
+                (GlobalValues.sheet!!.spriteHeight) * 2 + (GlobalValues.reflectionPadding)
             )
             g2D.scale(1.0, -1.0)
 
