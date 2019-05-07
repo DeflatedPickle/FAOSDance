@@ -1,7 +1,10 @@
 package com.deflatedpickle.faosdance
 
 import java.awt.image.BufferedImage
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
+import java.util.stream.Collectors
 import javax.imageio.ImageIO
 import javax.swing.JOptionPane
 
@@ -35,24 +38,35 @@ class SpriteSheet(image: String, spriteNumX: Int = 8, var spriteNumY: Int? = nul
     init {
         // Load the sprite sheet
         val sheetFile = File("$image.png")
+        val resourceSheetFile = ClassLoader.getSystemResourceAsStream("$image.png")
 
-        if (sheetFile.exists()) {
-            sheet = ImageIO.read(sheetFile)
-            loadedImage = true
-        }
-        else {
-            JOptionPane.showMessageDialog(GlobalValues.frame, "Could not find the file: ${image.split(".").last()}.png", GlobalValues.frame!!.title, JOptionPane.ERROR_MESSAGE)
+        when {
+            sheetFile.exists() -> {
+                sheet = ImageIO.read(sheetFile)
+                loadedImage = true
+            }
+            resourceSheetFile != null -> {
+                sheet = ImageIO.read(resourceSheetFile)
+                loadedImage = true
+            }
+            else -> JOptionPane.showMessageDialog(GlobalValues.frame, "Could not find the file: ${image.split(".").last()}.png", GlobalValues.frame!!.title, JOptionPane.ERROR_MESSAGE)
         }
 
         // Load the actions file
         val textFile = File("$image.txt")
+        val resourceTextFile = ClassLoader.getSystemResourceAsStream("$image.txt")
 
-        if (textFile.exists()) {
-            animations = textFile.readText()
-            loadedText = true
-        }
-        else {
-            JOptionPane.showMessageDialog(GlobalValues.frame, "Could not find the file: ${image.split(".").last()}.txt", GlobalValues.frame!!.title, JOptionPane.ERROR_MESSAGE)
+        when {
+            textFile.exists() -> {
+                animations = textFile.readText()
+                loadedText = true
+            }
+            resourceTextFile != null -> {
+                val bufferedReader = BufferedReader(InputStreamReader(resourceTextFile))
+                animations = bufferedReader.lines().collect(Collectors.joining(System.lineSeparator()))
+                loadedText = true
+            }
+            else -> JOptionPane.showMessageDialog(GlobalValues.frame, "Could not find the file: ${image.split(".").last()}.txt", GlobalValues.frame!!.title, JOptionPane.ERROR_MESSAGE)
         }
 
         // Check if they were both loaded, then sort everything out
