@@ -3,7 +3,8 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 
 | | Downloads |
 |---|---|
-| **Latest** | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.5-alpha/total.svg) |
+| **Latest** | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.13-alpha/total.svg) |
+| | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.5-alpha/total.svg) |
 | | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.2-alpha/total.svg) |
 | | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.0-alpha/total.svg) |
 
@@ -48,12 +49,17 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 #### Config Options
 | Option | Description |
 |---|---|
-| `sprite.sheet` | The path to the sprite sheet name to use, without any extensions |
-| `sprite.action` | The action to start play through |
-| `sprite.frame_delay` | The amount of delay between each frame |
-| `sprite.visible` | Whether or not the sprite is visible |
-| `sprite.solid` | Whether or not the sprite can be clicked and dragged |
-| `sprite.always_on_top` | Whether or not the program stays above other windows |
+| `sprite.sheet` | `(String)` The path to the sprite sheet name to use, without any extensions |
+| `sprite.action` | `(String)` The action to start play through |
+| `sprite.fps` | `(Integer)` The amount of delay between each frame |
+| `sprite.visible` | `(Boolean)` Whether or not the sprite is visible |
+| `sprite.solid` | `(Boolean)` Whether or not the sprite can be clicked and dragged |
+| `sprite.always_on_top` | `(Boolean)` Whether or not the program stays above other windows |
+| `animation.play` | `(Boolean)` Whether or not the animation is playing |
+| `animation.rewind` | `(Boolean)` Whether or not the animation is playing backwards |
+| `animation.frame` | `(Integer)` The current frame of animation |
+| `location.x` | `(Integer)` The location of the window along the X axis |
+| `location.y` | `(Integer)` The location of the window along the Y axis |
 | `size.width` | The width of the sprite |
 | `size.height` | The height of the sprite |
 | `reflection.padding` | The amount of padding (centered) between the sprite and the reflection |
@@ -64,7 +70,7 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 [sprite]
 sheet="path/to/file/without/extensions"
 action="Zitabata"
-frame_delay=1
+fps=32
 
 [size]
 width=1.0
