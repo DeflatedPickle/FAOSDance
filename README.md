@@ -3,7 +3,8 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 
 | | Downloads |
 |---|---|
-| **Latest** | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.13-alpha/total.svg) |
+| **Latest** | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.17-alpha/total.svg) |
+| | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.13-alpha/total.svg) |
 | | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.5-alpha/total.svg) |
 | | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.2-alpha/total.svg) |
 | | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.0-alpha/total.svg) |
@@ -12,7 +13,7 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 | | Fruity Dance | FAOSDance |
 |---|---|---|
 | **Interface** | ![FruityDance](.github/images/FruityDance.png) | ![FAOSDance](.github/images/FAOSDance.png) |
-| **Pros** | Has a frame blending slider | Free and stand-alone, more customizable |
+| **Pros** | Has a frame blending slider | Free, stand-alone and more customizable, has a config file |
 | **Cons** | Requires owning (paid or trial) and running FL Studio | *Coming Soon* |
 
 ---
