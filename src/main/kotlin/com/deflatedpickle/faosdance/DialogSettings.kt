@@ -17,7 +17,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         this.isResizable = false
 
         createWidgets()
-        this.size = Dimension(440, 460)
+        this.size = Dimension(440, 480)
 
         this.layout = gridBagLayout
     }
@@ -205,14 +205,21 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     third.addChangeListener {
                         comboBox!!.selectedIndex = HookPoint.values().size - 1
                         when {
-                            (it.source as JSpinner).model.value is Int -> GlobalValues.frame!!.setLocation(
-                                (it.source as JSpinner).model.value as Int,
-                                GlobalValues.frame!!.y
-                            )
-                            (it.source as JSpinner).model.value is Double -> GlobalValues.frame!!.setLocation(
-                                ((it.source as JSpinner).model.value as Double).roundToInt(),
-                                GlobalValues.frame!!.y
-                            )
+                            (it.source as JSpinner).model.value is Int -> {
+                                GlobalValues.frame!!.setLocation(
+                                    (it.source as JSpinner).model.value as Int,
+                                    GlobalValues.frame!!.y
+                                )
+                                GlobalValues.xPosition = (it.source as JSpinner).model.value as Int
+                            }
+                            (it.source as JSpinner).model.value is Double -> {
+                                GlobalValues.frame!!.setLocation(
+                                    ((it.source as JSpinner).model.value as Double).roundToInt(),
+                                    GlobalValues.frame!!.y
+                                )
+                                ((it.source as JSpinner).model.value as Double).roundToInt()
+                                GlobalValues.xPosition = ((it.source as JSpinner).model.value as Double).roundToInt()
+                            }
                         }
                     }
                 }
@@ -229,14 +236,20 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     third.addChangeListener {
                         comboBox!!.selectedIndex = HookPoint.values().size - 1
                         when {
-                            (it.source as JSpinner).model.value is Int -> GlobalValues.frame!!.setLocation(
-                                GlobalValues.frame!!.x,
-                                (it.source as JSpinner).model.value as Int
-                            )
-                            (it.source as JSpinner).model.value is Double -> GlobalValues.frame!!.setLocation(
-                                GlobalValues.frame!!.x,
-                                ((it.source as JSpinner).model.value as Double).roundToInt()
-                            )
+                            (it.source as JSpinner).model.value is Int -> {
+                                GlobalValues.frame!!.setLocation(
+                                    GlobalValues.frame!!.x,
+                                    (it.source as JSpinner).model.value as Int
+                                )
+                                GlobalValues.yPosition = (it.source as JSpinner).model.value as Int
+                            }
+                            (it.source as JSpinner).model.value is Double -> {
+                                GlobalValues.frame!!.setLocation(
+                                    GlobalValues.frame!!.x,
+                                    ((it.source as JSpinner).model.value as Double).roundToInt()
+                                )
+                                GlobalValues.yPosition = ((it.source as JSpinner).model.value as Double).roundToInt()
+                            }
                         }
                     }
                 }
@@ -416,6 +429,19 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
 
                 gridBagLayout.setConstraints(this, GridBagConstraints().apply {
                     fill = GridBagConstraints.BOTH
+                    weightx = 1.0
+                    gridwidth = GridBagConstraints.REMAINDER
+                })
+            })
+
+            this.add(JButton("Save Configuration").apply {
+                addActionListener {
+                    ConfigFile.writeConfig()
+                    JOptionPane.showMessageDialog(GlobalValues.frame, "Your configuration was saved to the JAR", GlobalValues.frame!!.title, JOptionPane.INFORMATION_MESSAGE)
+                }
+
+                gridBagLayout.setConstraints(this, GridBagConstraints().apply {
+                    anchor = GridBagConstraints.EAST
                     weightx = 1.0
                     gridwidth = GridBagConstraints.REMAINDER
                 })

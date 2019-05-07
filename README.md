@@ -13,7 +13,7 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 |---|---|---|
 | **Interface** | ![FruityDance](.github/images/FruityDance.png) | ![FAOSDance](.github/images/FAOSDance.png) |
 | **Pros** | Has a frame blending slider | Free and stand-alone, more customizable |
-| **Cons** | Requires owning (paid or trial) and running FL Studio | Doesn't have drag-and-drop for images |
+| **Cons** | Requires owning (paid or trial) and running FL Studio | *Coming Soon* |
 
 ---
 
