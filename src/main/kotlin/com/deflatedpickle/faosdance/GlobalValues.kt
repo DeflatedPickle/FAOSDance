@@ -9,6 +9,8 @@ object GlobalValues {
     var sheet: SpriteSheet? = null
     var currentAction = ""
 
+    var opacity = 1.0
+
     var animFrame = 0
 
     var play = true

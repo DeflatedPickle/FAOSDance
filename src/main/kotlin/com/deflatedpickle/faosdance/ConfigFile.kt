@@ -25,6 +25,7 @@ object ConfigFile {
                 "sheet" to GlobalValues.sheet!!.image.replace("\\", "/"),
                 "action" to GlobalValues.currentAction,
                 "fps" to GlobalValues.fps,
+                "opacity" to GlobalValues.opacity,
                 "visible" to GlobalValues.isVisible,
                 "solid" to GlobalValues.isSolid,
                 "always_on_top" to GlobalValues.isTopLevel
@@ -65,6 +66,7 @@ object ConfigFile {
         val sheet = config.getString("sprite.sheet")
         val action = config.getString("sprite.action")
         val fps = config.getLong("sprite.fps")
+        val opacity = config.getDouble("sprite.opacity")
         val visible = config.getBoolean("sprite.visible")
         val solid = config.getBoolean("sprite.solid")
         val alwaysOnTop = config.getBoolean("sprite.always_on_top")
@@ -95,6 +97,9 @@ object ConfigFile {
         }
         if (fps != null) {
             GlobalValues.fps = fps.toInt()
+        }
+        if (opacity != null) {
+            GlobalValues.opacity = opacity
         }
         if (visible != null) {
             GlobalValues.isVisible = visible

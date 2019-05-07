@@ -17,7 +17,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         this.isResizable = false
 
         createWidgets()
-        this.size = Dimension(440, 480)
+        this.size = Dimension(440, 510)
 
         this.layout = gridBagLayout
     }
@@ -112,6 +112,17 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     else -> 0
                 }
                 GlobalValues.timer!!.delay = 1000 / GlobalValues.fps
+            }
+
+            addComponentSliderSpinner<Double>(
+                this,
+                gridBagLayout,
+                JLabel("Opacity:"),
+                GlobalValues.opacity,
+                1.0,
+                0.1
+            ).third.addChangeListener {
+                GlobalValues.opacity = (it.source as JSpinner).model.value as Double
             }
 
             this.add(JCheckBox("Visible").apply {

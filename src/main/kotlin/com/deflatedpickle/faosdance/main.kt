@@ -186,6 +186,8 @@ fun main() {
             val g2D = g as Graphics2D
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
 
+            g2D.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, GlobalValues.opacity.toFloat())
+
             g2D.translate(
                 (this.width - GlobalValues.sheet!!.spriteWidth * GlobalValues.xMultiplier) / 2,
                 (this.height - GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2
