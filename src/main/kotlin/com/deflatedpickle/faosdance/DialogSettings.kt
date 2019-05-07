@@ -1,5 +1,6 @@
 package com.deflatedpickle.faosdance
 
+import com.deflatedpickle.faosdance.util.Lang
 import java.awt.*
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
@@ -10,7 +11,8 @@ import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.math.roundToInt
 
-class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) {
+class DialogSettings(owner: Frame) :
+    JDialog(owner, "${Lang.bundle.getString("window.title")} ${Lang.bundle.getString("window.settings")}", true) {
     private val gridBagLayout = GridBagLayout()
 
     init {
@@ -26,7 +28,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         contentPane.removeAll()
 
         if (GlobalValues.sheet != null) {
-            this.add(JLabel("Action:").also {
+            this.add(JLabel("${Lang.bundle.getString("settings.sprite.action")}:").also {
                 gridBagLayout.setConstraints(it, GridBagConstraints().apply {
                     anchor = GridBagConstraints.EAST
                 })
@@ -43,7 +45,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
             })
         }
 
-        this.add(JButton("Open").apply {
+        this.add(JButton(Lang.bundle.getString("settings.sprite.open")).apply {
             dropTarget = object : DropTarget() {
                 override fun drop(dtde: DropTargetDropEvent) {
                     // super.drop(dtde)
@@ -91,6 +93,8 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     fill = GridBagConstraints.BOTH
                     weightx = 1.0
                     weighty = 1.0
+                } else {
+                    anchor = GridBagConstraints.EAST
                 }
 
                 gridwidth = GridBagConstraints.REMAINDER
@@ -101,7 +105,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
             addComponentSliderSpinner<Int>(
                 this,
                 gridBagLayout,
-                JLabel("Frames Per Second:"),
+                JLabel("${Lang.bundle.getString("settings.sprite.frames_per_second")}:"),
                 GlobalValues.fps,
                 144,
                 1
@@ -117,7 +121,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
             addComponentSliderSpinner<Double>(
                 this,
                 gridBagLayout,
-                JLabel("Opacity:"),
+                JLabel("${Lang.bundle.getString("settings.sprite.opacity")}:"),
                 GlobalValues.opacity,
                 1.0,
                 0.1
@@ -125,39 +129,40 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 GlobalValues.opacity = (it.source as JSpinner).model.value as Double
             }
 
-            this.add(JCheckBox("Visible").apply {
+            this.add(JCheckBox(Lang.bundle.getString("settings.sprite.visible")).apply {
                 isSelected = GlobalValues.isVisible
 
                 addActionListener { GlobalValues.isVisible = this.isSelected }
             })
-            this.add(JCheckBox("Solid").apply {
-                isSelected = GlobalValues.isSolid
-
-                addActionListener { GlobalValues.isSolid = this.isSelected }
-            })
-            this.add(JCheckBox("Always On Top").apply {
+            this.add(JCheckBox(Lang.bundle.getString("settings.sprite.always_on_top")).apply {
                 isSelected = GlobalValues.isTopLevel
 
                 addActionListener {
                     GlobalValues.isTopLevel = this.isSelected
                     GlobalValues.frame!!.isAlwaysOnTop = GlobalValues.isTopLevel
                 }
+            })
+            this.add(JCheckBox(Lang.bundle.getString("settings.sprite.solid")).apply {
+                isSelected = GlobalValues.isSolid
+
+                addActionListener { GlobalValues.isSolid = this.isSelected }
 
                 gridBagLayout.setConstraints(
                     this,
-                    GridBagConstraints().apply { gridwidth = GridBagConstraints.REMAINDER })
+                    GridBagConstraints().apply { gridwidth = GridBagConstraints.REMAINDER }
+                )
             })
 
             this.add(JPanel().apply {
-                this.border = BorderFactory.createTitledBorder("Animation")
+                this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.animation"))
                 this.layout = GridBagLayout()
 
-                val rewind = JCheckBox("Rewind").apply {
+                val rewind = JCheckBox(Lang.bundle.getString("settings.animation.rewind")).apply {
                     addActionListener {
                         GlobalValues.rewind = this.isSelected
                     }
                 }
-                val play = JCheckBox("Play").apply {
+                val play = JCheckBox(Lang.bundle.getString("settings.animation.play")).apply {
                     isSelected = true
 
                     addActionListener {
@@ -196,7 +201,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
             })
 
             this.add(JPanel().apply {
-                this.border = BorderFactory.createTitledBorder("Location")
+                this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.location"))
                 this.layout = GridBagLayout()
 
                 val effectiveSize = GlobalValues.getEffectiveScreenSize(this@DialogSettings)
@@ -208,7 +213,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 val xComponents = addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
-                    JLabel("X:"),
+                    JLabel("${Lang.bundle.getString("settings.location.x")}:"),
                     GlobalValues.xPosition,
                     effectiveSize.width,
                     0.0
@@ -239,7 +244,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 val yComponents = addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
-                    JLabel("Y:"),
+                    JLabel("${Lang.bundle.getString("settings.location.y")}:"),
                     GlobalValues.yPosition,
                     effectiveSize.height,
                     0.0
@@ -355,13 +360,13 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
             })
 
             this.add(JPanel().apply {
-                this.border = BorderFactory.createTitledBorder("Size")
+                this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.size"))
                 this.layout = GridBagLayout()
 
                 addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
-                    JLabel("Width:"),
+                    JLabel("${Lang.bundle.getString("settings.size.width")}:"),
                     GlobalValues.xMultiplier,
                     GlobalValues.maxSize,
                     0.1
@@ -373,7 +378,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
-                    JLabel("Height:"),
+                    JLabel("${Lang.bundle.getString("settings.size.height")}:"),
                     GlobalValues.yMultiplier,
                     GlobalValues.maxSize,
                     0.1
@@ -391,13 +396,13 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
 
             this.add(JPanel().apply {
                 // TODO: Add a visibility setting for the reflection
-                this.border = BorderFactory.createTitledBorder("Reflection")
+                this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.reflection"))
                 this.layout = GridBagLayout()
 
                 addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
-                    JLabel("Padding:"),
+                    JLabel("${Lang.bundle.getString("settings.reflection.padding")}:"),
                     GlobalValues.reflectionPadding,
                     100.0,
                     -100.0
@@ -406,13 +411,13 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 }
 
                 this.add(JPanel().apply {
-                    this.border = BorderFactory.createTitledBorder("Fade")
+                    this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.reflection.fade"))
                     this.layout = GridBagLayout()
 
                     addComponentSliderSpinner<Double>(
                         this,
                         this.layout as GridBagLayout,
-                        JLabel("Height:"),
+                        JLabel("${Lang.bundle.getString("settings.reflection.fade.height")}:"),
                         GlobalValues.fadeHeight,
                         0.9,
                         0.1
@@ -423,7 +428,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     addComponentSliderSpinner<Double>(
                         this,
                         this.layout as GridBagLayout,
-                        JLabel("Opacity:"),
+                        JLabel("${Lang.bundle.getString("settings.reflection.fade.opacity")}:"),
                         GlobalValues.fadeOpacity,
                         0.9,
                         0.1
@@ -445,10 +450,15 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 })
             })
 
-            this.add(JButton("Save Configuration").apply {
+            this.add(JButton(Lang.bundle.getString("settings.save_configuration")).apply {
                 addActionListener {
                     ConfigFile.writeConfig()
-                    JOptionPane.showMessageDialog(GlobalValues.frame, "Your configuration was saved to the JAR", GlobalValues.frame!!.title, JOptionPane.INFORMATION_MESSAGE)
+                    JOptionPane.showMessageDialog(
+                        GlobalValues.frame,
+                        Lang.bundle.getString("settings.save_configuration.message"),
+                        GlobalValues.frame!!.title,
+                        JOptionPane.INFORMATION_MESSAGE
+                    )
                 }
 
                 gridBagLayout.setConstraints(this, GridBagConstraints().apply {
@@ -532,6 +542,8 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         })
 
         gridBagLayout.setConstraints(spinner, GridBagConstraints().apply {
+            fill = GridBagConstraints.HORIZONTAL
+            anchor = GridBagConstraints.EAST
             gridwidth = GridBagConstraints.REMAINDER
         })
 

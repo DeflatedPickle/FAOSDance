@@ -1,5 +1,6 @@
 package com.deflatedpickle.faosdance
 
+import com.deflatedpickle.faosdance.util.Lang
 import java.awt.*
 import java.awt.AlphaComposite
 import java.awt.datatransfer.DataFlavor
@@ -16,7 +17,7 @@ import javax.swing.*
 fun main() {
     val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
 
-    val frame = JFrame("FAOSDance")
+    val frame = JFrame(Lang.bundle.getString("window.title"))
     frame.iconImage = icon.image
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     SwingUtilities.updateComponentTreeUI(frame)
@@ -57,7 +58,7 @@ fun main() {
     val contextMenu = JPopupMenu()
     val menuItems = mutableListOf<JComponent>()
 
-    JMenuItem("Move to Centre").apply {
+    JMenuItem(Lang.bundle.getString("menu.move_to_centre")).apply {
         contextMenu.add(this)
         menuItems.add(this)
 
@@ -71,7 +72,7 @@ fun main() {
         menuItems.add(this)
     }
 
-    JMenuItem("Settings").apply {
+    JMenuItem(Lang.bundle.getString("menu.settings")).apply {
         contextMenu.add(this)
         menuItems.add(this)
 
@@ -88,7 +89,7 @@ fun main() {
         menuItems.add(this)
     }
 
-    JMenuItem("Exit").apply {
+    JMenuItem(Lang.bundle.getString("menu.exit")).apply {
         contextMenu.add(this)
         menuItems.add(this)
 
