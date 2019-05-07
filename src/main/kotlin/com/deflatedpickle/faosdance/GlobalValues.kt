@@ -47,12 +47,19 @@ object GlobalValues {
         frame!!.minimumSize = Dimension(width, height)
         frame!!.setSize(width, height)
 
+        // TODO: Clean this up
         when (direction) {
             Direction.HORIZONTAL -> {
                 frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
                 oldWidth = frame!!.width
             }
             Direction.VERTICAL -> {
+                frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
+                oldHeight = frame!!.height
+            }
+            Direction.BOTH -> {
+                frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
+                oldWidth = frame!!.width
                 frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
                 oldHeight = frame!!.height
             }

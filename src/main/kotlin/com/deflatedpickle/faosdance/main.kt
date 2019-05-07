@@ -6,10 +6,7 @@ import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetDropEvent
-import java.awt.event.ActionListener
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import java.awt.event.WindowEvent
+import java.awt.event.*
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.swing.*
@@ -29,6 +26,29 @@ fun main() {
     frame.isUndecorated = true
     frame.background = Color(0, 0, 0, 0)
     frame.type = Window.Type.UTILITY
+
+    var ctrlHeld = false
+    frame.addKeyListener(object : KeyAdapter() {
+        override fun keyPressed(e: KeyEvent) {
+            if (e.keyCode == KeyEvent.VK_CONTROL) {
+                ctrlHeld = true
+            }
+        }
+
+        override fun keyReleased(e: KeyEvent) {
+            if (e.keyCode == KeyEvent.VK_CONTROL) {
+                ctrlHeld = false
+            }
+        }
+    })
+
+    frame.addMouseWheelListener {
+        if (ctrlHeld) {
+            GlobalValues.xMultiplier += (it.preciseWheelRotation * -1) / 100
+            GlobalValues.yMultiplier += (it.preciseWheelRotation * -1) / 100
+            GlobalValues.resize(Direction.BOTH)
+        }
+    }
 
     GlobalValues.frame = frame
 
