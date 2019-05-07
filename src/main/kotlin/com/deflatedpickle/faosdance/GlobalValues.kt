@@ -1,7 +1,6 @@
 package com.deflatedpickle.faosdance
 
-import java.awt.Dimension
-import java.awt.Point
+import java.awt.*
 import javax.swing.*
 
 object GlobalValues {
@@ -18,6 +17,9 @@ object GlobalValues {
 
     var fadeHeight = 0.65f
     var fadeOpacity = 0.25f
+
+    var xPosition = 0
+    var yPosition = 0
 
     var xMultiplier = 0.5
     var yMultiplier = 0.5
@@ -39,6 +41,12 @@ object GlobalValues {
 
     var oldWidth = 0
     var oldHeight = 0
+
+    fun initPositions() {
+        val effectiveSize = getEffectiveScreenSize(frame!!)
+        xPosition = effectiveSize.width / 2
+        yPosition = effectiveSize.height / 2
+    }
 
     fun resize(direction: Direction? = null) {
         val width = ((((sheet!!.spriteWidth * xMultiplier) * 2) * 100) / 100).toInt()
@@ -70,5 +78,23 @@ object GlobalValues {
         GlobalValues.sheet = sheet
         currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
         resize()
+    }
+
+    // https://stackoverflow.com/a/29177069
+    fun getEffectiveScreenSize(component: Component): Rectangle {
+        val rectangle = Rectangle()
+
+        val screenSize = Toolkit.getDefaultToolkit().screenSize
+        val bounds = Toolkit.getDefaultToolkit().getScreenInsets(component.graphicsConfiguration)
+
+        rectangle.width =
+            (screenSize.getWidth() - bounds.left.toDouble() - bounds.right.toDouble()).toInt() - GlobalValues.frame!!.width
+        rectangle.height =
+            (screenSize.getHeight() - bounds.top.toDouble() - bounds.bottom.toDouble()).toInt() - GlobalValues.frame!!.height
+
+        rectangle.x = ((screenSize.getHeight() - component.height) / 2.0).toInt()
+        rectangle.y = ((screenSize.getWidth() - component.width) / 2.0).toInt()
+
+        return rectangle
     }
 }

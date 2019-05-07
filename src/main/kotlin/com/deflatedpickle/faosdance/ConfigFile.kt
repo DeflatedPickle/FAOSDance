@@ -20,6 +20,13 @@ object ConfigFile {
         val visible = config.getBoolean("sprite.visible")
         val solid = config.getBoolean("sprite.solid")
         val alwaysOnTop = config.getBoolean("sprite.always_on_top")
+        // Animation
+        val play = config.getBoolean("animation.play")
+        val rewind = config.getBoolean("animation.rewind")
+        val frame = config.getLong("animation.frame")
+        // Location
+        val x = config.getLong("location.x")
+        val y = config.getLong("location.y")
         // Size
         val width = config.getDouble("size.width")
         val height = config.getDouble("size.height")
@@ -36,6 +43,13 @@ object ConfigFile {
         if (visible != null) { GlobalValues.isVisible = visible }
         if (solid != null) { GlobalValues.isSolid = solid }
         if (alwaysOnTop != null) { GlobalValues.isTopLevel = alwaysOnTop }
+        // Animation
+        if (play != null) { GlobalValues.play = play }
+        if (rewind != null) { GlobalValues.rewind = rewind }
+        if (frame != null) { GlobalValues.animFrame = frame.toInt() }
+        // Location
+        if (x != null) { GlobalValues.xPosition = x.toInt() }
+        if (y != null) { GlobalValues.yPosition = y.toInt() }
         // Size
         if (width != null) { GlobalValues.xMultiplier = width }
         if (height != null) { GlobalValues.yMultiplier = height }

@@ -188,7 +188,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                 this.border = BorderFactory.createTitledBorder("Location")
                 this.layout = GridBagLayout()
 
-                val effectiveSize = getEffectiveScreenSize()
+                val effectiveSize = GlobalValues.getEffectiveScreenSize(this@DialogSettings)
 
                 val gridLayout = this.layout as GridBagLayout
 
@@ -198,7 +198,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     this,
                     this.layout as GridBagLayout,
                     JLabel("X:"),
-                    effectiveSize.width / 2,
+                    GlobalValues.xPosition,
                     effectiveSize.width,
                     0.0
                 ).apply {
@@ -222,7 +222,7 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
                     this,
                     this.layout as GridBagLayout,
                     JLabel("Y:"),
-                    effectiveSize.height / 2,
+                    GlobalValues.yPosition,
                     effectiveSize.height,
                     0.0
                 ).apply {
@@ -499,23 +499,5 @@ class DialogSettings(owner: Frame) : JDialog(owner, "FAOSDance Settings", true) 
         })
 
         return Triple(component, slider, spinner)
-    }
-
-    // https://stackoverflow.com/a/29177069
-    private fun getEffectiveScreenSize(): Rectangle {
-        val rectangle = Rectangle()
-
-        val screenSize = Toolkit.getDefaultToolkit().screenSize
-        val bounds = Toolkit.getDefaultToolkit().getScreenInsets(graphicsConfiguration)
-
-        rectangle.width =
-            (screenSize.getWidth() - bounds.left.toDouble() - bounds.right.toDouble()).toInt() - GlobalValues.frame!!.width
-        rectangle.height =
-            (screenSize.getHeight() - bounds.top.toDouble() - bounds.bottom.toDouble()).toInt() - GlobalValues.frame!!.height
-
-        rectangle.x = ((screenSize.getHeight() - height) / 2.0).toInt()
-        rectangle.y = ((screenSize.getWidth() - width) / 2.0).toInt()
-
-        return rectangle
     }
 }

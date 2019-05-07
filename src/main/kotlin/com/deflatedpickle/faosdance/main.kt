@@ -261,7 +261,11 @@ fun main() {
     frame.pack()
     frame.isVisible = true
 
-    frame.setLocationRelativeTo(null)
+    if (!config) {
+        GlobalValues.initPositions()
+    }
+
+    frame.setLocation(GlobalValues.xPosition, GlobalValues.yPosition)
 
     if (!config) {
         val dialog = DialogSettings(frame)
