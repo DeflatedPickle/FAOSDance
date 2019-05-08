@@ -26,7 +26,15 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
     - Click the big "Open" button
         - Locate the FL-Chan (or similar) sprite sheet and text file
             - Double-click either one, or click it and then click "Open"
-            
+
+#### Running On Start-Up
+If you want to run the program on start-up, you can using a couple scripts. These will find the latest version of the program in a directory and run it.
+It's a good idea to add a config, so it starts up without a prompt window.
+- Download the files in the `scripts` folder
+    - Place `FAOSDance.ps1` in the same directory as you put `FAOSDance.jar` in
+    - Place `FAOSDance.bat` in `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup`
+- Open `FAOSDance.bat` and change `./FAOSDance.ps1` to the full path of where you put `FAOSDance.ps1`
+
 ### Using The Config
 #### Showing File Extensions
 - Using the File Explorer, navigate to the `View` menu, click it

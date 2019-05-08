@@ -1,0 +1,1 @@
+iex ("javaw -jar {0}" -f((gci | ? -FilterScript { $_.Name -match "FAOSDance-[0-9]+.[0-9]+.[0-9]+-(alpha|beta)*.jar" }) | select -Last 1).Name)
