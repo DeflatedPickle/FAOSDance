@@ -19,7 +19,7 @@ class DialogSettings(owner: Frame) :
         this.isResizable = false
 
         createWidgets()
-        this.size = Dimension(440, 510)
+        this.size = Dimension(440, 560)
 
         this.layout = gridBagLayout
     }
@@ -351,6 +351,63 @@ class DialogSettings(owner: Frame) :
                         gridwidth = GridBagConstraints.REMAINDER
                     })
                 })
+
+                gridBagLayout.setConstraints(this, GridBagConstraints().apply {
+                    fill = GridBagConstraints.BOTH
+                    weightx = 1.0
+                    gridwidth = GridBagConstraints.REMAINDER
+                })
+            })
+
+            this.add(JPanel().apply {
+                this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.rotation"))
+                this.layout = GridBagLayout()
+
+                // TODO: Add 3D rotation
+                // addComponentSliderSpinner<Int>(
+                //     this,
+                //     this.layout as GridBagLayout,
+                //     JLabel("${Lang.bundle.getString("settings.rotation.x")}:"),
+                //     GlobalValues.xRotation,
+                //     360,
+                //     0
+                // ).third.addChangeListener {
+                //     GlobalValues.xRotation = when {
+                //         (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
+                //         (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
+                //         else -> 0
+                //     }
+                // }
+
+                // addComponentSliderSpinner<Int>(
+                //     this,
+                //     this.layout as GridBagLayout,
+                //     JLabel("${Lang.bundle.getString("settings.rotation.y")}:"),
+                //     GlobalValues.yRotation,
+                //     360,
+                //     0
+                // ).third.addChangeListener {
+                //     GlobalValues.yRotation = when {
+                //         (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
+                //         (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
+                //         else -> 0
+                //     }
+                // }
+
+                addComponentSliderSpinner<Int>(
+                    this,
+                    this.layout as GridBagLayout,
+                    JLabel("${Lang.bundle.getString("settings.rotation.z")}:"),
+                    GlobalValues.zRotation,
+                    360,
+                    0
+                ).third.addChangeListener {
+                    GlobalValues.zRotation = when {
+                        (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
+                        (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
+                        else -> 0
+                    }
+                }
 
                 gridBagLayout.setConstraints(this, GridBagConstraints().apply {
                     fill = GridBagConstraints.BOTH

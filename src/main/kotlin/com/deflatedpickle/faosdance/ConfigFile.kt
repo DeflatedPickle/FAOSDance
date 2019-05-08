@@ -41,6 +41,10 @@ object ConfigFile {
                 "x" to GlobalValues.xPosition,
                 "y" to GlobalValues.yPosition
             ),
+            // Rotation
+            "roation" to hashMapOf(
+                "z" to GlobalValues.zRotation
+            ),
             // Size
             "size" to hashMapOf(
                 "width" to GlobalValues.xMultiplier,
@@ -77,6 +81,8 @@ object ConfigFile {
         // Location
         val x = config.getLong("location.x")
         val y = config.getLong("location.y")
+        // Rotation
+        val rotationZ = config.getLong("rotation.z")
         // Size
         val width = config.getDouble("size.width")
         val height = config.getDouble("size.height")
@@ -126,6 +132,10 @@ object ConfigFile {
         }
         if (y != null) {
             GlobalValues.yPosition = y.toInt()
+        }
+        // Rotation
+        if (rotationZ != null) {
+            GlobalValues.zRotation = rotationZ.toInt()
         }
         // Size
         if (width != null) {

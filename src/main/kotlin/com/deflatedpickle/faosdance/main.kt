@@ -189,6 +189,8 @@ fun main() {
 
             g2D.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, GlobalValues.opacity.toFloat())
 
+            g2D.rotate(Math.toRadians(GlobalValues.zRotation.toDouble()), (this.width / 2).toDouble(), (this.height / 2).toDouble())
+
             g2D.translate(
                 (this.width - GlobalValues.sheet!!.spriteWidth * GlobalValues.xMultiplier) / 2,
                 (this.height - GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2

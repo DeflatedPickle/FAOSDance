@@ -26,6 +26,10 @@ object GlobalValues {
     var xMultiplier = 0.5
     var yMultiplier = 0.5
 
+    // var xRotation = 0
+    // var yRotation = 0
+    var zRotation = 0
+
     var fps = 8
     var rewind = false
 
