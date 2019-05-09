@@ -187,42 +187,57 @@ fun main() {
             val g2D = g as Graphics2D
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
 
+            // Change the opacity
             g2D.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, GlobalValues.opacity.toFloat())
 
+            // Rotate the matrix
             g2D.rotate(Math.toRadians(GlobalValues.zRotation.toDouble()), (this.width / 2).toDouble(), (this.height / 2).toDouble())
 
+            // Translate to the centre
             g2D.translate(
                 (this.width - GlobalValues.sheet!!.spriteWidth * GlobalValues.xMultiplier) / 2,
                 (this.height - GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2
             )
 
-            g2D.translate(
-                0.0,
-                -(GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2 - GlobalValues.reflectionPadding
-            )
+            // Translate upwards the size of the sprite plus the reflection padding
+            if (GlobalValues.isReflectionVisible) {
+                g2D.translate(
+                    0.0,
+                    -(GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2 - GlobalValues.reflectionPadding
+                )
+            }
+            // Scale the sprite
             g2D.scale(GlobalValues.xMultiplier, GlobalValues.yMultiplier)
+            // Draw the sprite
             g2D.drawRenderedImage(
                 GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame],
                 null
             )
 
+            if (!GlobalValues.isReflectionVisible) return
+
+            // Move to the bottom of the sprite
             g2D.translate(
                 0.0,
                 (GlobalValues.sheet!!.spriteHeight) * 2 + (GlobalValues.reflectionPadding)
             )
+            // Flip the matrix, so the reflection is upside down
             g2D.scale(1.0, -1.0)
 
+            // Create a new image for the reflection
             val reflection = BufferedImage(
                 GlobalValues.sheet!!.spriteWidth,
                 GlobalValues.sheet!!.spriteHeight,
                 BufferedImage.TYPE_INT_ARGB
             )
             val rg = reflection.createGraphics()
+            // Draw the reflection
             rg.drawRenderedImage(
                 GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame],
                 null
             )
             rg.composite = AlphaComposite.getInstance(AlphaComposite.DST_IN)
+            // Apply a gradient paint, so the reflection fades out
             rg.paint = GradientPaint(
                 0f,
                 GlobalValues.sheet!!.spriteHeight.toFloat() * GlobalValues.fadeHeight,

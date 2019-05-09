@@ -15,6 +15,7 @@ object GlobalValues {
 
     var play = true
 
+    var isReflectionVisible = true
     var reflectionPadding = 0.0
 
     var fadeHeight = 0.65f
@@ -48,15 +49,17 @@ object GlobalValues {
     var oldWidth = 0
     var oldHeight = 0
 
+    var effectiveSize: Rectangle? = null
+
     fun initPositions() {
-        val effectiveSize = getEffectiveScreenSize(frame!!)
-        xPosition = effectiveSize.width / 2
-        yPosition = effectiveSize.height / 2
+        effectiveSize = getEffectiveScreenSize(frame!!)
+        xPosition = effectiveSize!!.width / 2
+        yPosition = effectiveSize!!.height / 2
     }
 
     fun resize(direction: Direction? = null) {
-        val width = ((((sheet!!.spriteWidth * xMultiplier) * 2) * 100) / 100).toInt()
-        val height = ((((sheet!!.spriteHeight * yMultiplier) * 2) * 100) / 100).toInt()
+        val width = ((((sheet!!.spriteWidth * xMultiplier) * 1.2) * 100) / 100).toInt()
+        val height = ((((sheet!!.spriteHeight * yMultiplier) * if (isReflectionVisible) 2 else 1) * 100) / 100).toInt()
 
         frame!!.minimumSize = Dimension(width, height)
         frame!!.setSize(width, height)
@@ -78,6 +81,8 @@ object GlobalValues {
                 oldHeight = frame!!.height
             }
         }
+
+        effectiveSize = getEffectiveScreenSize(frame!!)
     }
 
     fun configureSpriteSheet(sheet: SpriteSheet) {
@@ -94,9 +99,9 @@ object GlobalValues {
         val bounds = Toolkit.getDefaultToolkit().getScreenInsets(component.graphicsConfiguration)
 
         rectangle.width =
-            (screenSize.getWidth() - bounds.left.toDouble() - bounds.right.toDouble()).toInt() - GlobalValues.frame!!.width
+            (screenSize.getWidth() - bounds.left.toDouble() - bounds.right.toDouble()).toInt() - frame!!.width
         rectangle.height =
-            (screenSize.getHeight() - bounds.top.toDouble() - bounds.bottom.toDouble()).toInt() - GlobalValues.frame!!.height
+            (screenSize.getHeight() - bounds.top.toDouble() - bounds.bottom.toDouble()).toInt() - frame!!.height
 
         rectangle.x = ((screenSize.getHeight() - component.height) / 2.0).toInt()
         rectangle.y = ((screenSize.getWidth() - component.width) / 2.0).toInt()

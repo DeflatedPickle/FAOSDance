@@ -19,7 +19,7 @@ class DialogSettings(owner: Frame) :
         this.isResizable = false
 
         createWidgets()
-        this.size = Dimension(440, 560)
+        this.size = Dimension(440, 580)
 
         this.layout = gridBagLayout
     }
@@ -102,6 +102,9 @@ class DialogSettings(owner: Frame) :
         })
 
         if (GlobalValues.sheet != null) {
+            var xComponents: Triple<JComponent, JSlider, JSpinner>?
+            var yComponents: Triple<JComponent, JSlider, JSpinner>?
+
             addComponentSliderSpinner<Int>(
                 this,
                 gridBagLayout,
@@ -204,18 +207,16 @@ class DialogSettings(owner: Frame) :
                 this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.location"))
                 this.layout = GridBagLayout()
 
-                val effectiveSize = GlobalValues.getEffectiveScreenSize(this@DialogSettings)
-
                 val gridLayout = this.layout as GridBagLayout
 
                 var comboBox: JComboBox<String>? = null
 
-                val xComponents = addComponentSliderSpinner<Double>(
+                xComponents = addComponentSliderSpinner<Int>(
                     this,
                     this.layout as GridBagLayout,
                     JLabel("${Lang.bundle.getString("settings.location.x")}:"),
                     GlobalValues.xPosition,
-                    effectiveSize.width,
+                    GlobalValues.effectiveSize!!.width,
                     0.0
                 ).apply {
                     third.addChangeListener {
@@ -239,14 +240,14 @@ class DialogSettings(owner: Frame) :
                         }
                     }
                 }
-                val xEntry = xComponents.third
+                val xEntry = xComponents!!.third
 
-                val yComponents = addComponentSliderSpinner<Double>(
+                yComponents = addComponentSliderSpinner<Int>(
                     this,
                     this.layout as GridBagLayout,
                     JLabel("${Lang.bundle.getString("settings.location.y")}:"),
                     GlobalValues.yPosition,
-                    effectiveSize.height,
+                    GlobalValues.effectiveSize!!.height,
                     0.0
                 ).apply {
                     third.addChangeListener {
@@ -269,7 +270,7 @@ class DialogSettings(owner: Frame) :
                         }
                     }
                 }
-                val yEntry = yComponents.third
+                val yEntry = yComponents!!.third
 
                 this.add(JComboBox<String>(HookPoint.values().map { enumItem ->
                     enumItem.name
@@ -294,50 +295,50 @@ class DialogSettings(owner: Frame) :
                             }
                             HookPoint.TOP_CENTRE -> {
                                 val selected = this.selectedIndex
-                                xEntry.value = effectiveSize.width / 2.0
+                                xEntry.value = GlobalValues.effectiveSize!!.width / 2.0
                                 yEntry.value = 0.0
                                 this.selectedIndex = selected
                             }
                             HookPoint.TOP_RIGHT -> {
                                 val selected = this.selectedIndex
-                                xEntry.value = effectiveSize.width.toDouble()
+                                xEntry.value = GlobalValues.effectiveSize!!.width.toDouble()
                                 yEntry.value = 0.0
                                 this.selectedIndex = selected
                             }
                             HookPoint.MIDDLE_LEFT -> {
                                 val selected = this.selectedIndex
                                 xEntry.value = 0.0
-                                yEntry.value = effectiveSize.height / 2.0
+                                yEntry.value = GlobalValues.effectiveSize!!.height / 2.0
                                 this.selectedIndex = selected
                             }
                             HookPoint.MIDDLE_CENTRE -> {
                                 val selected = this.selectedIndex
-                                xEntry.value = effectiveSize.width / 2.0
-                                yEntry.value = effectiveSize.height / 2.0
+                                xEntry.value = GlobalValues.effectiveSize!!.width / 2.0
+                                yEntry.value = GlobalValues.effectiveSize!!.height / 2.0
                                 this.selectedIndex = selected
                             }
                             HookPoint.MIDDLE_RIGHT -> {
                                 val selected = this.selectedIndex
-                                xEntry.value = effectiveSize.width.toDouble()
-                                yEntry.value = effectiveSize.height / 2.0
+                                xEntry.value = GlobalValues.effectiveSize!!.width.toDouble()
+                                yEntry.value = GlobalValues.effectiveSize!!.height / 2.0
                                 this.selectedIndex = selected
                             }
                             HookPoint.BOTTOM_LEFT -> {
                                 val selected = this.selectedIndex
                                 xEntry.value = 0.0
-                                yEntry.value = effectiveSize.height.toDouble()
+                                yEntry.value = GlobalValues.effectiveSize!!.height.toDouble()
                                 this.selectedIndex = selected
                             }
                             HookPoint.BOTTOM_CENTRE -> {
                                 val selected = this.selectedIndex
-                                xEntry.value = effectiveSize.width / 2.0
-                                yEntry.value = effectiveSize.height.toDouble()
+                                xEntry.value = GlobalValues.effectiveSize!!.width / 2.0
+                                yEntry.value = GlobalValues.effectiveSize!!.height.toDouble()
                                 this.selectedIndex = selected
                             }
                             HookPoint.BOTTOM_RIGHT -> {
                                 val selected = this.selectedIndex
-                                xEntry.value = effectiveSize.width.toDouble()
-                                yEntry.value = effectiveSize.height.toDouble()
+                                xEntry.value = GlobalValues.effectiveSize!!.width.toDouble()
+                                yEntry.value = GlobalValues.effectiveSize!!.height.toDouble()
                                 this.selectedIndex = selected
                             }
                             HookPoint.CUSTOM -> {
@@ -364,36 +365,6 @@ class DialogSettings(owner: Frame) :
                 this.layout = GridBagLayout()
 
                 // TODO: Add 3D rotation
-                // addComponentSliderSpinner<Int>(
-                //     this,
-                //     this.layout as GridBagLayout,
-                //     JLabel("${Lang.bundle.getString("settings.rotation.x")}:"),
-                //     GlobalValues.xRotation,
-                //     360,
-                //     0
-                // ).third.addChangeListener {
-                //     GlobalValues.xRotation = when {
-                //         (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
-                //         (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
-                //         else -> 0
-                //     }
-                // }
-
-                // addComponentSliderSpinner<Int>(
-                //     this,
-                //     this.layout as GridBagLayout,
-                //     JLabel("${Lang.bundle.getString("settings.rotation.y")}:"),
-                //     GlobalValues.yRotation,
-                //     360,
-                //     0
-                // ).third.addChangeListener {
-                //     GlobalValues.yRotation = when {
-                //         (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
-                //         (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
-                //         else -> 0
-                //     }
-                // }
-
                 addComponentSliderSpinner<Int>(
                     this,
                     this.layout as GridBagLayout,
@@ -456,41 +427,83 @@ class DialogSettings(owner: Frame) :
                 this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.reflection"))
                 this.layout = GridBagLayout()
 
-                addComponentSliderSpinner<Double>(
+                val gridLayout = this.layout as GridBagLayout
+
+                var padding: Triple<JComponent, JSlider, JSpinner>? = null
+                var fadeHeight: Triple<JComponent, JSlider, JSpinner>? = null
+                var fadeOpacity: Triple<JComponent, JSlider, JSpinner>? = null
+
+                this.add(JCheckBox(Lang.bundle.getString("settings.reflection.visible")).apply {
+                    isSelected = GlobalValues.isReflectionVisible
+
+                    addActionListener {
+                        GlobalValues.isReflectionVisible = this.isSelected
+
+                        padding!!.second.isEnabled = this.isSelected
+                        padding!!.third.isEnabled = this.isSelected
+
+                        fadeHeight!!.second.isEnabled = this.isSelected
+                        fadeHeight!!.third.isEnabled = this.isSelected
+
+                        fadeOpacity!!.second.isEnabled = this.isSelected
+                        fadeOpacity!!.third.isEnabled = this.isSelected
+
+                        GlobalValues.resize()
+
+                        xComponents!!.second.maximum = GlobalValues.effectiveSize!!.width
+                        (xComponents!!.third.model as SpinnerNumberModel).maximum = GlobalValues.effectiveSize!!.width
+
+                        yComponents!!.second.maximum = GlobalValues.effectiveSize!!.height
+                        (yComponents!!.third.model as SpinnerNumberModel).maximum = GlobalValues.effectiveSize!!.height
+                    }
+
+                    gridLayout.setConstraints(
+                        this,
+                        GridBagConstraints().apply { gridwidth = GridBagConstraints.REMAINDER }
+                    )
+                })
+
+                padding = addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
                     JLabel("${Lang.bundle.getString("settings.reflection.padding")}:"),
                     GlobalValues.reflectionPadding,
                     100.0,
                     -100.0
-                ).third.addChangeListener {
-                    GlobalValues.reflectionPadding = (it.source as JSpinner).model.value as Double
+                ).apply {
+                    third.addChangeListener {
+                        GlobalValues.reflectionPadding = (it.source as JSpinner).model.value as Double
+                    }
                 }
 
                 this.add(JPanel().apply {
                     this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.reflection.fade"))
                     this.layout = GridBagLayout()
 
-                    addComponentSliderSpinner<Double>(
+                    fadeHeight = addComponentSliderSpinner<Double>(
                         this,
                         this.layout as GridBagLayout,
                         JLabel("${Lang.bundle.getString("settings.reflection.fade.height")}:"),
                         GlobalValues.fadeHeight,
                         0.9,
                         0.1
-                    ).third.addChangeListener {
-                        GlobalValues.fadeHeight = ((it.source as JSpinner).model.value as Double).toFloat()
+                    ).apply {
+                        third.addChangeListener {
+                            GlobalValues.fadeHeight = ((it.source as JSpinner).model.value as Double).toFloat()
+                        }
                     }
 
-                    addComponentSliderSpinner<Double>(
+                    fadeOpacity = addComponentSliderSpinner<Double>(
                         this,
                         this.layout as GridBagLayout,
                         JLabel("${Lang.bundle.getString("settings.reflection.fade.opacity")}:"),
                         GlobalValues.fadeOpacity,
                         0.9,
                         0.1
-                    ).third.addChangeListener {
-                        GlobalValues.fadeOpacity = ((it.source as JSpinner).model.value as Double).toFloat()
+                    ).apply {
+                        third.addChangeListener {
+                            GlobalValues.fadeOpacity = ((it.source as JSpinner).model.value as Double).toFloat()
+                        }
                     }
                 }.also {
                     (this.layout as GridBagLayout).setConstraints(it, GridBagConstraints().apply {

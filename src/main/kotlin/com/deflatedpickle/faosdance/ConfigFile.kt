@@ -52,6 +52,7 @@ object ConfigFile {
             ),
             // Reflection
             "reflection" to hashMapOf(
+                "visible" to GlobalValues.isReflectionVisible,
                 "padding" to GlobalValues.reflectionPadding,
                 // Reflection -- Fade
                 "fade" to hashMapOf(
@@ -88,6 +89,7 @@ object ConfigFile {
         val height = config.getDouble("size.height")
         // Reflection
         val padding = config.getDouble("reflection.padding")
+        val reflectionVisible = config.getBoolean("reflection.visible")
         // Reflection -- Fade
         val fadeHeight = config.getDouble("reflection.fade.height")
         val fadeOpacity = config.getDouble("reflection.fade.opacity")
@@ -145,6 +147,9 @@ object ConfigFile {
             GlobalValues.yMultiplier = height
         }
         // Reflection
+        if (reflectionVisible != null) {
+            GlobalValues.isReflectionVisible = reflectionVisible
+        }
         if (padding != null) {
             GlobalValues.reflectionPadding = padding
         }
