@@ -1,13 +1,28 @@
-# FAOSDance ![GitHub Last Commit](https://img.shields.io/github/last-commit/DeflatedPickle/FAOSDance.svg) [![Build Status](https://travis-ci.org/DeflatedPickle/FAOSDance.svg?branch=master)](https://travis-ci.org/DeflatedPickle/FAOSDance)
+# FAOSDance [![GitHub Last Commit](https://img.shields.io/github/last-commit/DeflatedPickle/FAOSDance.svg)](https://github.com/DeflatedPickle/FAOSDance/commits/master) [![Build Status](https://travis-ci.org/DeflatedPickle/FAOSDance.svg?branch=master)](https://travis-ci.org/DeflatedPickle/FAOSDance)
 A stand-alone, free and open-source implementation of the Fruity Dance plugin from FL Studio.
+
+## Table Of Contents
+- [Comparison With Fruity Dance](#comparison-with-fruity-dance)
+- [Basic Usage](#basic-usage)
+    - [Setting Up](#setting-up)
+    - [Running On Start-Up](#running-on-start-up)
+- [Using The Config](#using-the-config)
+    - [Showing File Extensions](#showing-file-extensions)
+    - [Editing Files In The Program](#editing-files-in-the-program)
+        - [Using An Archiving Program](#using-an-archiving-program)
+        - [Changing To A ZIP File And Back](#changing-to-a-zip-file-and-back)
+    - [Config Options](#config-options)
+    - [Config Example](#config-example)
 
 | | Downloads |
 |---|---|
-| **Latest** | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.13.0-alpha/total.svg) |
-| | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.9.3-alpha/total.svg) |
-| | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.4.1-alpha/total.svg) |
-| | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.2.1-alpha/total.svg) |
-| | ![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.0-alpha/total.svg) |
+| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.13.0-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.13.0-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.9.3-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.9.3-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.4.1-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.4.1-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.2.1-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.2.1-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.1.0-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.1.0-alpha) |
+
+---
 
 ### Comparison With Fruity Dance
 | | Fruity Dance | FAOSDance |
@@ -18,7 +33,7 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 
 ---
 
-### How To Use
+### Basic Usage
 #### Setting Up
 - Download the JAR from the [latest release](https://github.com/DeflatedPickle/FAOSDance/releases/latest)
 - Download the FL-Chan (or similar) sprite sheet and text file (can be found in the FL Studio files, or you can [download a big version](http://www.image-line.com/support/FLHelp/content/FLChan_HD.zip))
@@ -36,6 +51,7 @@ It's a good idea to add a config, so it starts up without a prompt window.
 - Open `FAOSDance.bat` and change `./FAOSDance.ps1` to the full path of where you put `FAOSDance.ps1`
 
 ### Using The Config
+The easiest way to use the config is to change your settings in the UI and then click the "`Save Configuration`" button. But if you want to edit the raw config as text, or share it, continue reading this section.
 #### Showing File Extensions
 - Using the File Explorer, navigate to the `View` menu, click it
     - Navigate to the `Options` button, click it
@@ -43,17 +59,18 @@ It's a good idea to add a config, so it starts up without a prompt window.
             - Untick the `Hide extensions for known file types` checkbox
                 - Click the `Ok` button
 #### Editing Files In The Program
-##### Option 1
+##### Using An Archiving Program
+- Right-click the program file
+    - Open it with an archiving program, such as; WinRAR, 7-Zip or WinZip
+- Open the `config.toml` file and configure it using the details below
+
+##### Changing To A ZIP File And Back
 - Right-click on the program file
     - Select the `Rename` option
         - Change the extension (the text shown after the dot) to `zip`
 - Double-click the program file
 - Open the `config.toml` file and configure it using the details below
-
-##### Option 2
-- Right-click the program file
-    - Open it with an archiving program, such as; WinRAR, 7-Zip or WinZip
-- Open the `config.toml` file and configure it using the details below
+- After editing the config, change the extension back to `jar` to run
 
 #### Config Options
 | Option | Description |
