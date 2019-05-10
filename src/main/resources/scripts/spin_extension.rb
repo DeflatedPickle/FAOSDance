@@ -2,7 +2,7 @@ class SpinExtension < DanceExtension
   def initialize
     super "Spin", "Spins the sprite around using a sine function"
 
-    @original = FAOSDance.getXMultiplier()
+    @original = FAOSDance.getXMultiplier
     @counter = @original
   end
 
@@ -15,6 +15,14 @@ class SpinExtension < DanceExtension
 
     new_size = Math.sin(@counter)
     FAOSDance.setXMultiplier new_size
+  end
+
+  def enable
+    @original = FAOSDance.getXMultiplier
+  end
+
+  def disable
+    FAOSDance.setXMultiplier @original
   end
 end
 

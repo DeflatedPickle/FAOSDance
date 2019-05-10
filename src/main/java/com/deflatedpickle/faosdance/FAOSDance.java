@@ -1,5 +1,6 @@
 package com.deflatedpickle.faosdance;
 
+import com.deflatedpickle.faosdance.settings.ExtensionSettings;
 import org.jruby.RubyObject;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ public class FAOSDance {
         ArrayList newExtensions = new ArrayList(RubyThread.Companion.getExtensions());
         newExtensions.add(object);
         RubyThread.Companion.setExtensions(newExtensions);
+        ExtensionSettings.Companion.getExtensionList().add(object);
     }
 
     public static Double getXMultiplier() {

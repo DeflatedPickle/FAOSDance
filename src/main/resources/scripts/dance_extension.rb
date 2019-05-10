@@ -35,6 +35,14 @@ class DanceExtension
   end
 
   # Adds components to the settings dialog
-  def settings
+  def settings(panel)
+  end
+
+  # Run when the extension is disabled
+  def enable
+  end
+
+  # Run when the extension is enabled
+  def disable
   end
 end

@@ -2,6 +2,7 @@ class RotateExtension < DanceExtension
   def initialize
     super "Rotate", "Rotates the sprite around using a sine function"
 
+    @original = FAOSDance.getZRotation
     @max = 360
     @counter = 0
   end
@@ -14,6 +15,14 @@ class RotateExtension < DanceExtension
     end
 
     FAOSDance.setZRotation @counter
+  end
+
+  def enable
+    @original = FAOSDance.getZRotation
+  end
+
+  def disable
+    FAOSDance.setZRotation @original
   end
 end
 
