@@ -1,6 +1,7 @@
 package com.deflatedpickle.faosdance
 
 import com.deflatedpickle.faosdance.util.Lang
+import org.jruby.RubyBoolean
 import java.awt.*
 import java.awt.AlphaComposite
 import java.awt.datatransfer.DataFlavor
@@ -192,7 +193,11 @@ fun main() {
             val g2D = g as Graphics2D
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
 
-            RubyThread.rubyContainer.callMethod(RubyThread.rubyContainer.get("\$extension"), "pre_draw", g2D)
+            for (i in RubyThread.extensions) {
+                if (i.getInstanceVariable("@enabled") as RubyBoolean == RubyThread.ruby.`true`) {
+                    RubyThread.rubyContainer.callMethod(i, "pre_draw", g2D)
+                }
+            }
 
             // Change the opacity
             g2D.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, GlobalValues.opacity.toFloat())

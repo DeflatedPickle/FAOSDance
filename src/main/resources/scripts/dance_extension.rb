@@ -7,6 +7,7 @@ class DanceExtension
   def initialize(name, description)
     @name = name
     @description = description
+    @enabled = false
   end
 
   # Runs after drawing starts
@@ -31,5 +32,9 @@ class DanceExtension
 
   # Runs before drawing finishes
   def post_draw(g2d)
+  end
+
+  # Adds components to the settings dialog
+  def settings
   end
 end

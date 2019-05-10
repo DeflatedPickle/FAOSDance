@@ -65,7 +65,7 @@ object GlobalValues {
     }
 
     fun resize(direction: Direction? = null) {
-        val width = ((((sheet!!.spriteWidth * xMultiplier) * 1.2) * 100) / 100).toInt()
+        val width = ((((sheet!!.spriteWidth * xMultiplier) * 2) * 100) / 100).toInt()
         val height = ((((sheet!!.spriteHeight * yMultiplier) * if (isReflectionVisible) 2 else 1) * 100) / 100).toInt()
 
         frame!!.minimumSize = Dimension(width, height)

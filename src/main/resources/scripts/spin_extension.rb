@@ -18,4 +18,4 @@ class SpinExtension < DanceExtension
   end
 end
 
-$extension = SpinExtension.new
+FAOSDance.registerExtension SpinExtension.new
