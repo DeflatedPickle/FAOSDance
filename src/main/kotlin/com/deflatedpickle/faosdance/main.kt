@@ -20,8 +20,12 @@ fun main() {
     val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
 
     val scripts = mutableListOf<String>()
+    // Makes sure the core class is always loaded first
+    scripts.add(File(ClassLoader.getSystemResource("scripts/dance_extension.rb").path).readText())
     for (i in File(ClassLoader.getSystemResource("scripts").path).listFiles()) {
-        scripts.add(i.readText())
+        if (i.name != "dance_extension") {
+            scripts.add(i.readText())
+        }
     }
     RubyThread.queue = scripts
 
