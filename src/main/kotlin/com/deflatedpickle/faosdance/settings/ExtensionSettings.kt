@@ -3,9 +3,7 @@ package com.deflatedpickle.faosdance.settings
 import com.deflatedpickle.faosdance.RubyThread
 import org.jruby.RubyObject
 import org.jruby.RubyString
-import java.awt.BorderLayout
-import java.awt.Component
-import java.awt.Frame
+import java.awt.*
 import javax.swing.*
 
 class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
@@ -21,6 +19,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
         for (i in extensionList) {
             val name = (i.getInstanceVariable("@name") as RubyString).asJavaString()
             val description = (i.getInstanceVariable("@description") as RubyString).asJavaString()
+            val author = (i.getInstanceVariable("@author") as RubyString).asJavaString()
 
             val mainPanel = JPanel()
             mainPanel.layout = BoxLayout(mainPanel, BoxLayout.Y_AXIS)
@@ -35,7 +34,14 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
             })
 
             val subPanel = JPanel()
+            subPanel.border = BorderFactory.createEmptyBorder(10, 10, 10, 10)
+            subPanel.layout = GridBagLayout()
             RubyThread.rubyContainer.callMethod(i, "settings", subPanel)
+            subPanel.add(Box.createVerticalGlue(), GridBagConstraints().apply {
+                this.anchor = GridBagConstraints.NORTH
+                this.fill = GridBagConstraints.VERTICAL
+                this.weighty = 1.0
+            })
             mainPanel.add(subPanel)
 
             extensionTabbedPane.addTab(null, mainPanel)

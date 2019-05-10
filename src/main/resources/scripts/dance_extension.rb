@@ -1,12 +1,15 @@
 require "java"
 
 java_import "com.deflatedpickle.faosdance.FAOSDance"
+java_import "com.deflatedpickle.faosdance.FAOSDanceSettings"
 
 class DanceExtension
   # An extension for FAOSDance
-  def initialize(name, description)
+  def initialize(name, description, author)
     @name = name
     @description = description
+    @author = author
+
     @enabled = false
   end
 
@@ -38,11 +41,11 @@ class DanceExtension
   def settings(panel)
   end
 
-  # Run when the extension is disabled
+  # Run when the extension is enabled
   def enable
   end
 
-  # Run when the extension is enabled
+  # Run when the extension is disabled
   def disable
   end
 end

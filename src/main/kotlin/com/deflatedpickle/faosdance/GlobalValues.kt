@@ -118,6 +118,28 @@ object GlobalValues {
         return rectangle
     }
 
+    fun addLabelSliderSpinnerDouble(
+        parent: Container,
+        gridBagLayout: GridBagLayout,
+        name: String,
+        defaultValue: Double,
+        maxNumber: Double,
+        minNumber: Double
+    ): Triple<JComponent, JSlider, JSpinner> {
+        return addComponentSliderSpinner<Double>(parent, gridBagLayout, JLabel(name), defaultValue, maxNumber, minNumber)
+    }
+
+    fun addLabelSliderSpinnerInteger(
+        parent: Container,
+        gridBagLayout: GridBagLayout,
+        name: String,
+        defaultValue: Int,
+        maxNumber: Int,
+        minNumber: Int
+    ): Triple<JComponent, JSlider, JSpinner> {
+        return addComponentSliderSpinner<Int>(parent, gridBagLayout, JLabel(name), defaultValue, maxNumber, minNumber)
+    }
+
     inline fun <reified T : Number> addComponentSliderSpinner(
         parent: Container,
         gridBagLayout: GridBagLayout,
