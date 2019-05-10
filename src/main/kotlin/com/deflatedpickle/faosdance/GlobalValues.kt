@@ -1,7 +1,9 @@
 package com.deflatedpickle.faosdance
 
+import com.deflatedpickle.faosdance.settings.SettingsDialog
 import java.awt.*
 import javax.swing.*
+import kotlin.math.roundToInt
 
 object GlobalValues {
     init {
@@ -56,7 +58,7 @@ object GlobalValues {
     var effectiveSize: Rectangle? = null
 
     // The current settings window
-    var dialogSettings: DialogSettings? = null
+    var settingsDialog: SettingsDialog? = null
 
     fun initPositions() {
         effectiveSize = getEffectiveScreenSize(frame!!)
@@ -114,5 +116,87 @@ object GlobalValues {
         rectangle.y = ((screenSize.getWidth() - component.width) / 2.0).toInt()
 
         return rectangle
+    }
+
+    inline fun <reified T : Number> addComponentSliderSpinner(
+        parent: Container,
+        gridBagLayout: GridBagLayout,
+        component: JComponent,
+        defaultValue: Number,
+        maxNumber: Number,
+        minNumber: Number
+    ): Triple<JComponent, JSlider, JSpinner> {
+        val slider = when (T::class) {
+            Int::class -> JSlider(minNumber.toInt(), maxNumber.toInt(), defaultValue.toInt())
+            Double::class -> JDoubleSlider(
+                minNumber.toDouble(),
+                maxNumber.toDouble(),
+                defaultValue.toDouble(),
+                100.0
+            )
+            else -> JSlider()
+        }
+
+        val stepSize = when (T::class) {
+            Int::class -> 1 as T
+            Double::class -> 0.01 as T
+            else -> 0 as T
+        }
+
+        val spinner = JSpinner(
+            SpinnerNumberModel(
+                defaultValue.toDouble(),
+                minNumber.toDouble(),
+                maxNumber.toDouble(),
+                stepSize
+            )
+        )
+
+        slider.value = when (T::class) {
+            Int::class -> defaultValue.toInt()
+            Double::class -> (defaultValue.toFloat() * 100).toInt()
+            else -> 0
+        }
+        spinner.value = defaultValue
+
+        slider.addChangeListener {
+            spinner.value = when (T::class) {
+                Int::class -> slider.value
+                Double::class -> slider.value.toDouble() / 100
+                else -> 0
+            }
+        }
+        spinner.addChangeListener {
+            slider.value = when (T::class) {
+                Int::class -> when {
+                    spinner.value is Int -> spinner.value as Int
+                    spinner.value is Double -> (spinner.value as Double).roundToInt()
+                    else -> 0
+                }
+                Double::class -> (spinner.value as Double * 100).toInt()
+                else -> 0
+            }
+        }
+
+        parent.add(component)
+        parent.add(slider)
+        parent.add(spinner)
+
+        gridBagLayout.setConstraints(component, GridBagConstraints().apply {
+            anchor = GridBagConstraints.EAST
+        })
+
+        gridBagLayout.setConstraints(slider, GridBagConstraints().apply {
+            fill = GridBagConstraints.HORIZONTAL
+            weightx = 1.0
+        })
+
+        gridBagLayout.setConstraints(spinner, GridBagConstraints().apply {
+            fill = GridBagConstraints.HORIZONTAL
+            anchor = GridBagConstraints.EAST
+            gridwidth = GridBagConstraints.REMAINDER
+        })
+
+        return Triple(component, slider, spinner)
     }
 }

@@ -1,5 +1,6 @@
 package com.deflatedpickle.faosdance
 
+import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
 import org.jruby.RubyBoolean
 import java.awt.*
@@ -84,7 +85,8 @@ fun main() {
         menuItems.add(this)
 
         addActionListener {
-            val dialog = DialogSettings(frame)
+            val dialog = SettingsDialog(frame)
+            dialog.triggerWidgets()
             dialog.setLocationRelativeTo(frame)
 
             dialog.isVisible = true
@@ -270,7 +272,7 @@ fun main() {
     frame.add(panel)
 
     GlobalValues.timer = Timer(1000 / GlobalValues.fps, ActionListener {
-        if (GlobalValues.play) {
+        if (GlobalValues.play && GlobalValues.sheet != null) {
             if (GlobalValues.rewind) {
                 GlobalValues.animFrame--
 
@@ -303,7 +305,8 @@ fun main() {
     frame.setLocation(GlobalValues.xPosition, GlobalValues.yPosition)
 
     if (!config) {
-        val dialog = DialogSettings(frame)
+        val dialog = SettingsDialog(frame)
+        dialog.triggerWidgets()
         dialog.setLocationRelativeTo(frame)
 
         dialog.isVisible = true
