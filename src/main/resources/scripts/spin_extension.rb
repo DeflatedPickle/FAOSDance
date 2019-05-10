@@ -7,7 +7,7 @@ class SpinExtension < DanceExtension
     @increase = 0.1
   end
 
-  def pre_draw(g2d)
+  def pre_draw(graphics)
     if @counter < @original
       @counter += @increase
     else

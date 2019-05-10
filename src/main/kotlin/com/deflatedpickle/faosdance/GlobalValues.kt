@@ -1,6 +1,8 @@
 package com.deflatedpickle.faosdance
 
 import com.deflatedpickle.faosdance.settings.SettingsDialog
+import org.jruby.RubyBoolean
+import org.jruby.RubyObject
 import java.awt.*
 import javax.swing.*
 import kotlin.math.roundToInt
@@ -98,6 +100,10 @@ object GlobalValues {
         GlobalValues.sheet = sheet
         currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
         resize()
+    }
+
+    fun isEnabled(rubyObject: RubyObject): Boolean {
+        return rubyObject.getInstanceVariable("@enabled") as RubyBoolean == RubyThread.ruby.`true`
     }
 
     // https://stackoverflow.com/a/29177069

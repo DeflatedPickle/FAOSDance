@@ -8,7 +8,7 @@ class RotateExtension < DanceExtension
     @counter = 0
   end
 
-  def pre_draw(g2d)
+  def pre_draw(graphics)
     if @counter < @max
       @counter += @increase
     else

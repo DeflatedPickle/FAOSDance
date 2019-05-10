@@ -14,27 +14,27 @@ class DanceExtension
   end
 
   # Runs after drawing starts
-  def pre_draw(g2d)
+  def pre_draw(graphics)
   end
 
   # Runs before the sprite is drawn
-  def pre_draw_sprite(g2d)
+  def pre_draw_sprite(sprite_graphics)
   end
 
   # Runs after the sprite is drawn
-  def post_draw_sprite(g2d)
+  def post_draw_sprite(graphics)
   end
 
   # Runs before the reflection is drawn
-  def pre_draw_reflection(g2d)
+  def pre_draw_reflection(reflection_graphics)
   end
 
   # Runs after the reflection is drawn
-  def post_draw_reflection(g2d)
+  def post_draw_reflection(graphics)
   end
 
   # Runs before drawing finishes
-  def post_draw(g2d)
+  def post_draw(graphics)
   end
 
   # Adds components to the settings dialog
