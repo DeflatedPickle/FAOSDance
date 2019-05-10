@@ -17,6 +17,12 @@ import javax.swing.*
 fun main() {
     val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
 
+    val scripts = mutableListOf<String>()
+    for (i in File(ClassLoader.getSystemResource("scripts").path).listFiles()) {
+        scripts.add(i.readText())
+    }
+    RubyThread.queue = scripts
+
     val frame = JFrame(Lang.bundle.getString("window.title"))
     frame.iconImage = icon.image
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
@@ -106,8 +112,7 @@ fun main() {
                 for (i in menuItems) {
                     if (i is JMenuItem) {
                         this.add(MenuItem(i.text).apply { addActionListener(i.actionListeners[0]) })
-                    }
-                    else if (i is JSeparator) {
+                    } else if (i is JSeparator) {
                         this.addSeparator()
                     }
                 }
@@ -187,11 +192,17 @@ fun main() {
             val g2D = g as Graphics2D
             g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
 
+            RubyThread.rubyContainer.callMethod(RubyThread.rubyContainer.get("\$extension"), "pre_draw", g2D)
+
             // Change the opacity
             g2D.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, GlobalValues.opacity.toFloat())
 
             // Rotate the matrix
-            g2D.rotate(Math.toRadians(GlobalValues.zRotation.toDouble()), (this.width / 2).toDouble(), (this.height / 2).toDouble())
+            g2D.rotate(
+                Math.toRadians(GlobalValues.zRotation.toDouble()),
+                (this.width / 2).toDouble(),
+                (this.height / 2).toDouble()
+            )
 
             // Translate to the centre
             g2D.translate(
@@ -261,8 +272,7 @@ fun main() {
                 if (GlobalValues.animFrame <= 0) {
                     GlobalValues.animFrame = 7
                 }
-            }
-            else {
+            } else {
                 GlobalValues.animFrame++
 
                 if (GlobalValues.animFrame >= 8) {

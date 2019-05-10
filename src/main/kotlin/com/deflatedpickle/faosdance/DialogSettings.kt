@@ -6,6 +6,8 @@ import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetDropEvent
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import java.io.File
 import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
@@ -15,13 +17,24 @@ class DialogSettings(owner: Frame) :
     JDialog(owner, "${Lang.bundle.getString("window.title")} ${Lang.bundle.getString("window.settings")}", true) {
     private val gridBagLayout = GridBagLayout()
 
+    var widthComponents: Triple<JComponent, JSlider, JSpinner>? = null
+    var heightComponents: Triple<JComponent, JSlider, JSpinner>? = null
+
     init {
+        GlobalValues.dialogSettings = this
+
         this.isResizable = false
 
         createWidgets()
         this.size = Dimension(440, 580)
 
         this.layout = gridBagLayout
+
+        this.addWindowListener(object : WindowAdapter() {
+            override fun windowClosed(e: WindowEvent) {
+                GlobalValues.dialogSettings = null
+            }
+        })
     }
 
     fun createWidgets() {
@@ -391,28 +404,32 @@ class DialogSettings(owner: Frame) :
                 this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.size"))
                 this.layout = GridBagLayout()
 
-                addComponentSliderSpinner<Double>(
+                widthComponents = addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
                     JLabel("${Lang.bundle.getString("settings.size.width")}:"),
                     GlobalValues.xMultiplier,
                     GlobalValues.maxSize,
                     0.1
-                ).third.addChangeListener {
-                    GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double
-                    GlobalValues.resize(Direction.HORIZONTAL)
+                ).apply {
+                    third.addChangeListener {
+                        GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double
+                        GlobalValues.resize(Direction.HORIZONTAL)
+                    }
                 }
 
-                addComponentSliderSpinner<Double>(
+                heightComponents = addComponentSliderSpinner<Double>(
                     this,
                     this.layout as GridBagLayout,
                     JLabel("${Lang.bundle.getString("settings.size.height")}:"),
                     GlobalValues.yMultiplier,
                     GlobalValues.maxSize,
                     0.1
-                ).third.addChangeListener {
-                    GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double
-                    GlobalValues.resize(Direction.VERTICAL)
+                ).apply {
+                    third.addChangeListener {
+                        GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double
+                        GlobalValues.resize(Direction.VERTICAL)
+                    }
                 }
 
                 gridBagLayout.setConstraints(this, GridBagConstraints().apply {

@@ -22,6 +22,8 @@ dependencies {
 
     // compile 'com.electronwill.night-config:toml:3.6.0'
     compile 'com.moandjiezana.toml:toml4j:0.7.2'
+    
+    compile 'org.jruby:jruby:9.2.7.0'
 }
 
 compileKotlin {

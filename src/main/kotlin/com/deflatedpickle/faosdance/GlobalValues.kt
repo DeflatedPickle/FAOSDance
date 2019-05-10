@@ -4,6 +4,10 @@ import java.awt.*
 import javax.swing.*
 
 object GlobalValues {
+    init {
+        Thread(RubyThread(), "Ruby").start()
+    }
+
     val maxSize = 10.0
 
     var sheet: SpriteSheet? = null
@@ -50,6 +54,9 @@ object GlobalValues {
     var oldHeight = 0
 
     var effectiveSize: Rectangle? = null
+
+    // The current settings window
+    var dialogSettings: DialogSettings? = null
 
     fun initPositions() {
         effectiveSize = getEffectiveScreenSize(frame!!)
