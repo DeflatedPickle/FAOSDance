@@ -40,6 +40,6 @@ application {
 }
 
 shadowJar {
-    minimize()
+    // minimize() // Causes an error with loading constants for OpenFlags
     archiveName = "FAOSDance.jar"
 }
