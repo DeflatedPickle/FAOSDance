@@ -2,6 +2,7 @@ package com.deflatedpickle.faosdance
 
 import org.jruby.Ruby
 import org.jruby.RubyObject
+import org.jruby.embed.IsolatedScriptingContainer
 import org.jruby.embed.LocalVariableBehavior
 import org.jruby.embed.ScriptingContainer
 
@@ -13,7 +14,7 @@ class RubyThread : Runnable {
         @Volatile
         var extensions = listOf<RubyObject>()
 
-        val rubyContainer = ScriptingContainer(LocalVariableBehavior.PERSISTENT)
+        val rubyContainer = IsolatedScriptingContainer(LocalVariableBehavior.PERSISTENT)
         val ruby: Ruby
 
         init {

@@ -2,30 +2,27 @@ package com.deflatedpickle.faosdance
 
 import com.deflatedpickle.faosdance.settings.ExtensionSettings
 import com.deflatedpickle.faosdance.settings.SettingsDialog
-import com.deflatedpickle.faosdance.util.Lang
 import com.deflatedpickle.faosdance.window.ApplicationWindow
 import com.deflatedpickle.faosdance.window.ContextMenu
 import com.deflatedpickle.faosdance.window.SpritePanel
-import java.awt.*
-import java.awt.AlphaComposite
-import java.awt.datatransfer.DataFlavor
-import java.awt.dnd.DnDConstants
-import java.awt.dnd.DropTarget
-import java.awt.dnd.DropTargetDropEvent
-import java.awt.event.*
-import java.awt.image.BufferedImage
-import java.io.File
-import javax.swing.*
+import org.apache.commons.io.IOUtils
+import java.awt.MenuItem
+import java.awt.PopupMenu
+import java.awt.SystemTray
+import java.awt.TrayIcon
+import javax.swing.JMenuItem
+import javax.swing.JSeparator
 
 
 @Suppress("KDocMissingDocumentation")
 fun main() {
     val scripts = mutableListOf<String>()
     // Makes sure the core class is always loaded first
-    scripts.add(File(ClassLoader.getSystemResource("scripts/dance_extension.rb").path).readText())
-    for (i in File(ClassLoader.getSystemResource("scripts").path).listFiles()) {
-        if (i.name != "dance_extension") {
-            scripts.add(i.readText())
+    scripts.add(ClassLoader.getSystemResource("scripts/dance_extension.rb").readText())
+    for (i in IOUtils.readLines(ClassLoader.getSystemResourceAsStream("scripts/"), Charsets.UTF_8)) {
+        val f = ClassLoader.getSystemResource("scripts/$i").readText()
+        if (i != "dance_extension.rb" && f.contains("< DanceExtension")) {
+            scripts.add(f)
         }
     }
     RubyThread.queue = scripts
