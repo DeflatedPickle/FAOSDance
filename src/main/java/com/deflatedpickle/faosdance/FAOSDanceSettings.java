@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class FAOSDanceSettings {
     public static JPanel createBorderPanel(String title) {
-        var panel = new JPanel();
+        JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder(title));
         return panel;
