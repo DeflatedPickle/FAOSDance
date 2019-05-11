@@ -12,6 +12,8 @@ class SpritePanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
     private val gridBagLayout = GridBagLayout()
 
     val animationPanel = AnimationPanel(owner, settings)
+    val rotationPanel = RotationPanel(owner, settings)
+    val scalePanel = ScalePanel(owner, settings)
 
     var opacityWidgets: Triple<JComponent, JSlider, JSpinner>? = null
     var visibleCheckbox: JCheckBox? = null
@@ -68,14 +70,16 @@ class SpritePanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
         this.settings.widgets.add(solidCheckbox!!)
         this.add(solidCheckbox)
 
-        this.add(animationPanel.apply {
-            gridBagLayout.setConstraints(this,
-                GridBagConstraints().apply {
-                    fill = GridBagConstraints.HORIZONTAL
-                    weightx = 1.0
-                    gridwidth = GridBagConstraints.REMAINDER
-                }
-            )
-        })
+        val fillConstraint = GridBagConstraints().apply {
+            fill = GridBagConstraints.HORIZONTAL
+            weightx = 1.0
+            gridwidth = GridBagConstraints.REMAINDER
+        }
+
+        this.add(animationPanel, fillConstraint)
+
+        this.add(rotationPanel, fillConstraint)
+
+        this.add(scalePanel, fillConstraint)
     }
 }

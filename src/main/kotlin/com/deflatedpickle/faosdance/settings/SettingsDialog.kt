@@ -41,8 +41,10 @@ class SettingsDialog(owner: Frame) : JDialog(
     }
 
     fun triggerWidgets() {
-        for (i in this.widgets) {
-            i.isEnabled = false
+        if (GlobalValues.sheet == null) {
+            for (i in this.widgets) {
+                i.isEnabled = false
+            }
         }
     }
 }

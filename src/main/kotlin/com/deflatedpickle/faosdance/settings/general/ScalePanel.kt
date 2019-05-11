@@ -26,7 +26,7 @@ class ScalePanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
             JLabel("${Lang.bundle.getString("settings.size.width")}:"),
             GlobalValues.xMultiplier,
             GlobalValues.maxSize,
-            0.1
+            -GlobalValues.maxSize
         ).apply {
             third.addChangeListener {
                 GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double
@@ -42,7 +42,7 @@ class ScalePanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
             JLabel("${Lang.bundle.getString("settings.size.height")}:"),
             GlobalValues.yMultiplier,
             GlobalValues.maxSize,
-            0.1
+            -GlobalValues.maxSize
         ).apply {
             third.addChangeListener {
                 GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double

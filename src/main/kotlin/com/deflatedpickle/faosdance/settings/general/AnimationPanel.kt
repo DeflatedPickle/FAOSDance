@@ -44,6 +44,9 @@ class AnimationPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 weightx = 1.0
             })
         }
+        if (GlobalValues.sheet != null) {
+            setActions()
+        }
         this.settings.widgets.add(actionCombobox!!)
         this.add(actionCombobox!!)
 
@@ -152,13 +155,16 @@ class AnimationPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
             GlobalValues.configureSpriteSheet(tempSheet)
             GlobalValues.currentPath = path
 
-            actionCombobox!!.model = DefaultComboBoxModel<String>(GlobalValues.sheet!!.spriteMap.keys.toTypedArray())
-            actionCombobox!!.selectedIndex =
-                GlobalValues.sheet!!.spriteMap.keys.indexOf(actionCombobox!!.selectedItem as String)
+            setActions()
 
             for (i in this.settings.widgets) {
                 i.isEnabled = true
             }
         }
+    }
+
+    fun setActions() {
+        actionCombobox!!.model = DefaultComboBoxModel<String>(GlobalValues.sheet!!.spriteMap.keys.toTypedArray())
+        actionCombobox!!.selectedIndex = GlobalValues.sheet!!.spriteMap.keys.indexOf(GlobalValues.currentAction)
     }
 }

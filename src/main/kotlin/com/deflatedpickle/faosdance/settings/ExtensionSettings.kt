@@ -1,5 +1,6 @@
 package com.deflatedpickle.faosdance.settings
 
+import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.RubyThread
 import org.jruby.RubyObject
 import org.jruby.RubyString
@@ -50,6 +51,10 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
             tabPanel.isOpaque = false
             tabPanel.add(JLabel(name).apply { isOpaque = false }, BorderLayout.WEST)
             tabPanel.add(JCheckBox().apply {
+                if (GlobalValues.enabledExtensions.contains(name)) {
+                    this.isSelected = true
+                }
+
                 isOpaque = false
                 addActionListener {
                     if (this.isSelected) {

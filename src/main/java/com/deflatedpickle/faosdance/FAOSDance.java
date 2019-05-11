@@ -11,6 +11,7 @@ public class FAOSDance {
         ArrayList newExtensions = new ArrayList(RubyThread.Companion.getExtensions());
         newExtensions.add(object);
         RubyThread.Companion.setExtensions(newExtensions);
+
         ExtensionSettings.Companion.getExtensionList().add(object);
     }
 

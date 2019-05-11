@@ -1,5 +1,6 @@
 package com.deflatedpickle.faosdance
 
+import com.deflatedpickle.faosdance.settings.ExtensionSettings
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
 import org.jruby.RubyBoolean
@@ -66,6 +67,13 @@ fun main() {
     GlobalValues.frame = frame
 
     val config = ConfigFile.loadAndUseConfig()
+
+    // Enable scripts in the config
+    for (i in ExtensionSettings.extensionList) {
+        if (GlobalValues.enabledExtensions.contains(i.getInstanceVariable("@name").asJavaString())) {
+            i.setInstanceVariable("@enabled", RubyThread.ruby.getTrue())
+        }
+    }
 
     val contextMenu = JPopupMenu()
     val menuItems = mutableListOf<JComponent>()

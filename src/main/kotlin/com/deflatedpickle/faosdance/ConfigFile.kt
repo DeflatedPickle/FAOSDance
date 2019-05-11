@@ -59,6 +59,10 @@ object ConfigFile {
                     "height" to GlobalValues.fadeHeight,
                     "opacity" to GlobalValues.fadeOpacity
                 )
+            ),
+            // Extensions
+            "extensions" to hashMapOf(
+                "enabled" to GlobalValues.enabledExtensions
             )
         )
 
@@ -93,6 +97,8 @@ object ConfigFile {
         // Reflection -- Fade
         val fadeHeight = config.getDouble("reflection.fade.height")
         val fadeOpacity = config.getDouble("reflection.fade.opacity")
+        // Extensions
+        val enabledExtensions = config.getList<String>("extensions.enabled")
 
         // Sprite
         if (sheet != null) {
@@ -159,6 +165,10 @@ object ConfigFile {
         }
         if (fadeOpacity != null) {
             GlobalValues.fadeOpacity = fadeOpacity.toFloat()
+        }
+        // Extensions
+        if (enabledExtensions != null) {
+            GlobalValues.enabledExtensions = enabledExtensions
         }
 
         return true

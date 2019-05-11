@@ -46,6 +46,8 @@ object GlobalValues {
     var isSolid = true
     var isTopLevel = true
 
+    var enabledExtensions = listOf<String>()
+
     var currentPath = System.getProperty("user.home")
 
     var timer: Timer? = null

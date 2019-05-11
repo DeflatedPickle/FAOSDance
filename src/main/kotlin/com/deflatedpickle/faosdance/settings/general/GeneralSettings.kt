@@ -15,8 +15,6 @@ import javax.swing.JPanel
 class GeneralSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
     val spritePanel = SpritePanel(owner, settings)
     val locationPanel = LocationPanel(owner, settings)
-    val rotationPanel = RotationPanel(owner, settings)
-    val scalePanel = ScalePanel(owner, settings)
     val reflectionPanel = ReflectionPanel(owner, settings)
 
     val saveConfigurationButton = JButton(Lang.bundle.getString("settings.save_configuration")).apply {
@@ -35,8 +33,6 @@ class GeneralSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
         this.layout = BoxLayout(this, BoxLayout.Y_AXIS)
         this.add(spritePanel)
         this.add(locationPanel)
-        this.add(rotationPanel)
-        this.add(scalePanel)
         this.add(reflectionPanel)
 
         this.settings.widgets.add(saveConfigurationButton)
