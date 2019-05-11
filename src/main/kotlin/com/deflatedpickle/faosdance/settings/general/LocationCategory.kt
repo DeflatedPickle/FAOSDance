@@ -10,7 +10,7 @@ import java.awt.GridBagLayout
 import javax.swing.*
 import kotlin.math.roundToInt
 
-class LocationPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
+class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     private val gridBagLayout = GridBagLayout()
 
     var hookPointComboBox: JComboBox<String>? = null

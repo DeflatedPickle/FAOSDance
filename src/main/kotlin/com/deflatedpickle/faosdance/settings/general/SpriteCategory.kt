@@ -8,12 +8,12 @@ import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.*
 
-class SpritePanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
+class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     private val gridBagLayout = GridBagLayout()
 
-    val animationPanel = AnimationPanel(owner, settings)
-    val rotationPanel = RotationPanel(owner, settings)
-    val scalePanel = ScalePanel(owner, settings)
+    val animationCategory = AnimationCategory(owner, settings)
+    val rotationCategory = RotationCategory(owner, settings)
+    val scaleCategory = ScaleCategory(owner, settings)
 
     var opacityWidgets: Triple<JComponent, JSlider, JSpinner>? = null
     var visibleCheckbox: JCheckBox? = null
@@ -76,10 +76,8 @@ class SpritePanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
             gridwidth = GridBagConstraints.REMAINDER
         }
 
-        this.add(animationPanel, fillConstraint)
-
-        this.add(rotationPanel, fillConstraint)
-
-        this.add(scalePanel, fillConstraint)
+        this.add(animationCategory, fillConstraint)
+        this.add(rotationCategory, fillConstraint)
+        this.add(scaleCategory, fillConstraint)
     }
 }

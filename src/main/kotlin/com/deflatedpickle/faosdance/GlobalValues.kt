@@ -12,6 +12,8 @@ object GlobalValues {
         Thread(RubyThread(), "Ruby").start()
     }
 
+    val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
+
     val maxSize = 10.0
 
     var sheet: SpriteSheet? = null

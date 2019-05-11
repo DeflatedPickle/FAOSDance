@@ -8,10 +8,10 @@ import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.*
 
-class ReflectionPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
+class ReflectionCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     private val gridBagLayout = GridBagLayout()
 
-    val fadePanel = FadePanel(owner, settings)
+    val fadeCategory = FadeCategory(owner, settings)
 
     var paddingWidgets: Triple<JComponent, JSlider, JSpinner>? = null
     var visibleCheckbox: JCheckBox? = null
@@ -48,7 +48,7 @@ class ReflectionPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
         this.settings.widgets.add(paddingWidgets!!.second)
         this.settings.widgets.add(paddingWidgets!!.third)
 
-        this.add(fadePanel.apply {
+        this.add(fadeCategory.apply {
             gridBagLayout.setConstraints(this,
                 GridBagConstraints().apply {
                     fill = GridBagConstraints.HORIZONTAL

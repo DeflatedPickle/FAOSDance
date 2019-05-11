@@ -10,7 +10,7 @@ import java.awt.GridBagLayout
 import javax.swing.*
 import kotlin.math.roundToInt
 
-class ScalePanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
+class ScaleCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     private val gridBagLayout = GridBagLayout()
 
     var xScaleWidgets: Triple<JComponent, JSlider, JSpinner>? = null

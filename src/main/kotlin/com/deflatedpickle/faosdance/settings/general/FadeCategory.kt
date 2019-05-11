@@ -9,7 +9,7 @@ import java.awt.GridBagLayout
 import javax.swing.*
 import kotlin.math.roundToInt
 
-class FadePanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
+class FadeCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     private val gridBagLayout = GridBagLayout()
 
     var fadeHeightWidgets: Triple<JComponent, JSlider, JSpinner>? = null

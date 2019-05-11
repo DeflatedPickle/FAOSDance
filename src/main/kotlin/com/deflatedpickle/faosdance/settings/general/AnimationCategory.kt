@@ -16,7 +16,18 @@ import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.math.roundToInt
 
-class AnimationPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
+class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
+    companion object {
+        fun loadSpriteSheet(path: String) {
+            val tempSheet = SpriteSheet(path.substringBeforeLast("."))
+
+            if (tempSheet.loadedImage && tempSheet.loadedText) {
+                GlobalValues.configureSpriteSheet(tempSheet)
+                GlobalValues.currentPath = path
+            }
+        }
+    }
+
     private val gridBagLayout = GridBagLayout()
 
     var actionCombobox: JComboBox<String>? = null
@@ -59,6 +70,7 @@ class AnimationPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
 
                     if (droppedFiles.size == 1) {
                         loadSpriteSheet(droppedFiles[0].absolutePath)
+                        setActions()
                     }
                 }
             }
@@ -75,6 +87,7 @@ class AnimationPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
 
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     loadSpriteSheet(fileChooser.selectedFile.absolutePath)
+                    setActions()
                 }
             }
 
@@ -148,23 +161,12 @@ class AnimationPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
         this.settings.widgets.add(GlobalValues.animationControls!!.third)
     }
 
-    fun loadSpriteSheet(path: String) {
-        val tempSheet = SpriteSheet(path.substringBeforeLast("."))
-
-        if (tempSheet.loadedImage && tempSheet.loadedText) {
-            GlobalValues.configureSpriteSheet(tempSheet)
-            GlobalValues.currentPath = path
-
-            setActions()
-
-            for (i in this.settings.widgets) {
-                i.isEnabled = true
-            }
-        }
-    }
-
     fun setActions() {
         actionCombobox!!.model = DefaultComboBoxModel<String>(GlobalValues.sheet!!.spriteMap.keys.toTypedArray())
         actionCombobox!!.selectedIndex = GlobalValues.sheet!!.spriteMap.keys.indexOf(GlobalValues.currentAction)
+
+        for (i in this.settings.widgets) {
+            i.isEnabled = true
+        }
     }
 }

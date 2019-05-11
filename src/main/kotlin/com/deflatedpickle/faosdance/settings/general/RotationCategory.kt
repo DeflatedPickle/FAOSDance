@@ -9,7 +9,7 @@ import java.awt.GridBagLayout
 import javax.swing.*
 import kotlin.math.roundToInt
 
-class RotationPanel(owner: Frame, val settings: SettingsDialog) : JPanel() {
+class RotationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     private val gridBagLayout = GridBagLayout()
 
     var zRotationWidgets: Triple<JComponent, JSlider, JSpinner>? = null
