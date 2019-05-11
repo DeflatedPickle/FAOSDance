@@ -2,7 +2,7 @@ package com.deflatedpickle.faosdance.window
 
 import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.RubyThread
-import com.deflatedpickle.faosdance.SpriteSheet
+import com.deflatedpickle.faosdance.ScalingType
 import com.deflatedpickle.faosdance.settings.general.AnimationCategory
 import java.awt.*
 import java.awt.datatransfer.DataFlavor
@@ -61,7 +61,11 @@ class SpritePanel : JPanel() {
         if (GlobalValues.sheet == null || !GlobalValues.isVisible) return
 
         val g2D = g as Graphics2D
-        g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
+        g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, when (GlobalValues.scalingType) {
+            ScalingType.BILINEAR -> RenderingHints.VALUE_INTERPOLATION_BILINEAR
+            ScalingType.BICUBIC -> RenderingHints.VALUE_INTERPOLATION_BICUBIC
+            ScalingType.NEAREST_NEIGHBOR -> RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+        })
 
         for (i in RubyThread.extensions) {
             if (GlobalValues.isEnabled(i)) {

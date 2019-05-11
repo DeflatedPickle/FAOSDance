@@ -28,7 +28,8 @@ object ConfigFile {
                 "opacity" to GlobalValues.opacity,
                 "visible" to GlobalValues.isVisible,
                 "solid" to GlobalValues.isSolid,
-                "always_on_top" to GlobalValues.isTopLevel
+                "always_on_top" to GlobalValues.isTopLevel,
+                "scaling_type" to GlobalValues.sanatizeEnumValue(GlobalValues.scalingType.name)
                 ),
             // Animation
             "animation" to hashMapOf(
@@ -79,6 +80,7 @@ object ConfigFile {
         val visible = config.getBoolean("sprite.visible")
         val solid = config.getBoolean("sprite.solid")
         val alwaysOnTop = config.getBoolean("sprite.always_on_top")
+        val scalingType = config.getString("sprite.scaling_type")
         // Animation
         val play = config.getBoolean("animation.play")
         val rewind = config.getBoolean("animation.rewind")
@@ -123,6 +125,9 @@ object ConfigFile {
         }
         if (alwaysOnTop != null) {
             GlobalValues.isTopLevel = alwaysOnTop
+        }
+        if (scalingType != null) {
+            GlobalValues.scalingType = ScalingType.valueOf(GlobalValues.unsanatizeEnumValue(scalingType))
         }
         // Animation
         if (play != null) {

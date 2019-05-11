@@ -67,6 +67,9 @@ fun main() {
     if (!config) {
         GlobalValues.initPositions()
     }
+    else {
+        GlobalValues.resize()
+    }
 
     frame.setLocation(GlobalValues.xPosition, GlobalValues.yPosition)
 

@@ -1,6 +1,6 @@
-package com.deflatedpickle.faosdance
+package com.deflatedpickle.faosdance;
 
-enum class HookPoint {
+public enum HookPoint {
     TOP_LEFT,
     TOP_CENTRE,
     TOP_RIGHT,

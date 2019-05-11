@@ -48,7 +48,9 @@ object GlobalValues {
     var isSolid = true
     var isTopLevel = true
 
-    var enabledExtensions = listOf<String>()
+    var enabledExtensions = mutableListOf<String>()
+
+    var scalingType: ScalingType = ScalingType.BILINEAR
 
     var currentPath = System.getProperty("user.home")
 
@@ -70,6 +72,24 @@ object GlobalValues {
         effectiveSize = getEffectiveScreenSize(frame!!)
         xPosition = effectiveSize!!.width / 2
         yPosition = effectiveSize!!.height / 2
+    }
+
+    fun <E : Enum<E>> enumToReadableNames(enum: Class<E>): Array<String> {
+        return enum.enumConstants.map { enumItem -> sanatizeEnumValue(enumItem.name) }.toTypedArray()
+    }
+
+    fun sanatizeEnumValue(enumItem: String): String {
+        return enumItem
+            .replace("_", " ")
+            .toLowerCase()
+            .split(" ")
+            .joinToString(" ") { subStr ->
+                subStr.capitalize()
+            }
+    }
+
+    fun unsanatizeEnumValue(enumItem: String): String {
+        return enumItem.replace(" ", "_").toUpperCase()
     }
 
     fun resize(direction: Direction? = null) {
@@ -136,7 +156,14 @@ object GlobalValues {
         maxNumber: Double,
         minNumber: Double
     ): Triple<JComponent, JSlider, JSpinner> {
-        return addComponentSliderSpinner<Double>(parent, gridBagLayout, JLabel(name), defaultValue, maxNumber, minNumber)
+        return addComponentSliderSpinner<Double>(
+            parent,
+            gridBagLayout,
+            JLabel(name),
+            defaultValue,
+            maxNumber,
+            minNumber
+        )
     }
 
     fun addLabelSliderSpinnerInteger(

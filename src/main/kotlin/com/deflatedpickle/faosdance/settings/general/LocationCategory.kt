@@ -86,12 +86,7 @@ class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
         this.settings.widgets.add(yLocationWidgets!!.third)
         val yEntry = yLocationWidgets!!.third
 
-        hookPointComboBox = JComboBox<String>(HookPoint.values().map { enumItem ->
-            enumItem.name
-                .replace("_", " ")
-                .toLowerCase().split(" ")
-                .joinToString(" ") { subStr -> subStr.capitalize() }
-        }.toTypedArray()).apply {
+        hookPointComboBox = JComboBox<String>(GlobalValues.enumToReadableNames(HookPoint::class.java)).apply {
             selectedIndex = HookPoint.values().size - 1
             addActionListener {
                 when (HookPoint.valueOf(

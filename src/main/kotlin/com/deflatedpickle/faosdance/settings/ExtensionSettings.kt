@@ -59,9 +59,11 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 addActionListener {
                     if (this.isSelected) {
                         RubyThread.rubyContainer.callMethod(i, "enable")
+                        GlobalValues.enabledExtensions.add(name)
                     }
                     else {
                         RubyThread.rubyContainer.callMethod(i, "disable")
+                        GlobalValues.enabledExtensions.remove(name)
                     }
 
                     i.setInstanceVariable("@enabled", RubyThread.ruby.newBoolean(this.isSelected))
