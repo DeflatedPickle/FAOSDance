@@ -43,7 +43,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 this.fill = GridBagConstraints.VERTICAL
                 this.weighty = 1.0
             })
-            mainPanel.add(subPanel)
+            mainPanel.add(JScrollPane(subPanel).apply { border = BorderFactory.createEmptyBorder() })
 
             extensionTabbedPane.addTab(null, mainPanel)
 
