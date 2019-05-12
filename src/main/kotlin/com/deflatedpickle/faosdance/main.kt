@@ -5,11 +5,13 @@ import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.window.ApplicationWindow
 import com.deflatedpickle.faosdance.window.ContextMenu
 import com.deflatedpickle.faosdance.window.SpritePanel
-import org.apache.commons.io.IOUtils
 import java.awt.MenuItem
 import java.awt.PopupMenu
 import java.awt.SystemTray
 import java.awt.TrayIcon
+import java.io.BufferedInputStream
+import java.io.File
+import java.util.zip.ZipInputStream
 import javax.swing.JMenuItem
 import javax.swing.JSeparator
 
@@ -19,10 +21,26 @@ fun main() {
     val scripts = mutableListOf<String>()
     // Makes sure the core class is always loaded first
     scripts.add(ClassLoader.getSystemResource("scripts/dance_extension.rb").readText())
-    for (i in IOUtils.readLines(ClassLoader.getSystemResourceAsStream("scripts/"), Charsets.UTF_8)) {
-        val f = ClassLoader.getSystemResource("scripts/$i").readText()
-        if (i != "dance_extension.rb" && f.contains("< DanceExtension")) {
-            scripts.add(f)
+    if (ClassLoader.getSystemResource("icon.png").protocol == "jar") {
+        val zipInputStream = ZipInputStream(GlobalValues::class.java.protectionDomain.codeSource.location.openStream())
+
+        while (true) {
+            var entry = zipInputStream.nextEntry ?: break
+
+            if (entry.name.startsWith("scripts/")) {
+                if (entry.name != "scripts/") {
+                    val bufferedInputStream = BufferedInputStream(zipInputStream)
+                    scripts.add(bufferedInputStream.reader().readText())
+                }
+            }
+        }
+    }
+    else {
+        for (i in ClassLoader.getSystemResourceAsStream("scripts").bufferedReader().readLines().map { ClassLoader.getSystemResource("scripts/$it") }) {
+            val f = File(i.file)
+            if (f.name != "dance_extension.rb" && f.readText().contains("< DanceExtension")) {
+                scripts.add(f.readText())
+            }
         }
     }
     RubyThread.queue = scripts
