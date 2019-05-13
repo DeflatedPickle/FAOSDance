@@ -1,4 +1,4 @@
-# FAOSDance [![GitHub Last Commit](https://img.shields.io/github/last-commit/DeflatedPickle/FAOSDance.svg)](https://github.com/DeflatedPickle/FAOSDance/commits/master) [![Build Status](https://travis-ci.org/DeflatedPickle/FAOSDance.svg?branch=master)](https://travis-ci.org/DeflatedPickle/FAOSDance)
+# FAOSDance [![GitHub Last Commit](https://img.shields.io/github/last-commit/DeflatedPickle/FAOSDance.svg)](https://github.com/DeflatedPickle/FAOSDance/commits/master) [![Build Status](https://travis-ci.org/DeflatedPickle/FAOSDance.svg?branch=master)](https://travis-ci.org/DeflatedPickle/FAOSDance) [![Maintainability](https://api.codeclimate.com/v1/badges/74c7afbfbcdada0d80e7/maintainability)](https://codeclimate.com/github/DeflatedPickle/FAOSDance/maintainability)
 A stand-alone, free and open-source implementation of the Fruity Dance plugin from FL Studio.
 
 ## Table Of Contents
