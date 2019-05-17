@@ -1,4 +1,5 @@
 # FAOSDance [![GitHub Last Commit](https://img.shields.io/github/last-commit/DeflatedPickle/FAOSDance.svg)](https://github.com/DeflatedPickle/FAOSDance/commits/master) [![Build Status](https://travis-ci.org/DeflatedPickle/FAOSDance.svg?branch=master)](https://travis-ci.org/DeflatedPickle/FAOSDance) [![Maintainability](https://api.codeclimate.com/v1/badges/74c7afbfbcdada0d80e7/maintainability)](https://codeclimate.com/github/DeflatedPickle/FAOSDance/maintainability)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FDeflatedPickle%2FFAOSDance.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FDeflatedPickle%2FFAOSDance?ref=badge_shield)
 A stand-alone, free and open-source implementation of the Fruity Dance plugin from FL Studio.
 
 ## Table Of Contents
@@ -152,3 +153,6 @@ If you get stuck, there are some example scripts [here](https://github.com/Defla
         - Change the extension (the text shown after the dot) to `zip`
 - Double-click the program file
 - After editing or adding files, change the extension back to `jar` to run
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FDeflatedPickle%2FFAOSDance.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FDeflatedPickle%2FFAOSDance?ref=badge_large)
