@@ -45,6 +45,7 @@ class ReflectionCategory(owner: Frame, val settings: SettingsDialog) : JPanel() 
                 GlobalValues.reflectionPadding = (it.source as JSpinner).model.value as Double
             }
         }
+        this.settings.widgets.add(paddingWidgets!!.first)
         this.settings.widgets.add(paddingWidgets!!.second)
         this.settings.widgets.add(paddingWidgets!!.third)
 

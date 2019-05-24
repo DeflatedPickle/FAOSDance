@@ -33,6 +33,7 @@ class ScaleCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.resize(Direction.HORIZONTAL)
             }
         }
+        this.settings.widgets.add(xScaleWidgets!!.first)
         this.settings.widgets.add(xScaleWidgets!!.second)
         this.settings.widgets.add(xScaleWidgets!!.third)
 
@@ -49,6 +50,7 @@ class ScaleCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.resize(Direction.VERTICAL)
             }
         }
+        this.settings.widgets.add(yScaleWidgets!!.first)
         this.settings.widgets.add(yScaleWidgets!!.second)
         this.settings.widgets.add(yScaleWidgets!!.third)
     }

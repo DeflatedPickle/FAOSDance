@@ -115,6 +115,7 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.timer!!.delay = 1000 / GlobalValues.fps
             }
         }
+        this.settings.widgets.add(framesPerSecondWidgets!!.first)
         this.settings.widgets.add(framesPerSecondWidgets!!.second)
         this.settings.widgets.add(framesPerSecondWidgets!!.third)
 
@@ -157,6 +158,7 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.frame!!.repaint()
             }
         }
+        this.settings.widgets.add(GlobalValues.animationControls!!.first)
         this.settings.widgets.add(GlobalValues.animationControls!!.second)
         this.settings.widgets.add(GlobalValues.animationControls!!.third)
     }

@@ -61,6 +61,7 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.opacity = (it.source as JSpinner).model.value as Double
             }
         }
+        this.settings.widgets.add(opacityWidgets!!.first)
         this.settings.widgets.add(opacityWidgets!!.second)
         this.settings.widgets.add(opacityWidgets!!.third)
 

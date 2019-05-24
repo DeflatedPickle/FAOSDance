@@ -35,6 +35,7 @@ class RotationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 }
             }
         }
+        this.settings.widgets.add(zRotationWidgets!!.first)
         this.settings.widgets.add(zRotationWidgets!!.second)
         this.settings.widgets.add(zRotationWidgets!!.third)
     }

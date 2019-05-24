@@ -184,7 +184,7 @@ object GlobalValues {
         defaultValue: Number,
         maxNumber: Number,
         minNumber: Number
-    ): Triple<JComponent, JSlider, JSpinner> {
+    ): Triple<JButton, JSlider, JSpinner> {
         val slider = when (T::class) {
             Int::class -> JSlider(minNumber.toInt(), maxNumber.toInt(), defaultValue.toInt())
             Double::class -> JDoubleSlider(
@@ -237,9 +237,16 @@ object GlobalValues {
             }
         }
 
+        val revertButton = JButton("Revert").apply {
+            addActionListener {
+                spinner.value = defaultValue.toDouble()
+            }
+        }
+
         parent.add(component)
         parent.add(slider)
         parent.add(spinner)
+        parent.add(revertButton)
 
         gridBagLayout.setConstraints(component, GridBagConstraints().apply {
             anchor = GridBagConstraints.EAST
@@ -253,9 +260,12 @@ object GlobalValues {
         gridBagLayout.setConstraints(spinner, GridBagConstraints().apply {
             fill = GridBagConstraints.HORIZONTAL
             anchor = GridBagConstraints.EAST
+        })
+
+        gridBagLayout.setConstraints(revertButton, GridBagConstraints().apply {
             gridwidth = GridBagConstraints.REMAINDER
         })
 
-        return Triple(component, slider, spinner)
+        return Triple(revertButton, slider, spinner)
     }
 }

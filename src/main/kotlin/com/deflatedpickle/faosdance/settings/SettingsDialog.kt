@@ -38,7 +38,7 @@ class SettingsDialog(owner: Frame) : JDialog(
         GlobalValues.settingsDialog = this
         this.layout = GridBagLayout()
 
-        this.size = Dimension(460, 420)
+        this.size = Dimension(500, 420)
 
         this.addWindowListener(object : WindowAdapter() {
             override fun windowClosed(e: WindowEvent) {

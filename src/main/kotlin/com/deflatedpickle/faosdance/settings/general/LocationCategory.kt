@@ -50,6 +50,7 @@ class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 }
             }
         }
+        this.settings.widgets.add(xLocationWidgets!!.first)
         this.settings.widgets.add(xLocationWidgets!!.second)
         this.settings.widgets.add(xLocationWidgets!!.third)
         val xEntry = xLocationWidgets!!.third
@@ -82,6 +83,7 @@ class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 }
             }
         }
+        this.settings.widgets.add(yLocationWidgets!!.first)
         this.settings.widgets.add(yLocationWidgets!!.second)
         this.settings.widgets.add(yLocationWidgets!!.third)
         val yEntry = yLocationWidgets!!.third

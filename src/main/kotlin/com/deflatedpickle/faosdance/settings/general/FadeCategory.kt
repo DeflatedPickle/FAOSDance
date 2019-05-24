@@ -31,6 +31,7 @@ class FadeCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.fadeHeight = ((it.source as JSpinner).model.value as Double).toFloat()
             }
         }
+        this.settings.widgets.add(fadeHeightWidgets!!.first)
         this.settings.widgets.add(fadeHeightWidgets!!.second)
         this.settings.widgets.add(fadeHeightWidgets!!.third)
 
@@ -46,6 +47,7 @@ class FadeCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.fadeOpacity = ((it.source as JSpinner).model.value as Double).toFloat()
             }
         }
+        this.settings.widgets.add(fadeOpacityWidgets!!.first)
         this.settings.widgets.add(fadeOpacityWidgets!!.second)
         this.settings.widgets.add(fadeOpacityWidgets!!.third)
     }
