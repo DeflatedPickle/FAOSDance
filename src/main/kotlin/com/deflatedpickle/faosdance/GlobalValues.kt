@@ -47,6 +47,7 @@ object GlobalValues {
     var isVisible = true
     var isSolid = true
     var isTopLevel = true
+    var isToggleHeld = true
 
     var enabledExtensions = mutableListOf<String>()
 

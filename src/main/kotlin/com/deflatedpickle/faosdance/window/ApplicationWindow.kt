@@ -70,7 +70,7 @@ class ApplicationWindow : JFrame(Lang.bundle.getString("window.title")) {
 
                     animation = GlobalValues.currentAction
 
-                    if (GlobalValues.sheet != null) {
+                    if (GlobalValues.sheet != null && GlobalValues.isToggleHeld) {
                         GlobalValues.currentAction = GlobalValues.sheet!!.spriteMap.keys.last()
                     }
                 } else if (e.button == 3) {
