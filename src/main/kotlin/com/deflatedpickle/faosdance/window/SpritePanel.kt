@@ -116,6 +116,13 @@ class SpritePanel : JPanel() {
             GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame],
             null
         )
+
+        for (i in RubyThread.extensions) {
+            if (GlobalValues.isEnabled(i)) {
+                RubyThread.rubyContainer.callMethod(i, "during_draw_sprite", spriteGraphics)
+            }
+        }
+
         spriteGraphics.dispose()
         g2D.drawRenderedImage(sprite, null)
 
@@ -154,6 +161,13 @@ class SpritePanel : JPanel() {
             GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame],
             null
         )
+
+        for (i in RubyThread.extensions) {
+            if (GlobalValues.isEnabled(i)) {
+                RubyThread.rubyContainer.callMethod(i, "during_draw_reflection", reflectionGraphics)
+            }
+        }
+
         reflectionGraphics.composite = AlphaComposite.getInstance(AlphaComposite.DST_IN)
         // Apply a gradient paint, so the reflection fades out
         reflectionGraphics.paint = GradientPaint(

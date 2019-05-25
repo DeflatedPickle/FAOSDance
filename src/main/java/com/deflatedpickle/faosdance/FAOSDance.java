@@ -14,20 +14,4 @@ public class FAOSDance {
 
         ExtensionSettings.Companion.getExtensionList().add(object);
     }
-
-    public static Double getXMultiplier() {
-        return GlobalValues.INSTANCE.getXMultiplier();
-    }
-
-    public static void setXMultiplier(Double value) {
-        GlobalValues.INSTANCE.setXMultiplier(value);
-    }
-
-    public static Integer getZRotation() {
-        return GlobalValues.INSTANCE.getZRotation();
-    }
-
-    public static void setZRotation(Integer value) {
-        GlobalValues.INSTANCE.setZRotation(value);
-    }
 }

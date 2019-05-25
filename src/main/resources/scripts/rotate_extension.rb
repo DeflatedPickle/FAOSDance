@@ -2,7 +2,7 @@ class RotateExtension < DanceExtension
   def initialize
     super "Rotate", "Rotates the sprite by an amount", "DeflatedPickle"
 
-    @original = FAOSDance.getZRotation
+    @original = GlobalValues.getZRotation
     @max = 360
     @increase = 8
     @counter = 0
@@ -15,7 +15,7 @@ class RotateExtension < DanceExtension
       @counter = 0
     end
 
-    FAOSDance.setZRotation @counter
+    GlobalValues.setZRotation @counter
   end
 
   def settings(panel)
@@ -26,11 +26,11 @@ class RotateExtension < DanceExtension
   end
 
   def enable
-    @original = FAOSDance.getZRotation
+    @original = GlobalValues.getZRotation
   end
 
   def disable
-    FAOSDance.setZRotation @original
+    GlobalValues.setZRotation @original
   end
 end
 

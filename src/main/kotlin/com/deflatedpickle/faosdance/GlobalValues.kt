@@ -12,52 +12,81 @@ object GlobalValues {
         Thread(RubyThread(), "Ruby").start()
     }
 
+    @JvmStatic
     val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
 
+    @JvmStatic
     val maxSize = 10.0
 
+    @JvmStatic
     var sheet: SpriteSheet? = null
+    @JvmStatic
     var currentAction = ""
 
+    @JvmStatic
     var opacity = 1.0
 
+    @JvmStatic
     var animFrame = 0
 
+    @JvmStatic
     var play = true
 
+    @JvmStatic
     var isReflectionVisible = true
+    @JvmStatic
     var reflectionPadding = 0.0
 
+    @JvmStatic
     var fadeHeight = 0.65f
+    @JvmStatic
     var fadeOpacity = 0.25f
 
+    @JvmStatic
     var xPosition = 0
+    @JvmStatic
     var yPosition = 0
 
+    @JvmStatic
     var xMultiplier = 0.5
+    @JvmStatic
     var yMultiplier = 0.5
 
     // var xRotation = 0
     // var yRotation = 0
+    @JvmStatic
     var zRotation = 0
 
+    @JvmStatic
     var fps = 8
+    @JvmStatic
     var rewind = false
 
+    @JvmStatic
     var isVisible = true
+    @JvmStatic
     var isSolid = true
+    @JvmStatic
     var isTopLevel = true
+    @JvmStatic
     var isToggleHeld = true
 
     var enabledExtensions = mutableListOf<String>()
+        @JvmStatic
+        get
 
+    @JvmStatic
     var scalingType: ScalingType = ScalingType.BILINEAR
 
     var currentPath = System.getProperty("user.home")
+        @JvmStatic
+        get
 
     var timer: Timer? = null
 
     var frame: JFrame? = null
+        @JvmStatic
+        get
 
     var animationControls: Triple<JComponent, JSlider, JSpinner>? = null
 
@@ -65,6 +94,8 @@ object GlobalValues {
     var oldHeight = 0
 
     var effectiveSize: Rectangle? = null
+        @JvmStatic
+        get
 
     // The current settings window
     var settingsDialog: SettingsDialog? = null

@@ -2,7 +2,7 @@ class SpinExtension < DanceExtension
   def initialize
     super "Spin", "Spins the sprite around using a sine function", "DeflatedPickle"
 
-    @original = FAOSDance.getXMultiplier
+    @original = GlobalValues.getXMultiplier
     @counter = @original
     @increase = 0.1
   end
@@ -15,7 +15,7 @@ class SpinExtension < DanceExtension
     end
 
     new_size = Math.sin(@counter)
-    FAOSDance.setXMultiplier new_size
+    GlobalValues.setXMultiplier new_size
   end
 
   def settings(panel)
@@ -26,11 +26,11 @@ class SpinExtension < DanceExtension
   end
 
   def enable
-    @original = FAOSDance.getXMultiplier
+    @original = GlobalValues.getXMultiplier
   end
 
   def disable
-    FAOSDance.setXMultiplier @original
+    GlobalValues.setXMultiplier @original
   end
 end
 

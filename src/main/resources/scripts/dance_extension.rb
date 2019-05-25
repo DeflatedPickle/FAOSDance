@@ -1,5 +1,6 @@
 require "java"
 
+java_import "com.deflatedpickle.faosdance.GlobalValues"
 java_import "com.deflatedpickle.faosdance.FAOSDance"
 java_import "com.deflatedpickle.faosdance.FAOSDanceSettings"
 
@@ -17,6 +18,10 @@ class DanceExtension
   def pre_draw(graphics)
   end
 
+  # Runs after drawing the sprite, but before before the sprite graphics are disposed
+  def during_draw_sprite(sprite_graphics)
+  end
+
   # Runs before the sprite is drawn
   def pre_draw_sprite(sprite_graphics)
   end
@@ -27,6 +32,10 @@ class DanceExtension
 
   # Runs before the reflection is drawn
   def pre_draw_reflection(reflection_graphics)
+  end
+
+  # Runs after drawing the reflection, but before before the reflection graphics are disposed
+  def during_draw_reflection(graphics)
   end
 
   # Runs after the reflection is drawn
