@@ -69,6 +69,8 @@ object GlobalValues {
     // The current settings window
     var settingsDialog: SettingsDialog? = null
 
+    var extensionCheckBoxList: MutableList<JCheckBox>? = null
+
     fun initPositions() {
         effectiveSize = getEffectiveScreenSize(frame!!)
         xPosition = effectiveSize!!.width / 2

@@ -48,7 +48,11 @@ class SettingsDialog(owner: Frame) : JDialog(
 
         // Widgets
         val tabbedPane = JTabbedPane()
-        tabbedPane.addTab("General", JScrollPane(generalSettings).apply { border = BorderFactory.createEmptyBorder() })
+        tabbedPane.addTab("General", JScrollPane(generalSettings).apply {
+            border = BorderFactory.createEmptyBorder()
+            horizontalScrollBar.unitIncrement = 20
+            verticalScrollBar.unitIncrement = 20
+        })
         tabbedPane.addTab("Extensions", extensionsSettings)
 
         this.add(tabbedPane, GridBagConstraints().apply {

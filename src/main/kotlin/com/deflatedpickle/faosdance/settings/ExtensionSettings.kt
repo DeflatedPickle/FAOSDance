@@ -17,6 +17,8 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
     init {
         this.layout = BoxLayout(this, BoxLayout.Y_AXIS)
 
+        GlobalValues.extensionCheckBoxList = mutableListOf()
+
         for (i in extensionList) {
             val name = (i.getInstanceVariable("@name") as RubyString).asJavaString()
             val description = (i.getInstanceVariable("@description") as RubyString).asJavaString()
@@ -51,11 +53,18 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
             tabPanel.isOpaque = false
             tabPanel.add(JLabel(name).apply { isOpaque = false }, BorderLayout.WEST)
             tabPanel.add(JCheckBox().apply {
+                GlobalValues.extensionCheckBoxList!!.add(this)
+
                 if (GlobalValues.enabledExtensions.contains(name)) {
                     this.isSelected = true
 
                     for (c in subPanel.components) {
                         c.isEnabled = true
+                    }
+                }
+                else {
+                    if (GlobalValues.sheet == null) {
+                        this.isEnabled = false
                     }
                 }
 

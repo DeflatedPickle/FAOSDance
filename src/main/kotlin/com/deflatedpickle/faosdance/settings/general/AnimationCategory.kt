@@ -25,6 +25,10 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.configureSpriteSheet(tempSheet)
                 GlobalValues.currentPath = path
             }
+
+            for (i in GlobalValues.extensionCheckBoxList!!) {
+                i.isEnabled = true
+            }
         }
     }
 
