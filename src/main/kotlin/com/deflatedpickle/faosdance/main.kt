@@ -25,7 +25,7 @@ fun main() {
         val zipInputStream = ZipInputStream(GlobalValues::class.java.protectionDomain.codeSource.location.openStream())
 
         while (true) {
-            var entry = zipInputStream.nextEntry ?: break
+            val entry = zipInputStream.nextEntry ?: break
 
             if (entry.name.startsWith("scripts/")) {
                 if (entry.name != "scripts/") {

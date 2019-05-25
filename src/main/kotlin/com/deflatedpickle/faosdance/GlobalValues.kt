@@ -156,7 +156,7 @@ object GlobalValues {
         defaultValue: Double,
         maxNumber: Double,
         minNumber: Double
-    ): Triple<JComponent, JSlider, JSpinner> {
+    ): Triple<JButton, JSlider, JSpinner> {
         return addComponentSliderSpinner<Double>(
             parent,
             gridBagLayout,
@@ -174,7 +174,7 @@ object GlobalValues {
         defaultValue: Int,
         maxNumber: Int,
         minNumber: Int
-    ): Triple<JComponent, JSlider, JSpinner> {
+    ): Triple<JButton, JSlider, JSpinner> {
         return addComponentSliderSpinner<Int>(parent, gridBagLayout, JLabel(name), defaultValue, maxNumber, minNumber)
     }
 
