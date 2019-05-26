@@ -30,6 +30,7 @@ class ScaleCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
         ).apply {
             third.addChangeListener {
                 GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double
+                GlobalValues.updateScripts("xMultiplier", GlobalValues.xMultiplier)
                 GlobalValues.resize(Direction.HORIZONTAL)
             }
         }
@@ -47,6 +48,7 @@ class ScaleCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
         ).apply {
             third.addChangeListener {
                 GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double
+                GlobalValues.updateScripts("yMultiplier", GlobalValues.yMultiplier)
                 GlobalValues.resize(Direction.VERTICAL)
             }
         }

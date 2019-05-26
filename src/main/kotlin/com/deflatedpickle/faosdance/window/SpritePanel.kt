@@ -31,22 +31,24 @@ class SpritePanel : JPanel() {
         }
 
         GlobalValues.timer = Timer(1000 / GlobalValues.fps, ActionListener {
-            if (GlobalValues.play && GlobalValues.sheet != null) {
-                if (GlobalValues.rewind) {
-                    GlobalValues.animFrame--
+            if (GlobalValues.sheet != null) {
+                if (GlobalValues.play) {
+                    if (GlobalValues.rewind) {
+                        GlobalValues.animFrame--
 
-                    if (GlobalValues.animFrame <= 0) {
-                        GlobalValues.animFrame = 7
-                    }
-                } else {
-                    GlobalValues.animFrame++
+                        if (GlobalValues.animFrame <= 0) {
+                            GlobalValues.animFrame = 7
+                        }
+                    } else {
+                        GlobalValues.animFrame++
 
-                    if (GlobalValues.animFrame >= 8) {
-                        GlobalValues.animFrame = 0
+                        if (GlobalValues.animFrame >= 8) {
+                            GlobalValues.animFrame = 0
+                        }
                     }
+
+                    GlobalValues.animationControls?.second?.value = GlobalValues.animFrame
                 }
-
-                GlobalValues.animationControls?.second?.value = GlobalValues.animFrame
 
                 GlobalValues.frame!!.revalidate()
                 GlobalValues.frame!!.repaint()

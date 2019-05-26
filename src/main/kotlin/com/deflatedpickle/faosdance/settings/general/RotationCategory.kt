@@ -33,6 +33,7 @@ class RotationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                     (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
                     else -> 0
                 }
+                GlobalValues.updateScripts("zRotation", GlobalValues.zRotation)
             }
         }
         this.settings.widgets.add(zRotationWidgets!!.first)

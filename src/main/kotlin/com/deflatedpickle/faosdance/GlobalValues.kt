@@ -101,6 +101,7 @@ object GlobalValues {
     var settingsDialog: SettingsDialog? = null
 
     var extensionCheckBoxList: MutableList<JCheckBox>? = null
+    val extensionPanelMap = mutableMapOf<String, JPanel>()
 
     fun initPositions() {
         effectiveSize = getEffectiveScreenSize(frame!!)
@@ -124,6 +125,14 @@ object GlobalValues {
 
     fun unsanatizeEnumValue(enumItem: String): String {
         return enumItem.replace(" ", "_").toUpperCase()
+    }
+
+    fun updateScripts(name: String, value: Any) {
+        for (i in RubyThread.extensions) {
+            if (isEnabled(i)) {
+                RubyThread.rubyContainer.callMethod(i, "update_value", name, value)
+            }
+        }
     }
 
     fun resize(direction: Direction? = null) {

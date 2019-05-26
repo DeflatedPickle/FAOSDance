@@ -52,7 +52,10 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
 
         // Action drop-down
         actionCombobox = JComboBox<String>().apply {
-            addActionListener { GlobalValues.currentAction = (it.source as JComboBox<*>).selectedItem as String }
+            addActionListener {
+                GlobalValues.currentAction = (it.source as JComboBox<*>).selectedItem as String
+                GlobalValues.updateScripts("action", GlobalValues.currentAction)
+            }
 
             gridBagLayout.setConstraints(this, GridBagConstraints().apply {
                 fill = GridBagConstraints.HORIZONTAL
@@ -92,6 +95,8 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     loadSpriteSheet(fileChooser.selectedFile.absolutePath)
                     setActions()
+
+                    GlobalValues.updateScripts("sheet", GlobalValues.sheet!!)
                 }
             }
 
@@ -117,6 +122,7 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                     else -> 0
                 }
                 GlobalValues.timer!!.delay = 1000 / GlobalValues.fps
+                GlobalValues.updateScripts("fps", GlobalValues.fps)
             }
         }
         this.settings.widgets.add(framesPerSecondWidgets!!.first)
@@ -129,6 +135,7 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             addActionListener {
                 GlobalValues.play = this.isSelected
                 rewindCheckbox!!.isEnabled = isSelected
+                GlobalValues.updateScripts("play", GlobalValues.play)
             }
         }
         this.settings.widgets.add(playCheckbox!!)
@@ -136,6 +143,7 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
         rewindCheckbox = JCheckBox(Lang.bundle.getString("settings.animation.rewind")).apply {
             addActionListener {
                 GlobalValues.rewind = this.isSelected
+                GlobalValues.updateScripts("rewind", GlobalValues.rewind)
             }
         }
         this.settings.widgets.add(rewindCheckbox!!)
@@ -157,6 +165,7 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                     (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
                     else -> 0
                 }
+                GlobalValues.updateScripts("animFrame", GlobalValues.animFrame)
 
                 GlobalValues.frame!!.revalidate()
                 GlobalValues.frame!!.repaint()

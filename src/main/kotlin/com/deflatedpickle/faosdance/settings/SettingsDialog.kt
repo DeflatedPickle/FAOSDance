@@ -2,6 +2,7 @@ package com.deflatedpickle.faosdance.settings
 
 import com.deflatedpickle.faosdance.ConfigFile
 import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.RubyThread
 import com.deflatedpickle.faosdance.settings.general.GeneralSettings
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Dimension
@@ -76,5 +77,23 @@ class SettingsDialog(owner: Frame) : JDialog(
                 i.isEnabled = false
             }
         }
+    }
+
+    override fun setVisible(b: Boolean) {
+        for (i in ExtensionSettings.extensionList) {
+            val name = i.getInstanceVariable("@name").asJavaString()
+            if (GlobalValues.enabledExtensions.contains(name)) {
+                for (c in GlobalValues.extensionPanelMap[name]!!.components) {
+                    c.isEnabled = true
+                }
+            }
+            else {
+                for (c in GlobalValues.extensionPanelMap[name]!!.components) {
+                    c.isEnabled = false
+                }
+            }
+        }
+
+        super.setVisible(b)
     }
 }

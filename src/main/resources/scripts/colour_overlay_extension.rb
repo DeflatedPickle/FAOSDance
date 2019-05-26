@@ -2,6 +2,8 @@ java_import "java.awt.Color"
 java_import "java.awt.image.BufferedImage"
 java_import "java.awt.AlphaComposite"
 java_import "java.awt.event.ActionListener"
+java_import "java.awt.GridBagLayout"
+java_import "java.awt.GridBagConstraints"
 
 java_import "javax.swing.JButton"
 java_import "javax.swing.JCheckBox"
@@ -11,7 +13,7 @@ class ColourOverlayExtension < DanceExtension
   def initialize
     super "Colour Overlay", "Applies RGB values to the sprite", "DeflatedPickle"
 
-    @default = -1
+    @default = 0.0
 
     @red = 0
     @green = 0
@@ -23,14 +25,15 @@ class ColourOverlayExtension < DanceExtension
     @colour = nil
     @coloured_sprite = nil
 
+    # https://krazydad.com/tutorials/makecolors.php
     frequency = 0.14
     loop_var = 0
-    @timer = Timer.new(GlobalValues.fps) {|_|
-      if loop_var < 32
+    @timer = Timer.new(1000 / GlobalValues.fps) {|_|
+      if loop_var < 42
         loop_var += 1
 
-        @red = (Math.sin(frequency * loop_var) * 127 + 128).round
-        @green = (Math.sin(frequency * loop_var + 2) * 127 + 128).round
+        @red = (Math.sin(frequency * loop_var + 2) * 127 + 128).round
+        @green = (Math.sin(frequency * loop_var) * 127 + 128).round
         @blue = (Math.sin(frequency * loop_var + 4) * 127 + 128).round
 
         @red_widgets.second.value = @red
@@ -42,8 +45,13 @@ class ColourOverlayExtension < DanceExtension
     }
   end
 
+  def update_value(name, value)
+    if name == "fps"
+      @timer.delay = 1000 / value
+    end
+  end
+
   def during_draw_sprite(graphics)
-    # TODO: Cache coloured versions of all the animation frames and use those instead of new ones every frame
     create_image
     graphics.drawRenderedImage @coloured_sprite, nil
   end
@@ -53,7 +61,7 @@ class ColourOverlayExtension < DanceExtension
   end
 
   def settings(panel)
-    @red_widgets = FAOSDanceSettings.createOptionInteger panel, "Red:", @default, 255, -1
+    @red_widgets = FAOSDanceSettings.createOptionInteger panel, "Red:", @default, 255, 0.0
     @red_widgets.third.addChangeListener {|it|
       value = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
       if value > -1
@@ -61,7 +69,7 @@ class ColourOverlayExtension < DanceExtension
       end
     }
 
-    @green_widgets = FAOSDanceSettings.createOptionInteger panel, "Green:", @default, 255, -1
+    @green_widgets = FAOSDanceSettings.createOptionInteger panel, "Green:", @default, 255, 0.0
     @green_widgets.third.addChangeListener {|it|
       value = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
       if value > -1
@@ -69,7 +77,7 @@ class ColourOverlayExtension < DanceExtension
       end
     }
 
-    @blue_widgets = FAOSDanceSettings.createOptionInteger panel, "Blue:", @default, 255, -1
+    @blue_widgets = FAOSDanceSettings.createOptionInteger panel, "Blue:", @default, 255, 0.0
     @blue_widgets.third.addChangeListener {|it|
       value = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
       if value > -1
@@ -84,15 +92,24 @@ class ColourOverlayExtension < DanceExtension
 
     rainbow_checkbox = JCheckBox.new "Rainbow"
     rainbow_checkbox.addActionListener {|it|
-      @rainbow = it
+      @rainbow = it.source.to_java(javax::swing::JCheckBox).isSelected
 
-      if it
+      if @rainbow
         @timer.start
       else
         @timer.stop
       end
     }
     panel.add rainbow_checkbox
+    grid_settings = GridBagConstraints.new
+    grid_settings.gridwidth = GridBagConstraints::REMAINDER
+    panel.getLayout.to_java(java::awt::GridBagLayout).setConstraints rainbow_checkbox, grid_settings
+  end
+
+  def enable
+    if @rainbow
+      @timer.start
+    end
   end
 
   def disable

@@ -25,6 +25,7 @@ class ReflectionCategory(owner: Frame, val settings: SettingsDialog) : JPanel() 
 
             addActionListener {
                 GlobalValues.isReflectionVisible = this.isSelected
+                GlobalValues.updateScripts("isReflectionVisible", GlobalValues.isReflectionVisible)
             }
         }
         (this.layout as GridBagLayout).setConstraints(
@@ -43,6 +44,7 @@ class ReflectionCategory(owner: Frame, val settings: SettingsDialog) : JPanel() 
         ).apply {
             third.addChangeListener {
                 GlobalValues.reflectionPadding = (it.source as JSpinner).model.value as Double
+                GlobalValues.updateScripts("reflectionPadding", GlobalValues.reflectionPadding)
             }
         }
         this.settings.widgets.add(paddingWidgets!!.first)

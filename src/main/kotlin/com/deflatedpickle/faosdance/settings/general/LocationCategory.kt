@@ -48,6 +48,7 @@ class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                         GlobalValues.xPosition = ((it.source as JSpinner).model.value as Double).roundToInt()
                     }
                 }
+                GlobalValues.updateScripts("xPosition", GlobalValues.xPosition)
             }
         }
         this.settings.widgets.add(xLocationWidgets!!.first)
@@ -81,6 +82,7 @@ class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                         GlobalValues.yPosition = ((it.source as JSpinner).model.value as Double).roundToInt()
                     }
                 }
+                GlobalValues.updateScripts("yPosition", GlobalValues.yPosition)
             }
         }
         this.settings.widgets.add(yLocationWidgets!!.first)

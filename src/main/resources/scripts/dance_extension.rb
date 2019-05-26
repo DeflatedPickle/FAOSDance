@@ -14,6 +14,10 @@ class DanceExtension
     @enabled = false
   end
 
+  # Called when a core value is changed
+  def update_value(name, value)
+  end
+
   # Runs after drawing starts
   def pre_draw(graphics)
   end

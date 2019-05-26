@@ -91,6 +91,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 }
             }, BorderLayout.EAST)
             extensionTabbedPane.setTabComponentAt(extensionTabbedPane.tabCount - 1, tabPanel)
+            GlobalValues.extensionPanelMap[name] = subPanel
         }
 
         this.add(extensionTabbedPane)
