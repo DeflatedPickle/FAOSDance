@@ -26,32 +26,27 @@ class ColourOverlayExtension < DanceExtension
     @coloured_sprite = nil
 
     # https://krazydad.com/tutorials/makecolors.php
-    frequency = 0.14
-    loop_var = 0
-    @timer = Timer.new(1000 / GlobalValues.fps) {|_|
-      if loop_var < 42
-        loop_var += 1
+    @frequency = 0.14
+    @loop_var = 0
+  end
 
-        @red = (Math.sin(frequency * loop_var + 2) * 127 + 128).round
-        @green = (Math.sin(frequency * loop_var) * 127 + 128).round
-        @blue = (Math.sin(frequency * loop_var + 4) * 127 + 128).round
+  def during_draw_sprite(graphics)
+    if @rainbow
+      if @loop_var < 42
+        @loop_var += 1
+
+        @red = (Math.sin(@frequency * @loop_var + 2) * 127 + 128).round
+        @green = (Math.sin(@frequency * @loop_var) * 127 + 128).round
+        @blue = (Math.sin(@frequency * @loop_var + 4) * 127 + 128).round
 
         @red_widgets.second.value = @red
         @green_widgets.second.value = @green
         @blue_widgets.second.value = @blue
       else
-        loop_var = 0
+        @loop_var = 0
       end
-    }
-  end
-
-  def update_value(name, value)
-    if name == "fps"
-      @timer.delay = 1000 / value
     end
-  end
 
-  def during_draw_sprite(graphics)
     create_image
     graphics.drawRenderedImage @coloured_sprite, nil
   end
@@ -93,27 +88,11 @@ class ColourOverlayExtension < DanceExtension
     rainbow_checkbox = JCheckBox.new "Rainbow"
     rainbow_checkbox.addActionListener {|it|
       @rainbow = it.source.to_java(javax::swing::JCheckBox).isSelected
-
-      if @rainbow
-        @timer.start
-      else
-        @timer.stop
-      end
     }
     panel.add rainbow_checkbox
     grid_settings = GridBagConstraints.new
     grid_settings.gridwidth = GridBagConstraints::REMAINDER
     panel.getLayout.to_java(java::awt::GridBagLayout).setConstraints rainbow_checkbox, grid_settings
-  end
-
-  def enable
-    if @rainbow
-      @timer.start
-    end
-  end
-
-  def disable
-    @timer.stop
   end
 
   def create_image

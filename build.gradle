@@ -18,12 +18,15 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
     // compile 'com.electronwill.night-config:toml:3.6.0'
-    compile 'com.moandjiezana.toml:toml4j:0.7.2'
-    
-    compile 'org.jruby:jruby:9.2.7.0'
+    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
+
+    implementation 'org.jruby:jruby:9.2.7.0'
+
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
 }
 
 compileKotlin {

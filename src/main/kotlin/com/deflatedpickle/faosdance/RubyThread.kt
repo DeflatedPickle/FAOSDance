@@ -25,6 +25,8 @@ class RubyThread : Runnable {
     var run = true
 
     override fun run() {
+        GlobalValues.loadScripts()
+
         while (run) {
             for (i in queue) {
                 ruby.evalScriptlet(i)

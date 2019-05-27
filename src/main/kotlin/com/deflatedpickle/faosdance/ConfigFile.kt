@@ -2,21 +2,20 @@ package com.deflatedpickle.faosdance
 
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
+import java.io.BufferedInputStream
 import java.io.File
 import java.io.StringWriter
+import java.net.URL
+import java.util.zip.ZipInputStream
 
 object ConfigFile {
     fun openConfig(): Toml {
-        val currentFile = ClassLoader.getSystemClassLoader().getResource("config.toml").readText()
-
+        val currentFile = GlobalValues.configFile.readText()
         val config = Toml().read(currentFile)
-
         return config
     }
 
     fun writeConfig() {
-        val currentFile = File(ClassLoader.getSystemClassLoader().getResource("config.toml").file)
-
         val config = TomlWriter()
 
         val configMap = hashMapOf(
@@ -67,7 +66,7 @@ object ConfigFile {
             )
         )
 
-        config.write(configMap, currentFile)
+        config.write(configMap, GlobalValues.configFile)
     }
 
     fun loadAndUseConfig(): Boolean {

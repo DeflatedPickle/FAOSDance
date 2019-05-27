@@ -1,15 +1,90 @@
 package com.deflatedpickle.faosdance
 
 import com.deflatedpickle.faosdance.settings.SettingsDialog
+import org.apache.commons.io.IOUtils
+import org.apache.commons.lang3.SystemUtils
 import org.jruby.RubyBoolean
 import org.jruby.RubyObject
 import java.awt.*
+import java.io.BufferedInputStream
+import java.io.File
+import java.io.IOException
+import java.nio.file.Files
+import java.util.zip.ZipInputStream
 import javax.swing.*
 import kotlin.math.roundToInt
 
 object GlobalValues {
+    @JvmStatic
+    val homePath = when {
+        SystemUtils.IS_OS_WINDOWS -> File("${System.getenv("APPDATA")}/FAOSDance/")
+        SystemUtils.IS_OS_LINUX -> File("${System.getProperty("user.home")}/.config/FAOSDance/")
+        else -> null
+    }
+
+    lateinit var configFile: File
+    val scriptsFolder = File(homePath, "scripts")
+
     init {
+        createEnviromentFiles()
         Thread(RubyThread(), "Ruby").start()
+    }
+
+    fun createEnviromentFiles() {
+        homePath?.mkdir()
+        configFile = File(homePath, "config.toml").apply {
+            if (!this.isFile) {
+                this.createNewFile()
+            }
+        }
+
+        // It's a loop in case I decide to add more user folders, or move the lang folder out of the program
+        for (i in listOf(scriptsFolder)) {
+            if (!i.isDirectory) {
+                i.mkdir()
+            }
+
+            val fileList = i.listFiles().map { it.name }
+
+            val zipInputStream = ZipInputStream(GlobalValues::class.java.protectionDomain.codeSource.location.openStream())
+
+            while (true) {
+                try {
+                    val entry = zipInputStream.nextEntry ?: break
+
+                    if (entry.name.startsWith("${i.name}/")) {
+                        if (entry.name != "${i.name}/") {
+                            val bufferedInputStream = BufferedInputStream(zipInputStream)
+                            val text = bufferedInputStream.reader().readText().toByteArray()
+
+                            val name = entry.name.split("/").last()
+                            if (!fileList.contains(name)) {
+                                File(i, name).apply {
+                                    this.createNewFile()
+                                    Files.write(this.toPath(), text)
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (e: IOException) {
+                    break
+                }
+            }
+        }
+    }
+
+    fun loadScripts() {
+        val scripts = mutableListOf<String>()
+        // Makes sure the core class is always loaded first
+        scripts.add(File(scriptsFolder, "dance_extension.rb").readText())
+        for (i in scriptsFolder.listFiles()) {
+            val text = i.readText()
+            if (i.name != "dance_extension.rb" && text.contains("< DanceExtension")) {
+                scripts.add(text)
+            }
+        }
+        RubyThread.queue = scripts
     }
 
     @JvmStatic
