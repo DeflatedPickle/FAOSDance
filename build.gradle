@@ -27,6 +27,8 @@ dependencies {
 
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+
+    implementation 'com.jhlabs:filters:2.0.235-1'
 }
 
 compileKotlin {

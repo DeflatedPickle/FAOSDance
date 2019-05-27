@@ -110,6 +110,8 @@ class ColourOverlayExtension < DanceExtension
     graphics.setColor @colour
     graphics.fillRect 0, 0, width, height
     graphics.dispose
+
+    GlobalValues.mutableSprite = @coloured_sprite
   end
 end
 

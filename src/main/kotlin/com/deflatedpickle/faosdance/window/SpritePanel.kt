@@ -50,6 +50,8 @@ class SpritePanel : JPanel() {
                     GlobalValues.animationControls?.second?.value = GlobalValues.animFrame
                 }
 
+                GlobalValues.mutableSprite = GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame]
+
                 GlobalValues.frame!!.revalidate()
                 GlobalValues.frame!!.repaint()
             }
@@ -115,7 +117,7 @@ class SpritePanel : JPanel() {
         }
 
         spriteGraphics.drawRenderedImage(
-            GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame],
+            GlobalValues.mutableSprite,
             null
         )
 
@@ -160,7 +162,7 @@ class SpritePanel : JPanel() {
 
         // Draw the reflection
         reflectionGraphics.drawRenderedImage(
-            GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame],
+            GlobalValues.mutableSprite,
             null
         )
 

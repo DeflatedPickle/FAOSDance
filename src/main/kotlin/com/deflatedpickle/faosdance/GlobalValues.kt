@@ -6,6 +6,7 @@ import org.apache.commons.lang3.SystemUtils
 import org.jruby.RubyBoolean
 import org.jruby.RubyObject
 import java.awt.*
+import java.awt.image.BufferedImage
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.IOException
@@ -23,7 +24,12 @@ object GlobalValues {
     }
 
     lateinit var configFile: File
-    val scriptsFolder = File(homePath, "scripts")
+    val scriptsFolder = if (ClassLoader.getSystemResource("icon.png").protocol == "jar") {
+        File(homePath, "scripts")
+    }
+    else {
+        File(ClassLoader.getSystemResource("scripts").path)
+    }
 
     init {
         createEnviromentFiles()
@@ -97,6 +103,8 @@ object GlobalValues {
     var sheet: SpriteSheet? = null
     @JvmStatic
     var currentAction = ""
+    @JvmStatic
+    var mutableSprite: BufferedImage? = null
 
     @JvmStatic
     var opacity = 1.0

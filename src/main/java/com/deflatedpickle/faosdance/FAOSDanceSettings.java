@@ -6,10 +6,17 @@ import javax.swing.*;
 import java.awt.*;
 
 public class FAOSDanceSettings {
-    public static JPanel createBorderPanel(String title) {
+    public static JPanel createBorderPanel(Container parent, String title) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder(title));
+
+        parent.add(panel, new GridBagConstraints() {{
+            this.fill = GridBagConstraints.BOTH;
+            this.weightx = 1.0;
+            this.weighty = 1.0;
+            this.gridwidth = GridBagConstraints.REMAINDER;
+        }});
         return panel;
     }
 
