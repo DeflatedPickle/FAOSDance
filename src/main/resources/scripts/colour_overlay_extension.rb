@@ -21,6 +21,9 @@ class ColourOverlayExtension < DanceExtension
     @alpha = 0.5
 
     @rainbow = false
+    @red_offset = 2
+    @green_offset = 0
+    @blue_offset = 4
 
     @colour = nil
     @coloured_sprite = nil
@@ -28,6 +31,9 @@ class ColourOverlayExtension < DanceExtension
     # https://krazydad.com/tutorials/makecolors.php
     @frequency = 0.14
     @loop_var = 0
+
+    @amplitude = 255 / 2
+    @centre = 255 / 2
   end
 
   def during_draw_sprite(graphics)
@@ -35,9 +41,9 @@ class ColourOverlayExtension < DanceExtension
       if @loop_var < 42
         @loop_var += 1
 
-        @red = (Math.sin(@frequency * @loop_var + 2) * 127 + 128).round
-        @green = (Math.sin(@frequency * @loop_var) * 127 + 128).round
-        @blue = (Math.sin(@frequency * @loop_var + 4) * 127 + 128).round
+        @red = (Math.sin(@frequency * @loop_var + @red_offset) * @amplitude + @centre).round
+        @green = (Math.sin(@frequency * @loop_var + @green_offset) * @amplitude + @centre).round
+        @blue = (Math.sin(@frequency * @loop_var + @blue_offset) * @amplitude + @centre).round
 
         @red_widgets.second.value = @red
         @green_widgets.second.value = @green
@@ -58,26 +64,17 @@ class ColourOverlayExtension < DanceExtension
   def settings(panel)
     @red_widgets = FAOSDanceSettings.createOptionInteger panel, "Red:", @default, 255, 0.0
     @red_widgets.third.addChangeListener {|it|
-      value = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
-      if value > -1
-        @red = value
-      end
+      @red = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
     }
 
     @green_widgets = FAOSDanceSettings.createOptionInteger panel, "Green:", @default, 255, 0.0
     @green_widgets.third.addChangeListener {|it|
-      value = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
-      if value > -1
-        @green = value
-      end
+      @green = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
     }
 
     @blue_widgets = FAOSDanceSettings.createOptionInteger panel, "Blue:", @default, 255, 0.0
     @blue_widgets.third.addChangeListener {|it|
-      value = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
-      if value > -1
-        @blue = value
-      end
+      @blue = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
     }
 
     alpha_widgets = FAOSDanceSettings.createOptionDouble panel, "Alpha:", @alpha, 1.0, 0.0
@@ -85,14 +82,42 @@ class ColourOverlayExtension < DanceExtension
       @alpha = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
     }
 
-    rainbow_checkbox = JCheckBox.new "Rainbow"
-    rainbow_checkbox.addActionListener {|it|
+    rainbow_border = FAOSDanceSettings.createBorderPanel panel, "Rainbow", true
+    rainbow_border.titleComponent.addActionListener {|it|
       @rainbow = it.source.to_java(javax::swing::JCheckBox).isSelected
     }
-    panel.add rainbow_checkbox
-    grid_settings = GridBagConstraints.new
-    grid_settings.gridwidth = GridBagConstraints::REMAINDER
-    panel.getLayout.to_java(java::awt::GridBagLayout).setConstraints rainbow_checkbox, grid_settings
+    rainbow_panel = rainbow_border.panel
+
+    FAOSDanceSettings.createOptionDouble(rainbow_panel, "Frequency:", @frequency, 3.0, 0.1).third.addChangeListener {|it|
+      @frequency = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+    }
+
+    FAOSDanceSettings.createSeparator(rainbow_panel)
+
+    FAOSDanceSettings.createOptionInteger(rainbow_panel, "Red Offset:", @frequency, 8, -8).third.addChangeListener {|it|
+      @red_offset = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      @loop_var = 0
+    }
+
+    FAOSDanceSettings.createOptionInteger(rainbow_panel, "Green Offset:", @frequency, 8, -8).third.addChangeListener {|it|
+      @green_offset = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      @loop_var = 0
+    }
+
+    FAOSDanceSettings.createOptionInteger(rainbow_panel, "Blue Offset:", @frequency, 8, -8).third.addChangeListener {|it|
+      @blue_offset = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      @loop_var = 0
+    }
+
+    FAOSDanceSettings.createSeparator(rainbow_panel)
+
+    FAOSDanceSettings.createOptionDouble(rainbow_panel, "Amplitude:", @amplitude, 360.0, 1.0).third.addChangeListener {|it|
+      @amplitude = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+    }
+
+    FAOSDanceSettings.createOptionDouble(rainbow_panel, "Centre:", @centre, 360.0, 1.0).third.addChangeListener {|it|
+      @centre = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+    }
   end
 
   def create_image

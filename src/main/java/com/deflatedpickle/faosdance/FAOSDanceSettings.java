@@ -42,4 +42,14 @@ public class FAOSDanceSettings {
     public static Triple<JButton, JSlider, JSpinner> createOptionInteger(Container parent, String name, Integer defaultNumber, Integer maxNumber, Integer minNumber) {
         return GlobalValues.INSTANCE.addLabelSliderSpinnerInteger(parent, (GridBagLayout) parent.getLayout(), name, defaultNumber, maxNumber, minNumber);
     }
+
+    public static JSeparator createSeparator(Container parent) {
+        JSeparator separator = new JSeparator();
+        parent.add(separator, new GridBagConstraints() {{
+            this.fill = GridBagConstraints.BOTH;
+            this.weightx = 1.0;
+            this.gridwidth = GridBagConstraints.REMAINDER;
+        }});
+        return separator;
+    }
 }

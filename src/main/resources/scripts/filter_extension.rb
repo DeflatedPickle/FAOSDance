@@ -27,28 +27,18 @@ class FilterExtension < DanceExtension
     box_blur_border.titleComponent.addActionListener {|it|
       @box_blur_enabled = it.source.to_java(javax::swing::JCheckBox).isSelected
     }
-
     box_blur_panel = box_blur_border.panel
 
     FAOSDanceSettings.createOptionInteger(box_blur_panel, "Width:", 2, 10, 1).third.addChangeListener {|it|
-      value = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
-      if value > -1
-        @box_blur_filter.setHRadius value
-      end
+      @box_blur_filter.setHRadius it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
     }
 
     FAOSDanceSettings.createOptionInteger(box_blur_panel, "Height:", 2, 10, 1).third.addChangeListener {|it|
-      value = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
-      if value > -1
-        @box_blur_filter.setVRadius value
-      end
+      @box_blur_filter.setVRadius it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
     }
 
     FAOSDanceSettings.createOptionInteger(box_blur_panel, "Iterations:", 3, 10, 1).third.addChangeListener {|it|
-      value = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
-      if value > -1
-        @box_blur_filter.setIterations value
-      end
+      @box_blur_filter.setIterations it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
     }
   end
 end
