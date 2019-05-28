@@ -1,5 +1,5 @@
 # FAOSDance [![GitHub Last Commit](https://img.shields.io/github/last-commit/DeflatedPickle/FAOSDance.svg)](https://github.com/DeflatedPickle/FAOSDance/commits/master) [![Build Status](https://travis-ci.org/DeflatedPickle/FAOSDance.svg?branch=master)](https://travis-ci.org/DeflatedPickle/FAOSDance) [![Maintainability](https://api.codeclimate.com/v1/badges/74c7afbfbcdada0d80e7/maintainability)](https://codeclimate.com/github/DeflatedPickle/FAOSDance/maintainability)
-A stand-alone, free and open-source implementation of the Fruity Dance plugin from FL Studio.
+A stand-alone, free and open-source and extendable implementation of the Fruity Dance plugin from FL Studio.
 
 ## Table Of Contents
 - [Comparison With Fruity Dance](#comparison-with-fruity-dance)
@@ -12,14 +12,12 @@ A stand-alone, free and open-source implementation of the Fruity Dance plugin fr
 - [Extending The Program](#extending-the-program)
     - [Using Scripts](#using-scripts)
     - [Writing Scripts](#writing-scripts)
-- [Editing Files In The Program](#editing-files-in-the-program)
-    - [Showing File Extensions](#showing-file-extensions)
-    - [Using An Archiving Program](#using-an-archiving-program)
-    - [Changing To A ZIP File And Back](#changing-to-a-zip-file-and-back)
+- [Finding Your App Data Directory](#finding-your-app-data-directory)
 
 | | Downloads |
 |---|---|
-| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.17.2-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.17.2-alpha) |
+| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.27.1-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.27.1-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.17.2-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.17.2-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.13.0-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.13.0-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.9.3-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.9.3-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.4.1-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.4.1-alpha) |
@@ -55,7 +53,7 @@ It's a good idea to add a config, so it starts up without a prompt window.
 - Open `FAOSDance.bat` and change `./FAOSDance.ps1` to the full path of where you put `FAOSDance.ps1`
 
 ## Using The Config
-The easiest way to use the config is to change your settings in the UI and then click the "`Save Configuration`" button. But if you want to edit the raw config as text, or share it, follow one of the paths in [Editing Files In The Program](#editing-files-in-the-program).
+The easiest way to use the config is to change your settings in the UI and then click the "`Save Configuration`" button. But if you want to edit the raw config as text, or share it, find your data directory using [Finding Your App Data Directory](#finding-your-app-data-directory), then open the "`config.toml`" file.
 
 ### Config Options
 | Option | Description |
@@ -115,7 +113,9 @@ enabled=["Spin"]
 ## Extending The Program
 The program can be extended with scripts written in the Ruby language. The scripts can be found in the settings UI under their own tab, where information and settings for each script can be found.
 ### Using Scripts
-To add new scripts, you'll need to follow one of the paths in [Editing Files In The Program](#editing-files-in-the-program), then put the scripts in the `scripts` directory.
+***Warning: Scripts can run any arbitrary code, always check scripts before using them!***
+
+To add new scripts, you'll need to follow [Finding Your App Data Directory](#finding-your-app-data-directory), then put the scripts in the "`scripts`" directory.
 ### Writing Scripts
 To begin writing scripts, you should probably have a basic understanding of the [Ruby language](https://www.ruby-lang.org/en/), [Swing](https://en.wikipedia.org/wiki/Swing_(Java) (specifically the `Graphics2D` class) and object-oriented programming.
 
@@ -133,22 +133,11 @@ Beyond that, here are some general steps to set up a script:
 
 If you get stuck, there are some example scripts [here](https://github.com/DeflatedPickle/FAOSDance/tree/master/src/main/resources/scripts).
 
-## Editing Files In The Program
-### Showing File Extensions
-- Using the File Explorer, navigate to the `View` menu, click it
-    - Navigate to the `Options` button, click it
-        - Change to the `View` tab
-            - Untick the `Hide extensions for known file types` checkbox
-                - Click the `Ok` button
-
-### Using An Archiving Program
-- Right-click the program file
-    - Open it with an archiving program, such as; WinRAR, 7-Zip or WinZip
-- Edit or add the files you want
-
-### Changing To A ZIP File And Back
-- Right-click on the program file
-    - Select the `Rename` option
-        - Change the extension (the text shown after the dot) to `zip`
-- Double-click the program file
-- After editing or adding files, change the extension back to `jar` to run
+## Finding Your App Data Directory
+### Windows
+The easiest way to find this directory by typing "`%APPDATA%`" into the File Manager or search bar.
+### Linux
+#### GUI (Nautilus and forks)
+First, open your file manager if it isn't already, then show hidden files from the View menu. Then go to home, and `.config`.
+#### Terminal
+First, fire up your terminal if it isn't already, then type; "`cd ~/.config`". If your terminal doesn't support tilde notation, then type this instead; "`cd $HOME/.config`".
