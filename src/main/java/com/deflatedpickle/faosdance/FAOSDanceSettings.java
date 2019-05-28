@@ -1,15 +1,30 @@
 package com.deflatedpickle.faosdance;
 
+import com.deflatedpickle.faosdance.component_border.ComponentPanel;
 import kotlin.Triple;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 
 public class FAOSDanceSettings {
-    public static JPanel createBorderPanel(Container parent, String title) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(title));
+    public static ComponentPanel createBorderPanel(Container parent, String title, Boolean toggled) {
+        ComponentPanel panel = new ComponentPanel();
+        JComponent widget;
+        if (toggled) {
+            widget = new JCheckBox(title) {{
+                addItemListener(e -> {
+                    for (Component i : panel.panel.getComponents()) {
+                        i.setEnabled(e.getStateChange() == ItemEvent.SELECTED);
+                    }
+                });
+            }};
+        } else {
+            widget = new JLabel(title);
+        }
+
+        panel.setTitleComponent(widget);
+        panel.panel.setLayout(new GridBagLayout());
 
         parent.add(panel, new GridBagConstraints() {{
             this.fill = GridBagConstraints.BOTH;

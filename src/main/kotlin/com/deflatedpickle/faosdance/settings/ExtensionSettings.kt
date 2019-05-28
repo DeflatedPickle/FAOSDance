@@ -2,6 +2,8 @@ package com.deflatedpickle.faosdance.settings
 
 import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.RubyThread
+import com.deflatedpickle.faosdance.component_border.ComponentBorder
+import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import org.jruby.RubyObject
 import org.jruby.RubyString
 import java.awt.*
@@ -60,11 +62,29 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
 
                     for (c in subPanel.components) {
                         c.isEnabled = true
+
+                        if (c is ComponentPanel) {
+                            c.titleComponent.isEnabled = true
+                            for (ch in c.panel.components) {
+                                ch.isEnabled = false
+                            }
+                        }
                     }
                 }
                 else {
                     if (GlobalValues.sheet == null) {
                         this.isEnabled = false
+
+                        for (c in subPanel.components) {
+                            c.isEnabled = false
+
+                            if (c is ComponentPanel) {
+                                c.titleComponent.isEnabled = false
+                                for (ch in c.panel.components) {
+                                    ch.isEnabled = false
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -73,17 +93,21 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
                     if (this.isSelected) {
                         RubyThread.rubyContainer.callMethod(i, "enable")
                         GlobalValues.enabledExtensions.add(name)
-
-                        for (c in subPanel.components) {
-                            c.isEnabled = true
-                        }
                     }
                     else {
                         RubyThread.rubyContainer.callMethod(i, "disable")
                         GlobalValues.enabledExtensions.remove(name)
+                    }
 
-                        for (c in subPanel.components) {
-                            c.isEnabled = false
+                    for (c in subPanel.components) {
+                        c.isEnabled = this.isSelected
+                    }
+
+                    for (c in subPanel.components) {
+                        c.isEnabled = this.isSelected
+
+                        if (c is ComponentPanel) {
+                            c.titleComponent.isEnabled = this.isSelected
                         }
                     }
 

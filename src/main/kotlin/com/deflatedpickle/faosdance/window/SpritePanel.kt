@@ -62,7 +62,7 @@ class SpritePanel : JPanel() {
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
-        if (GlobalValues.sheet == null || !GlobalValues.isVisible) return
+        if (GlobalValues.sheet == null) return
 
         val g2D = g as Graphics2D
         g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, when (GlobalValues.scalingType) {
@@ -102,41 +102,42 @@ class SpritePanel : JPanel() {
         }
         // Scale the sprite
         g2D.scale(GlobalValues.xMultiplier, GlobalValues.yMultiplier)
+
         // Draw the sprite
-        val sprite = BufferedImage(
-            GlobalValues.sheet!!.spriteWidth,
-            GlobalValues.sheet!!.spriteHeight,
-            BufferedImage.TYPE_INT_ARGB
-        )
-        val spriteGraphics = sprite.createGraphics()
+        if (GlobalValues.isVisible) {
+            val sprite = BufferedImage(
+                GlobalValues.sheet!!.spriteWidth,
+                GlobalValues.sheet!!.spriteHeight,
+                BufferedImage.TYPE_INT_ARGB
+            )
+            val spriteGraphics = sprite.createGraphics()
 
-        for (i in RubyThread.extensions) {
-            if (GlobalValues.isEnabled(i)) {
-                RubyThread.rubyContainer.callMethod(i, "pre_draw_sprite", spriteGraphics)
+            for (i in RubyThread.extensions) {
+                if (GlobalValues.isEnabled(i)) {
+                    RubyThread.rubyContainer.callMethod(i, "pre_draw_sprite", spriteGraphics)
+                }
+            }
+
+            spriteGraphics.drawRenderedImage(
+                GlobalValues.mutableSprite,
+                null
+            )
+
+            for (i in RubyThread.extensions) {
+                if (GlobalValues.isEnabled(i)) {
+                    RubyThread.rubyContainer.callMethod(i, "during_draw_sprite", spriteGraphics)
+                }
+            }
+
+            spriteGraphics.dispose()
+            g2D.drawRenderedImage(sprite, null)
+
+            for (i in RubyThread.extensions) {
+                if (GlobalValues.isEnabled(i)) {
+                    RubyThread.rubyContainer.callMethod(i, "post_draw_sprite", g2D)
+                }
             }
         }
-
-        spriteGraphics.drawRenderedImage(
-            GlobalValues.mutableSprite,
-            null
-        )
-
-        for (i in RubyThread.extensions) {
-            if (GlobalValues.isEnabled(i)) {
-                RubyThread.rubyContainer.callMethod(i, "during_draw_sprite", spriteGraphics)
-            }
-        }
-
-        spriteGraphics.dispose()
-        g2D.drawRenderedImage(sprite, null)
-
-        for (i in RubyThread.extensions) {
-            if (GlobalValues.isEnabled(i)) {
-                RubyThread.rubyContainer.callMethod(i, "post_draw_sprite", g2D)
-            }
-        }
-
-        if (!GlobalValues.isReflectionVisible) return
 
         // Move to the bottom of the sprite
         g2D.translate(
@@ -147,48 +148,50 @@ class SpritePanel : JPanel() {
         g2D.scale(1.0, -1.0)
 
         // Create a new image for the reflection
-        val reflection = BufferedImage(
-            GlobalValues.sheet!!.spriteWidth,
-            GlobalValues.sheet!!.spriteHeight,
-            BufferedImage.TYPE_INT_ARGB
-        )
-        val reflectionGraphics = reflection.createGraphics()
+        if (GlobalValues.isReflectionVisible) {
+            val reflection = BufferedImage(
+                GlobalValues.sheet!!.spriteWidth,
+                GlobalValues.sheet!!.spriteHeight,
+                BufferedImage.TYPE_INT_ARGB
+            )
+            val reflectionGraphics = reflection.createGraphics()
 
-        for (i in RubyThread.extensions) {
-            if (GlobalValues.isEnabled(i)) {
-                RubyThread.rubyContainer.callMethod(i, "pre_draw_reflection", reflectionGraphics)
+            for (i in RubyThread.extensions) {
+                if (GlobalValues.isEnabled(i)) {
+                    RubyThread.rubyContainer.callMethod(i, "pre_draw_reflection", reflectionGraphics)
+                }
             }
-        }
 
-        // Draw the reflection
-        reflectionGraphics.drawRenderedImage(
-            GlobalValues.mutableSprite,
-            null
-        )
+            // Draw the reflection
+            reflectionGraphics.drawRenderedImage(
+                GlobalValues.mutableSprite,
+                null
+            )
 
-        for (i in RubyThread.extensions) {
-            if (GlobalValues.isEnabled(i)) {
-                RubyThread.rubyContainer.callMethod(i, "during_draw_reflection", reflectionGraphics)
+            for (i in RubyThread.extensions) {
+                if (GlobalValues.isEnabled(i)) {
+                    RubyThread.rubyContainer.callMethod(i, "during_draw_reflection", reflectionGraphics)
+                }
             }
-        }
 
-        reflectionGraphics.composite = AlphaComposite.getInstance(AlphaComposite.DST_IN)
-        // Apply a gradient paint, so the reflection fades out
-        reflectionGraphics.paint = GradientPaint(
-            0f,
-            GlobalValues.sheet!!.spriteHeight.toFloat() * GlobalValues.fadeHeight,
-            Color(0.0f, 0.0f, 0.0f, 0.0f),
-            0f,
-            GlobalValues.sheet!!.spriteHeight.toFloat(),
-            Color(0.0f, 0.0f, 0.0f, GlobalValues.fadeOpacity)
-        )
-        reflectionGraphics.fillRect(0, 0, GlobalValues.sheet!!.spriteWidth, GlobalValues.sheet!!.spriteHeight)
-        reflectionGraphics.dispose()
-        g2D.drawRenderedImage(reflection, null)
+            reflectionGraphics.composite = AlphaComposite.getInstance(AlphaComposite.DST_IN)
+            // Apply a gradient paint, so the reflection fades out
+            reflectionGraphics.paint = GradientPaint(
+                0f,
+                GlobalValues.sheet!!.spriteHeight.toFloat() * GlobalValues.fadeHeight,
+                Color(0.0f, 0.0f, 0.0f, 0.0f),
+                0f,
+                GlobalValues.sheet!!.spriteHeight.toFloat(),
+                Color(0.0f, 0.0f, 0.0f, GlobalValues.fadeOpacity)
+            )
+            reflectionGraphics.fillRect(0, 0, GlobalValues.sheet!!.spriteWidth, GlobalValues.sheet!!.spriteHeight)
+            reflectionGraphics.dispose()
+            g2D.drawRenderedImage(reflection, null)
 
-        for (i in RubyThread.extensions) {
-            if (GlobalValues.isEnabled(i)) {
-                RubyThread.rubyContainer.callMethod(i, "post_draw_reflection", g2D)
+            for (i in RubyThread.extensions) {
+                if (GlobalValues.isEnabled(i)) {
+                    RubyThread.rubyContainer.callMethod(i, "post_draw_reflection", g2D)
+                }
             }
         }
 

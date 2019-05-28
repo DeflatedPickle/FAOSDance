@@ -2,14 +2,17 @@ package com.deflatedpickle.faosdance.settings.general
 
 import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.ScalingType
+import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
+import java.awt.FlowLayout
 import java.awt.Frame
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.*
 
-class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
+class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
+    ComponentPanel(JCheckBox(Lang.bundle.getString("settings.sprite"))) {
     private val gridBagLayout = GridBagLayout()
 
     val animationCategory = AnimationCategory(owner, settings)
@@ -24,26 +27,31 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     var solidCheckbox: JCheckBox? = null
 
     init {
-        this.layout = gridBagLayout
-        this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.sprite"))
+        this.layout = FlowLayout()
 
-        visibleCheckbox = JCheckBox(Lang.bundle.getString("settings.sprite.visible")).apply {
+        this.panel.layout = gridBagLayout
+        (this.titleComponent as JCheckBox).apply {
             isSelected = GlobalValues.isVisible
 
             addActionListener {
                 GlobalValues.isVisible = this.isSelected
                 GlobalValues.updateScripts("isVisible", GlobalValues.isVisible)
-            }
 
-            gridBagLayout.setConstraints(this,
-                GridBagConstraints().apply { gridwidth = GridBagConstraints.REMAINDER }
-            )
+                for (i in this@SpriteCategory.panel.components) {
+                    i.isEnabled = this.isSelected
+
+                    if (i is AnimationCategory || i is RotationCategory || i is ScaleCategory) {
+                        for (c in (i as JPanel).components) {
+                            c.isEnabled = this.isSelected
+                        }
+                    }
+                }
+            }
         }
-        this.settings.widgets.add(visibleCheckbox!!)
-        this.add(visibleCheckbox)
+        this.settings.widgets.add(this.titleComponent)
 
         // Scaling type label
-        this.add(JLabel("${Lang.bundle.getString("settings.sprite.scalingType")}:").also {
+        this.panel.add(JLabel("${Lang.bundle.getString("settings.sprite.scalingType")}:").also {
             gridBagLayout.setConstraints(it, GridBagConstraints().apply {
                 anchor = GridBagConstraints.EAST
             })
@@ -55,7 +63,8 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             selectedIndex = scalingValues.indexOf(GlobalValues.sanatizeEnumValue(GlobalValues.scalingType.name))
 
             addActionListener {
-                GlobalValues.scalingType = ScalingType.valueOf(GlobalValues.unsanatizeEnumValue(((it.source as JComboBox<*>).selectedItem as String)))
+                GlobalValues.scalingType =
+                    ScalingType.valueOf(GlobalValues.unsanatizeEnumValue(((it.source as JComboBox<*>).selectedItem as String)))
                 GlobalValues.updateScripts("scalingType", GlobalValues.scalingType)
             }
 
@@ -66,10 +75,10 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             })
         }
         this.settings.widgets.add(scalingTypeCombobox!!)
-        this.add(scalingTypeCombobox)
+        this.panel.add(scalingTypeCombobox)
 
         opacityWidgets = GlobalValues.addComponentSliderSpinner<Double>(
-            this,
+            this.panel,
             gridBagLayout,
             JLabel("${Lang.bundle.getString("settings.sprite.opacity")}:"),
             GlobalValues.opacity,
@@ -94,7 +103,7 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             }
         }
         this.settings.widgets.add(solidCheckbox!!)
-        this.add(solidCheckbox)
+        this.panel.add(solidCheckbox)
 
         alwaysOnTopCheckbox = JCheckBox(Lang.bundle.getString("settings.sprite.always_on_top")).apply {
             isSelected = GlobalValues.isTopLevel
@@ -106,7 +115,7 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             }
         }
         this.settings.widgets.add(alwaysOnTopCheckbox!!)
-        this.add(alwaysOnTopCheckbox)
+        this.panel.add(alwaysOnTopCheckbox)
 
         toggleHeldCheckbox = JCheckBox(Lang.bundle.getString("settings.sprite.toggled_held")).apply {
             isSelected = GlobalValues.isToggleHeld
@@ -121,7 +130,7 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             )
         }
         this.settings.widgets.add(toggleHeldCheckbox!!)
-        this.add(toggleHeldCheckbox)
+        this.panel.add(toggleHeldCheckbox)
 
         val fillConstraint = GridBagConstraints().apply {
             fill = GridBagConstraints.HORIZONTAL
@@ -129,8 +138,8 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             gridwidth = GridBagConstraints.REMAINDER
         }
 
-        this.add(animationCategory, fillConstraint)
-        this.add(rotationCategory, fillConstraint)
-        this.add(scaleCategory, fillConstraint)
+        this.panel.add(animationCategory, fillConstraint)
+        this.panel.add(rotationCategory, fillConstraint)
+        this.panel.add(scaleCategory, fillConstraint)
     }
 }

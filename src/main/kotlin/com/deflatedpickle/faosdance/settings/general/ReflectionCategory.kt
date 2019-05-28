@@ -1,42 +1,49 @@
 package com.deflatedpickle.faosdance.settings.general
 
 import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
+import java.awt.FlowLayout
 import java.awt.Frame
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.*
 
-class ReflectionCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
+class ReflectionCategory(owner: Frame, val settings: SettingsDialog) :
+    ComponentPanel(JCheckBox(Lang.bundle.getString("settings.reflection"))) {
     private val gridBagLayout = GridBagLayout()
 
     val fadeCategory = FadeCategory(owner, settings)
 
     var paddingWidgets: Triple<JComponent, JSlider, JSpinner>? = null
-    var visibleCheckbox: JCheckBox? = null
 
     init {
-        this.layout = gridBagLayout
-        this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.reflection"))
+        this.layout = FlowLayout()
 
-        visibleCheckbox = JCheckBox(Lang.bundle.getString("settings.reflection.visible")).apply {
+        this.panel.layout = gridBagLayout
+        (this.titleComponent as JCheckBox).apply {
             isSelected = GlobalValues.isReflectionVisible
-
             addActionListener {
                 GlobalValues.isReflectionVisible = this.isSelected
                 GlobalValues.updateScripts("isReflectionVisible", GlobalValues.isReflectionVisible)
+
+                for (i in this@ReflectionCategory.panel.components) {
+                    i.isEnabled = this.isSelected
+
+                    if (i is FadeCategory) {
+                        for (c in i.components) {
+                            c.isEnabled = this.isSelected
+                        }
+                    }
+                }
             }
         }
-        (this.layout as GridBagLayout).setConstraints(
-            visibleCheckbox, GridBagConstraints().apply { gridwidth = GridBagConstraints.REMAINDER }
-        )
-        this.settings.widgets.add(visibleCheckbox!!)
-        this.add(visibleCheckbox)
+        this.settings.widgets.add(this.titleComponent)
 
         paddingWidgets = GlobalValues.addComponentSliderSpinner<Double>(
-            this,
-            this.layout as GridBagLayout,
+            this.panel,
+            this.panel.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.reflection.padding")}:"),
             GlobalValues.reflectionPadding,
             100.0,
@@ -51,7 +58,7 @@ class ReflectionCategory(owner: Frame, val settings: SettingsDialog) : JPanel() 
         this.settings.widgets.add(paddingWidgets!!.second)
         this.settings.widgets.add(paddingWidgets!!.third)
 
-        this.add(fadeCategory.apply {
+        this.panel.add(fadeCategory.apply {
             gridBagLayout.setConstraints(this,
                 GridBagConstraints().apply {
                     fill = GridBagConstraints.HORIZONTAL
