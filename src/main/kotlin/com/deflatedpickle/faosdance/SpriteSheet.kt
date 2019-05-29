@@ -12,7 +12,7 @@ import javax.swing.JOptionPane
 /**
  * A sprite sheet
  */
-class SpriteSheet(val image: String, spriteNumX: Int = 8, var spriteNumY: Int? = null) {
+class SpriteSheet(val image: String, var spriteNumX: Int = 8, var spriteNumY: Int? = null) {
     /**
      * The map of sprites cut from the sheet
      */
