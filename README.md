@@ -27,11 +27,11 @@ A stand-alone, free and open-source and extendable implementation of the Fruity 
 ---
 
 ## Comparison With Fruity Dance
-| | Fruity Dance | FAOSDance |
+| | Fruity Dance (Official Plugin for FL Studio) | FAOSDance (This Program) |
 |---|---|---|
 | **Interface** | ![FruityDance](.github/images/FruityDance.png) | ![FAOSDance](.github/images/FAOSDance.png) |
-| **Pros** | Has a frame blending slider | Free, stand-alone and more customizable, has a config file |
-| **Cons** | Requires owning (paid or trial) and running FL Studio | *Coming Soon* |
+| **Pros** | Ships with a top of the ~~Image~~ line DAW | Free, stand-alone and more customizable, has a config file, completely scriptable |
+| **Cons** | Requires owning (paid or trial) and running FL Studio | *Cons Coming Soon* |
 
 ---
 
