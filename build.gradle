@@ -15,6 +15,7 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -32,6 +33,10 @@ dependencies {
 
     implementation 'org.lwjgl.osgi:org.lwjgl.opengl:3.2.0'
     implementation "org.joml:joml:1.9.12"
+
+    implementation 'com.github.jkcclemens:khttp:-SNAPSHOT'
+
+    implementation 'org.swinglabs:swingx:1.6.1'
 }
 
 compileKotlin {
@@ -58,11 +63,13 @@ shadowJar {
         exclude(dependency('joda-time:joda-time:2.9.9'))
 
         exclude(dependency('org.jruby:.*'))
-        
+
         // Other Requirements
         exclude(dependency('com.jhlabs:filters:.*'))
         exclude(dependency('org.lwjgl.osgi:org.lwjgl.opengl:.*'))
         exclude(dependency('org.joml:joml:.*'))
+
+        exclude(dependency('org.swinglabs:swingx:1.6.1'))
     }
     archiveName = "FAOSDance.jar"
 }

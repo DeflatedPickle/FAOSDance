@@ -16,6 +16,8 @@ import javax.swing.*
 import kotlin.math.roundToInt
 
 object GlobalValues {
+    const val version = "v0.27.1-alpha"
+
     @JvmStatic
     val homePath = when {
         SystemUtils.IS_OS_WINDOWS -> File("${System.getenv("APPDATA")}/FAOSDance/")

@@ -101,7 +101,6 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             }
 
             gridBagLayout.setConstraints(this, GridBagConstraints().apply {
-                anchor = GridBagConstraints.EAST
                 gridwidth = GridBagConstraints.REMAINDER
             })
         })

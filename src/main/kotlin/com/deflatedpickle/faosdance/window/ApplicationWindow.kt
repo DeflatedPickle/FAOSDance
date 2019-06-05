@@ -25,16 +25,14 @@ class ApplicationWindow : JFrame(Lang.bundle.getString("window.title")) {
 
     init {
         this.iconImage = GlobalValues.icon.image
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-        SwingUtilities.updateComponentTreeUI(this)
 
         contextMenu = ContextMenu()
 
-        this.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+        this.defaultCloseOperation = EXIT_ON_CLOSE
         this.isAlwaysOnTop = true
         this.isUndecorated = true
         this.background = Color(0, 0, 0, 0)
-        this.type = Window.Type.UTILITY
+        this.type = Type.UTILITY
 
         this.addKeyListener(object : KeyAdapter() {
             override fun keyPressed(e: KeyEvent) {
