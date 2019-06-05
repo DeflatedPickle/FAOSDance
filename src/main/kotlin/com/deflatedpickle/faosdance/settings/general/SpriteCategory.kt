@@ -21,10 +21,7 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
 
     var scalingTypeCombobox: JComboBox<String>? = null
     var opacityWidgets: Triple<JComponent, JSlider, JSpinner>? = null
-    var visibleCheckbox: JCheckBox? = null
-    var alwaysOnTopCheckbox: JCheckBox? = null
     var toggleHeldCheckbox: JCheckBox? = null
-    var solidCheckbox: JCheckBox? = null
 
     init {
         this.layout = FlowLayout()
@@ -93,29 +90,6 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
         this.settings.widgets.add(opacityWidgets!!.first)
         this.settings.widgets.add(opacityWidgets!!.second)
         this.settings.widgets.add(opacityWidgets!!.third)
-
-        solidCheckbox = JCheckBox(Lang.bundle.getString("settings.sprite.solid")).apply {
-            isSelected = GlobalValues.isSolid
-
-            addActionListener {
-                GlobalValues.isSolid = this.isSelected
-                GlobalValues.updateScripts("isSolid", GlobalValues.isSolid)
-            }
-        }
-        this.settings.widgets.add(solidCheckbox!!)
-        this.panel.add(solidCheckbox)
-
-        alwaysOnTopCheckbox = JCheckBox(Lang.bundle.getString("settings.sprite.always_on_top")).apply {
-            isSelected = GlobalValues.isTopLevel
-
-            addActionListener {
-                GlobalValues.isTopLevel = this.isSelected
-                GlobalValues.updateScripts("isTopLevel", GlobalValues.isTopLevel)
-                GlobalValues.frame!!.isAlwaysOnTop = GlobalValues.isTopLevel
-            }
-        }
-        this.settings.widgets.add(alwaysOnTopCheckbox!!)
-        this.panel.add(alwaysOnTopCheckbox)
 
         toggleHeldCheckbox = JCheckBox(Lang.bundle.getString("settings.sprite.toggled_held")).apply {
             isSelected = GlobalValues.isToggleHeld

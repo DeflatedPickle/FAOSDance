@@ -2,7 +2,6 @@ package com.deflatedpickle.faosdance.settings
 
 import com.deflatedpickle.faosdance.ConfigFile
 import com.deflatedpickle.faosdance.GlobalValues
-import com.deflatedpickle.faosdance.RubyThread
 import com.deflatedpickle.faosdance.settings.general.GeneralSettings
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Dimension
@@ -49,12 +48,12 @@ class SettingsDialog(owner: Frame) : JDialog(
 
         // Widgets
         val tabbedPane = JTabbedPane()
-        tabbedPane.addTab("General", JScrollPane(generalSettings).apply {
+        tabbedPane.addTab(Lang.bundle.getString("tabs.general"), JScrollPane(generalSettings).apply {
             border = BorderFactory.createEmptyBorder()
             horizontalScrollBar.unitIncrement = 20
             verticalScrollBar.unitIncrement = 20
         })
-        tabbedPane.addTab("Extensions", extensionsSettings)
+        tabbedPane.addTab(Lang.bundle.getString("tabs.extensions"), extensionsSettings)
 
         this.add(tabbedPane, GridBagConstraints().apply {
             fill = GridBagConstraints.BOTH
