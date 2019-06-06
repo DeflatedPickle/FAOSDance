@@ -16,7 +16,7 @@ import javax.swing.*
 import kotlin.math.roundToInt
 
 object GlobalValues {
-    const val version = "v0.27.1-alpha"
+    const val version = "v0.33.8-alpha"
 
     @JvmStatic
     val homePath = when {
