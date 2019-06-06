@@ -131,7 +131,7 @@ The program can be extended with scripts written in the Ruby language. The scrip
 
 To add new scripts, you'll need to follow [Finding Your App Data Directory](#finding-your-app-data-directory), then put the scripts in the "`scripts`" directory.
 ### Writing Scripts
-To begin writing scripts, you should probably have a basic understanding of the [Ruby language](https://www.ruby-lang.org/en/), [Swing](https://en.wikipedia.org/wiki/Swing_(Java) (specifically the `Graphics2D` class) and object-oriented programming.
+To begin writing scripts, you should probably have a basic understanding of the [Ruby language](https://www.ruby-lang.org/en/), [Swing](https://en.wikipedia.org/wiki/Swing_\(Java\)) (specifically the `Graphics2D` class) and object-oriented programming.
 
 Beyond that, here are some general steps to set up a script:
 - Make a new file in the `scripts` directory
