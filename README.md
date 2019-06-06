@@ -14,9 +14,12 @@ A stand-alone, free and open-source and extendable implementation of the Fruity 
     - [Writing Scripts](#writing-scripts)
 - [Finding Your App Data Directory](#finding-your-app-data-directory)
 
+***Noice: As of v0.33.8-alpha, FAOSDance has an auto-updater. It'll handle downloading new versions for you.***
+
 | | Downloads |
 |---|---|
-| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.27.1-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.27.1-alpha) |
+| **Latest** |[![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.33.8-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.33.8-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.27.1-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.27.1-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.17.2-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.17.2-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.13.0-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.13.0-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/FAOSDance/v0.9.3-alpha/total.svg)](https://github.com/DeflatedPickle/FAOSDance/releases/tag/v0.9.3-alpha) |
@@ -32,6 +35,17 @@ A stand-alone, free and open-source and extendable implementation of the Fruity 
 | **Interface** | ![FruityDance](.github/images/FruityDance.png) | ![FAOSDance](.github/images/FAOSDance.png) |
 | **Pros** | Ships with a top of the ~~Image~~ line DAW | Free, stand-alone and more customizable, has a config file, completely scriptable |
 | **Cons** | Requires owning (paid or trial) and running FL Studio | *Cons Coming Soon* |
+
+<details>
+<summary>
+<b>Not sold yet?</b>
+</summary>
+<i>How about now?</i>
+    
+![FAOSDance At Its Best](.github/images/FAOSDanceAtItsBest.gif)
+
+This is with the following extensions; Auto Action, Blend, Colour Overlay (rainbow), Filter (blur) and Shake
+</details>
 
 ---
 
