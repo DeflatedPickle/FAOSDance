@@ -14,7 +14,7 @@ A stand-alone, free and open-source and extendable implementation of the Fruity 
     - [Writing Scripts](#writing-scripts)
 - [Finding Your App Data Directory](#finding-your-app-data-directory)
 
-***Noice: As of v0.33.8-alpha, FAOSDance has an auto-updater. It'll handle downloading new versions for you.***
+***Notice: As of v0.33.8-alpha, FAOSDance has an auto-updater. It'll handle downloading new versions for you.***
 
 | | Downloads |
 |---|---|
