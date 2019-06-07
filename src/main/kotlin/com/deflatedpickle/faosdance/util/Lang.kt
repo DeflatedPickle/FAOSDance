@@ -1,9 +1,10 @@
 package com.deflatedpickle.faosdance.util
 
+import com.deflatedpickle.faosdance.GlobalValues
 import java.util.*
 
 object Lang {
-    private val inputStream = javaClass.classLoader.getResourceAsStream("lang.properties")
+    private val inputStream = GlobalValues.langProperties.inputStream()
     private val properties = Properties()
 
     val locale: Locale

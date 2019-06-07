@@ -1,7 +1,6 @@
 package com.deflatedpickle.faosdance
 
 import com.deflatedpickle.faosdance.settings.SettingsDialog
-import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.SystemUtils
 import org.jruby.RubyBoolean
 import org.jruby.RubyObject
@@ -26,11 +25,18 @@ object GlobalValues {
     }
 
     lateinit var configFile: File
+    lateinit var langProperties: File
     val scriptsFolder = if (ClassLoader.getSystemResource("icon.png").protocol == "jar") {
         File(homePath, "scripts")
     }
     else {
         File(ClassLoader.getSystemResource("scripts").path)
+    }
+    val configFolder = if (ClassLoader.getSystemResource("icon.png").protocol == "jar") {
+        File(homePath, "config")
+    }
+    else {
+        File(ClassLoader.getSystemResource("config").path)
     }
 
     init {
@@ -40,14 +46,9 @@ object GlobalValues {
 
     fun createEnviromentFiles() {
         homePath?.mkdir()
-        configFile = File(homePath, "config.toml").apply {
-            if (!this.isFile) {
-                this.createNewFile()
-            }
-        }
 
         // It's a loop in case I decide to add more user folders, or move the lang folder out of the program
-        for (i in listOf(scriptsFolder)) {
+        for (i in listOf(scriptsFolder, configFolder)) {
             if (!i.isDirectory) {
                 i.mkdir()
             }
@@ -80,6 +81,9 @@ object GlobalValues {
                 }
             }
         }
+
+        configFile = File(homePath, "config/config.toml")
+        langProperties = File(homePath, "config/lang.properties")
     }
 
     fun loadScripts() {
@@ -100,6 +104,10 @@ object GlobalValues {
 
     @JvmStatic
     val maxSize = 10.0
+
+    // TODO: Move config values to a map so extensions can make better use of them
+    // @JvmStatic
+    // val config = mutableMapOf<String, Any>()
 
     @JvmStatic
     var sheet: SpriteSheet? = null
