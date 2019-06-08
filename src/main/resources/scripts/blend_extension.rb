@@ -12,16 +12,19 @@ class BlendExtension < DanceExtension
   def pre_draw_sprite(graphics)
     if @blend_past_frame_amount > 0
       for i in 0..@blend_past_frame_amount
-        if GlobalValues.getRewind
-          sprite_image = GlobalValues.getSheet.getSpriteMap[GlobalValues.getCurrentAction][GlobalValues.getAnimFrame + 1 <= 7 ? GlobalValues.getAnimFrame + 1 : 0]
+        frame = GlobalValues.optionsMap.getMap("sprite").getMap("animation").getOption "frame"
+        action = GlobalValues.optionsMap.getMap("sprite").getMap("animation").getOption "action"
+
+        if GlobalValues.optionsMap.getMap("sprite").getMap("animation").getOption "rewind"
+          sprite_image = GlobalValues.getSheet.getSpriteMap[action][frame + 1 <= 7 ? frame + 1 : 0]
         else
-          sprite_image = GlobalValues.getSheet.getSpriteMap[GlobalValues.getCurrentAction][GlobalValues.getAnimFrame - 1 >= 0 ? GlobalValues.getAnimFrame - 1 : 7]
+          sprite_image = GlobalValues.getSheet.getSpriteMap[action][frame - 1 >= 0 ? frame - 1 : 7]
         end
 
         @sprite = BufferedImage.new @width, @height, BufferedImage::TYPE_INT_ARGB
         sprite_graphics = @sprite.createGraphics
 
-        sprite_graphics.composite = AlphaComposite.getInstance AlphaComposite::SRC_OVER, GlobalValues.getOpacity * @blend_opacity_multiplier * i / 9
+        sprite_graphics.composite = AlphaComposite.getInstance AlphaComposite::SRC_OVER, GlobalValues.optionsMap.getMap("sprite").getOption("opacity") * @blend_opacity_multiplier * i / 9
         sprite_graphics.drawRenderedImage sprite_image, nil
 
         sprite_graphics.dispose
@@ -33,16 +36,19 @@ class BlendExtension < DanceExtension
   def post_draw_sprite(graphics)
     if @blend_future_frame_amount > 0
       for i in 0..@blend_future_frame_amount
-        if GlobalValues.getRewind
-          sprite_image = GlobalValues.getSheet.getSpriteMap[GlobalValues.getCurrentAction][GlobalValues.getAnimFrame - 1 >= 0 ? GlobalValues.getAnimFrame - 1 : 7]
+        frame = GlobalValues.optionsMap.getMap("sprite").getMap("animation").getOption "frame"
+        action = GlobalValues.optionsMap.getMap("sprite").getMap("animation").getOption "action"
+
+        if GlobalValues.optionsMap.getMap("sprite").getMap("animation").getOption("rewind")
+          sprite_image = GlobalValues.getSheet.getSpriteMap[action][frame - 1 >= 0 ? frame - 1 : 7]
         else
-          sprite_image = GlobalValues.getSheet.getSpriteMap[GlobalValues.getCurrentAction][GlobalValues.getAnimFrame + 1 <= 7 ? GlobalValues.getAnimFrame + 1 : 0]
+          sprite_image = GlobalValues.getSheet.getSpriteMap[action][frame + 1 <= 7 ? frame + 1 : 0]
         end
 
         @sprite = BufferedImage.new @width, @height, BufferedImage::TYPE_INT_ARGB
         sprite_graphics = @sprite.createGraphics
 
-        sprite_graphics.composite = AlphaComposite.getInstance AlphaComposite::SRC_OVER, GlobalValues.getOpacity * @blend_opacity_multiplier * i / 9
+        sprite_graphics.composite = AlphaComposite.getInstance AlphaComposite::SRC_OVER, GlobalValues.optionsMap.getMap("sprite").getOption("opacity") * @blend_opacity_multiplier * i / 9
         sprite_graphics.drawRenderedImage sprite_image, nil
 
         sprite_graphics.dispose

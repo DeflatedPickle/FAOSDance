@@ -2,7 +2,6 @@ class RotateExtension < DanceExtension
   def initialize
     super "Rotate", "Rotates the sprite by an amount", "DeflatedPickle"
 
-    @original = GlobalValues.getZRotation
     @max = 360
     @increase = 8
     @counter = 0
@@ -15,7 +14,7 @@ class RotateExtension < DanceExtension
       @counter = 0
     end
 
-    GlobalValues.setZRotation @counter
+    GlobalValues.optionsMap.getMap("sprite").getMap("rotation").setOption "z", @counter
   end
 
   def settings(panel)
@@ -26,11 +25,11 @@ class RotateExtension < DanceExtension
   end
 
   def enable
-    @original = GlobalValues.getZRotation
+    @original = GlobalValues.optionsMap.getMap("sprite").getMap("rotation").getOption "z"
   end
 
   def disable
-    GlobalValues.setZRotation @original
+    GlobalValues.optionsMap.getMap("sprite").getMap("rotation").setOption "z", @original
   end
 end
 

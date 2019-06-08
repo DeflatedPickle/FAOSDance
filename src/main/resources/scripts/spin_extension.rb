@@ -2,8 +2,6 @@ class SpinExtension < DanceExtension
   def initialize
     super "Spin", "Spins the sprite around using a sine function", "DeflatedPickle"
 
-    @original = GlobalValues.getXMultiplier
-    @counter = @original
     @increase = 0.1
   end
 
@@ -15,7 +13,7 @@ class SpinExtension < DanceExtension
     end
 
     new_size = Math.sin(@counter)
-    GlobalValues.setXMultiplier new_size
+    GlobalValues.optionsMap.getMap("sprite").getMap("size").setOption "width", new_size
   end
 
   def settings(panel)
@@ -26,11 +24,12 @@ class SpinExtension < DanceExtension
   end
 
   def enable
-    @original = GlobalValues.getXMultiplier
+    @original = GlobalValues.optionsMap.getMap("sprite").getMap("size").getOption("width")
+    @counter = @original
   end
 
   def disable
-    GlobalValues.setXMultiplier @original
+    GlobalValues.optionsMap.getMap("sprite").getMap("size").setOption "width", @original
   end
 end
 

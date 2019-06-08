@@ -2,6 +2,7 @@ package com.deflatedpickle.faosdance.window
 
 import com.deflatedpickle.faosdance.Direction
 import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.SpriteSheet
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Color
 import java.awt.Point
@@ -19,7 +20,7 @@ class ApplicationWindow : JFrame(Lang.bundle.getString("window.title")) {
 
     var isGrabbed = false
     var clickedPoint = Point()
-    var animation = GlobalValues.currentAction
+    var animation = ""
 
     val contextMenu: ContextMenu
 
@@ -50,8 +51,12 @@ class ApplicationWindow : JFrame(Lang.bundle.getString("window.title")) {
 
         this.addMouseWheelListener {
             if (ctrlHeld) {
-                GlobalValues.xMultiplier += (it.preciseWheelRotation * -1) / 100
-                GlobalValues.yMultiplier += (it.preciseWheelRotation * -1) / 100
+                val width = GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.setOption("width", width + (it.preciseWheelRotation * -1) / 100)
+
+                val height = GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.setOption("height", height + (it.preciseWheelRotation * -1) / 100)
+
                 GlobalValues.resize(Direction.BOTH)
             }
         }
@@ -62,14 +67,14 @@ class ApplicationWindow : JFrame(Lang.bundle.getString("window.title")) {
             override fun mousePressed(e: MouseEvent) {
                 super.mousePressed(e)
 
-                if (e.button == 1 && GlobalValues.isSolid) {
+                if (e.button == 1 && GlobalValues.optionsMap.getMap("window")!!.getOption<Boolean>("solid")!!) {
                     isGrabbed = true
                     clickedPoint = e.point
 
-                    animation = GlobalValues.currentAction
+                    animation = GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<String>("action")!!
 
-                    if (GlobalValues.sheet != null && GlobalValues.isToggleHeld) {
-                        GlobalValues.currentAction = GlobalValues.sheet!!.spriteMap.keys.last()
+                    if (GlobalValues.sheet != null && GlobalValues.optionsMap.getMap("sprite")!!.getOption<Boolean>("toggle_held")!!) {
+                        GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("action", GlobalValues.sheet!!.spriteMap.keys.last())
                     }
                 } else if (e.button == 3) {
                     contextMenu.show(this@ApplicationWindow, e.x, e.y)
@@ -79,10 +84,10 @@ class ApplicationWindow : JFrame(Lang.bundle.getString("window.title")) {
             override fun mouseReleased(e: MouseEvent) {
                 super.mouseReleased(e)
 
-                if (e.button == 1 && GlobalValues.isSolid) {
+                if (e.button == 1 && GlobalValues.optionsMap.getMap("window")!!.getOption<Boolean>("solid")!!) {
                     isGrabbed = false
 
-                    GlobalValues.currentAction = animation
+                    GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("action", animation)
                 }
             }
 

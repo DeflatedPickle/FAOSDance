@@ -23,17 +23,17 @@ class RotationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             this,
             this.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.rotation.z")}:"),
-            GlobalValues.zRotation,
+            GlobalValues.optionsMap.getMap("sprite")!!.getMap("rotation")!!.getOption<Int>("z")!!,
             360,
             0
         ).apply {
             third.addChangeListener {
-                GlobalValues.zRotation = when {
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("rotation")!!.setOption("z", when {
                     (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
                     (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
                     else -> 0
-                }
-                GlobalValues.updateScripts("zRotation", GlobalValues.zRotation)
+                })
+                GlobalValues.updateScripts("sprite.rotation.z", GlobalValues.optionsMap.getMap("sprite")!!.getMap("rotation")!!.getOption<Int>("z")!!)
             }
         }
         this.settings.widgets.add(zRotationWidgets!!.first)

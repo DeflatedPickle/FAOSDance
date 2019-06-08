@@ -53,8 +53,8 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
         // Action drop-down
         actionCombobox = JComboBox<String>().apply {
             addActionListener {
-                GlobalValues.currentAction = (it.source as JComboBox<*>).selectedItem as String
-                GlobalValues.updateScripts("action", GlobalValues.currentAction)
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("action", (it.source as JComboBox<*>).selectedItem as String)
+                GlobalValues.updateScripts("sprite.action.animation", GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<String>("action")!!)
             }
 
             gridBagLayout.setConstraints(this, GridBagConstraints().apply {
@@ -62,7 +62,7 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 weightx = 1.0
             })
         }
-        if (GlobalValues.sheet != null) {
+        if (GlobalValues.optionsMap.getMap("sprite")!!.getOption<SpriteSheet>("sheet") != null) {
             setActions()
         }
         this.settings.widgets.add(actionCombobox!!)
@@ -96,7 +96,7 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                     loadSpriteSheet(fileChooser.selectedFile.absolutePath)
                     setActions()
 
-                    GlobalValues.updateScripts("sheet", GlobalValues.sheet!!)
+                    GlobalValues.updateScripts("sprite.sheet", GlobalValues.optionsMap.getMap("sprite")!!.getOption<SpriteSheet>("sheet")!!)
                 }
             }
 
@@ -110,18 +110,18 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             this,
             gridBagLayout,
             JLabel("${Lang.bundle.getString("settings.sprite.frames_per_second")}:"),
-            GlobalValues.fps,
+            GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("fps")!!,
             144,
             1
         ).apply {
             third.addChangeListener {
-                GlobalValues.fps = when {
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("fps", when {
                     (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
                     (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
                     else -> 0
-                }
-                GlobalValues.timer!!.delay = 1000 / GlobalValues.fps
-                GlobalValues.updateScripts("fps", GlobalValues.fps)
+                })
+                GlobalValues.timer!!.delay = 1000 / GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("fps")!!
+                GlobalValues.updateScripts("sprite.animation.fps", GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("fps")!!)
             }
         }
         this.settings.widgets.add(framesPerSecondWidgets!!.first)
@@ -132,17 +132,17 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             isSelected = true
 
             addActionListener {
-                GlobalValues.play = this.isSelected
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("play", this.isSelected)
                 rewindCheckbox!!.isEnabled = isSelected
-                GlobalValues.updateScripts("play", GlobalValues.play)
+                GlobalValues.updateScripts("sprite.animation.play", GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Boolean>("play")!!)
             }
         }
         this.settings.widgets.add(playCheckbox!!)
 
         rewindCheckbox = JCheckBox(Lang.bundle.getString("settings.animation.rewind")).apply {
             addActionListener {
-                GlobalValues.rewind = this.isSelected
-                GlobalValues.updateScripts("rewind", GlobalValues.rewind)
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("rewind", this.isSelected)
+                GlobalValues.updateScripts("sprite.animation.rewind", GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Boolean>("rewind")!!)
             }
         }
         this.settings.widgets.add(rewindCheckbox!!)
@@ -154,17 +154,17 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 this.add(playCheckbox)
                 this.add(rewindCheckbox)
             },
-            GlobalValues.animFrame,
+            GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("frame")!!,
             7,
             0
         ).apply {
             third.addChangeListener {
-                GlobalValues.animFrame = when {
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("frame", when {
                     (it.source as JSpinner).model.value is Int -> (it.source as JSpinner).model.value as Int
                     (it.source as JSpinner).model.value is Double -> ((it.source as JSpinner).model.value as Double).roundToInt()
                     else -> 0
-                }
-                GlobalValues.updateScripts("animFrame", GlobalValues.animFrame)
+                })
+                GlobalValues.updateScripts("sprite.animation.frame", GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("frame")!!)
 
                 GlobalValues.frame!!.revalidate()
                 GlobalValues.frame!!.repaint()
@@ -176,11 +176,13 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     }
 
     fun setActions() {
-        actionCombobox!!.model = DefaultComboBoxModel<String>(GlobalValues.sheet!!.spriteMap.keys.toTypedArray())
-        actionCombobox!!.selectedIndex = GlobalValues.sheet!!.spriteMap.keys.indexOf(GlobalValues.currentAction)
+        if (GlobalValues.sheet != null) {
+            actionCombobox!!.model = DefaultComboBoxModel<String>(GlobalValues.sheet!!.spriteMap.keys.toTypedArray())
+            actionCombobox!!.selectedIndex = GlobalValues.sheet!!.spriteMap.keys.indexOf(GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<String>("action")!!)
 
-        for (i in this.settings.widgets) {
-            i.isEnabled = true
+            for (i in this.settings.widgets) {
+                i.isEnabled = true
+            }
         }
     }
 }

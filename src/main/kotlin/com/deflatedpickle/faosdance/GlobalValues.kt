@@ -12,6 +12,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.util.zip.ZipInputStream
 import javax.swing.*
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object GlobalValues {
@@ -99,77 +100,20 @@ object GlobalValues {
         RubyThread.queue = scripts
     }
 
+    // For extensions to use
+    @JvmStatic
+    val optionsMap = NestedHashMap<String, Any>()
+
     @JvmStatic
     val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
 
     @JvmStatic
     val maxSize = 10.0
 
-    // TODO: Move config values to a map so extensions can make better use of them
-    // @JvmStatic
-    // val config = mutableMapOf<String, Any>()
-
     @JvmStatic
     var sheet: SpriteSheet? = null
     @JvmStatic
-    var currentAction = ""
-    @JvmStatic
     var mutableSprite: BufferedImage? = null
-
-    @JvmStatic
-    var opacity = 1.0
-
-    @JvmStatic
-    var animFrame = 0
-
-    @JvmStatic
-    var play = true
-
-    @JvmStatic
-    var isReflectionVisible = true
-    @JvmStatic
-    var reflectionPadding = 0.0
-
-    @JvmStatic
-    var fadeHeight = 0.65f
-    @JvmStatic
-    var fadeOpacity = 0.25f
-
-    @JvmStatic
-    var xPosition = 0
-    @JvmStatic
-    var yPosition = 0
-
-    @JvmStatic
-    var xMultiplier = 0.5
-    @JvmStatic
-    var yMultiplier = 0.5
-
-    // var xRotation = 0
-    // var yRotation = 0
-    @JvmStatic
-    var zRotation = 0
-
-    @JvmStatic
-    var fps = 8
-    @JvmStatic
-    var rewind = false
-
-    @JvmStatic
-    var isVisible = true
-    @JvmStatic
-    var isSolid = true
-    @JvmStatic
-    var isTopLevel = true
-    @JvmStatic
-    var isToggleHeld = true
-
-    var enabledExtensions = mutableListOf<String>()
-        @JvmStatic
-        get
-
-    @JvmStatic
-    var scalingType: ScalingType = ScalingType.BILINEAR
 
     var currentPath = System.getProperty("user.home")
         @JvmStatic
@@ -198,8 +142,8 @@ object GlobalValues {
 
     fun initPositions() {
         effectiveSize = getEffectiveScreenSize(frame!!)
-        xPosition = effectiveSize!!.width / 2
-        yPosition = effectiveSize!!.height / 2
+        GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!["x"] = effectiveSize!!.width / 2
+        GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!["y"] = effectiveSize!!.height / 2
     }
 
     fun <E : Enum<E>> enumToReadableNames(enum: Class<E>): Array<String> {
@@ -229,36 +173,38 @@ object GlobalValues {
     }
 
     fun resize(direction: Direction? = null) {
-        val width = ((((sheet!!.spriteWidth * xMultiplier) * 2) * 100) / 100).toInt()
-        val height = ((((sheet!!.spriteHeight * yMultiplier) * if (isReflectionVisible) 2 else 1) * 100) / 100).toInt()
+        if (sheet != null) {
+            val width = ((((sheet!!.spriteWidth * GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!) * 2) * 100) / 100).toInt()
+            val height = ((((sheet!!.spriteHeight * GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!) * if (GlobalValues.optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!) 2 else 1) * 100) / 100).toInt()
 
-        frame!!.minimumSize = Dimension(width, height)
-        frame!!.setSize(width, height)
+            frame!!.minimumSize = Dimension(abs(width), abs(height))
+            frame!!.setSize(abs(width), abs(height))
 
-        // TODO: Clean this up
-        when (direction) {
-            Direction.HORIZONTAL -> {
-                frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
-                oldWidth = frame!!.width
+            // TODO: Clean this up
+            when (direction) {
+                Direction.HORIZONTAL -> {
+                    frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
+                    oldWidth = frame!!.width
+                }
+                Direction.VERTICAL -> {
+                    frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
+                    oldHeight = frame!!.height
+                }
+                Direction.BOTH -> {
+                    frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
+                    oldWidth = frame!!.width
+                    frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
+                    oldHeight = frame!!.height
+                }
             }
-            Direction.VERTICAL -> {
-                frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
-                oldHeight = frame!!.height
-            }
-            Direction.BOTH -> {
-                frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
-                oldWidth = frame!!.width
-                frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
-                oldHeight = frame!!.height
-            }
+
+            effectiveSize = getEffectiveScreenSize(frame!!)
         }
-
-        effectiveSize = getEffectiveScreenSize(frame!!)
     }
 
     fun configureSpriteSheet(sheet: SpriteSheet) {
-        GlobalValues.sheet = sheet
-        currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
+        this.sheet = sheet
+        GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("action", this.sheet!!.spriteMap.keys.first())
         resize()
     }
 

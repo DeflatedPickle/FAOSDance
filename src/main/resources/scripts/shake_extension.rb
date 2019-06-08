@@ -24,6 +24,7 @@ class ShakeExtension < DanceExtension
       @shake_x = @shake_speed_max_x
       @shake_y = @shake_speed_max_y
 
+      # TODO: Translate the graphics instead of the window
       GlobalValues.getFrame.setLocation @original_location.x, @original_location.y
     else
       if @shake_x < 0

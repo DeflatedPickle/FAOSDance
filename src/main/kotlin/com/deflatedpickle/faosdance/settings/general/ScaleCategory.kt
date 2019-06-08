@@ -24,13 +24,13 @@ class ScaleCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             this,
             this.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.size.width")}:"),
-            GlobalValues.xMultiplier,
+            GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!,
             GlobalValues.maxSize,
             -GlobalValues.maxSize
         ).apply {
             third.addChangeListener {
-                GlobalValues.xMultiplier = (it.source as JSpinner).model.value as Double
-                GlobalValues.updateScripts("xMultiplier", GlobalValues.xMultiplier)
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.setOption("width", (it.source as JSpinner).model.value as Double)
+                GlobalValues.updateScripts("sprite.size.width", GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Int>("width")!!)
                 GlobalValues.resize(Direction.HORIZONTAL)
             }
         }
@@ -42,13 +42,13 @@ class ScaleCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             this,
             this.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.size.height")}:"),
-            GlobalValues.yMultiplier,
+            GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!,
             GlobalValues.maxSize,
             -GlobalValues.maxSize
         ).apply {
             third.addChangeListener {
-                GlobalValues.yMultiplier = (it.source as JSpinner).model.value as Double
-                GlobalValues.updateScripts("yMultiplier", GlobalValues.yMultiplier)
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.setOption("height", (it.source as JSpinner).model.value as Double)
+                GlobalValues.updateScripts("sprite.size.height", GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Int>("height")!!)
                 GlobalValues.resize(Direction.VERTICAL)
             }
         }

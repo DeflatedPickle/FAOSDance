@@ -2,6 +2,7 @@ package com.deflatedpickle.faosdance.settings
 
 import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.RubyThread
+import com.deflatedpickle.faosdance.SpriteSheet
 import com.deflatedpickle.faosdance.component_border.ComponentBorder
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import org.jruby.RubyObject
@@ -57,7 +58,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
             tabPanel.add(JCheckBox().apply {
                 GlobalValues.extensionCheckBoxList!!.add(this)
 
-                if (GlobalValues.enabledExtensions.contains(name)) {
+                if (GlobalValues.optionsMap.getMap("extensions")!!.getOption<List<String>>("enabled")!!.contains(name)) {
                     this.isSelected = true
 
                     for (c in subPanel.components) {
@@ -72,7 +73,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
                     }
                 }
                 else {
-                    if (GlobalValues.sheet == null) {
+                    if (GlobalValues.optionsMap.getMap("sprite")!!.getOption<SpriteSheet>("sheet") == null) {
                         this.isEnabled = false
 
                         for (c in subPanel.components) {
@@ -92,11 +93,11 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 addActionListener {
                     if (this.isSelected) {
                         RubyThread.rubyContainer.callMethod(i, "enable")
-                        GlobalValues.enabledExtensions.add(name)
+                        GlobalValues.optionsMap.getMap("extensions")!!.getOption<MutableList<String>>("enabled")!!.add(name)
                     }
                     else {
                         RubyThread.rubyContainer.callMethod(i, "disable")
-                        GlobalValues.enabledExtensions.remove(name)
+                        GlobalValues.optionsMap.getMap("extensions")!!.getOption<MutableList<String>>("enabled")!!.remove(name)
                     }
 
                     for (c in subPanel.components) {
