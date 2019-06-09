@@ -27,6 +27,7 @@ class WindowCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.updateScripts("window.solid", GlobalValues.optionsMap.getMap("window")!!.getOption<Boolean>("solid")!!)
             }
         }
+        this.settings.widgets.add(solidCheckbox!!)
         this.add(solidCheckbox)
 
         alwaysOnTopCheckbox = JCheckBox(Lang.bundle.getString("settings.window.always_on_top")).apply {
@@ -38,6 +39,7 @@ class WindowCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 GlobalValues.frame!!.isAlwaysOnTop = GlobalValues.optionsMap.getMap("window")!!.getOption<Boolean>("always_on_top")!!
             }
         }
+        this.settings.widgets.add(alwaysOnTopCheckbox!!)
         this.add(alwaysOnTopCheckbox)
     }
 }

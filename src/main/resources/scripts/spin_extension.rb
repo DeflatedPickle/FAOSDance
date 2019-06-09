@@ -13,7 +13,7 @@ class SpinExtension < DanceExtension
     end
 
     new_size = Math.sin(@counter)
-    GlobalValues.optionsMap.getMap("sprite").getMap("size").setOption "width", new_size
+    GlobalValues.setOption "sprite.size.width", new_size
   end
 
   def settings(panel)
@@ -24,12 +24,12 @@ class SpinExtension < DanceExtension
   end
 
   def enable
-    @original = GlobalValues.optionsMap.getMap("sprite").getMap("size").getOption("width")
+    @original = GlobalValues.getOption "sprite.size.width"
     @counter = @original
   end
 
   def disable
-    GlobalValues.optionsMap.getMap("sprite").getMap("size").setOption "width", @original
+    GlobalValues.setOption "sprite.size.width", @original
   end
 end
 

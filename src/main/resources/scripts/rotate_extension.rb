@@ -14,7 +14,7 @@ class RotateExtension < DanceExtension
       @counter = 0
     end
 
-    GlobalValues.optionsMap.getMap("sprite").getMap("rotation").setOption "z", @counter
+    GlobalValues.setOption "sprite.rotation.z", @counter
   end
 
   def settings(panel)
@@ -25,11 +25,11 @@ class RotateExtension < DanceExtension
   end
 
   def enable
-    @original = GlobalValues.optionsMap.getMap("sprite").getMap("rotation").getOption "z"
+    @original = GlobalValues.getOption "sprite.rotation.z"
   end
 
   def disable
-    GlobalValues.optionsMap.getMap("sprite").getMap("rotation").setOption "z", @original
+    GlobalValues.setOption "sprite.rotation.z", @original
   end
 end
 

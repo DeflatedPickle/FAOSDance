@@ -4,6 +4,7 @@ import com.deflatedpickle.faosdance.settings.SettingsDialog
 import org.apache.commons.lang3.SystemUtils
 import org.jruby.RubyBoolean
 import org.jruby.RubyObject
+import org.jruby.ir.Tuple
 import java.awt.*
 import java.awt.image.BufferedImage
 import java.io.BufferedInputStream
@@ -104,6 +105,38 @@ object GlobalValues {
     @JvmStatic
     val optionsMap = NestedHashMap<String, Any>()
 
+    var rootMap = optionsMap
+    fun parseOption(option: String): Tuple<NestedHashMap<String, Any>?, String?> {
+        if (option.contains(".")) {
+            val items = option.split(".")
+            for (i in items) {
+                if (rootMap[i] is NestedHashMap<*, *>) {
+                    rootMap = rootMap[i] as NestedHashMap<String, Any>
+                    parseOption(items.subList(items.indexOf(i), items.size).joinToString("."))
+                }
+                else {
+                    return Tuple(rootMap, items.last())
+                }
+            }
+        }
+
+        return Tuple(null, null)
+    }
+
+    @JvmStatic
+    fun getOption(option: String): Any? {
+        rootMap = optionsMap
+        val parse = parseOption(option)
+        return parse.a!![parse.b!!]
+    }
+
+    @JvmStatic
+    fun setOption(option: String, value: Any) {
+        rootMap = optionsMap
+        val parse = parseOption(option)
+        parse.a!![parse.b!!] = value
+    }
+
     @JvmStatic
     val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
 
@@ -142,8 +175,8 @@ object GlobalValues {
 
     fun initPositions() {
         effectiveSize = getEffectiveScreenSize(frame!!)
-        GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!["x"] = effectiveSize!!.width / 2
-        GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!["y"] = effectiveSize!!.height / 2
+        optionsMap.getMap("window")!!.getMap("location")!!["x"] = effectiveSize!!.width / 2
+        optionsMap.getMap("window")!!.getMap("location")!!["y"] = effectiveSize!!.height / 2
     }
 
     fun <E : Enum<E>> enumToReadableNames(enum: Class<E>): Array<String> {
@@ -174,8 +207,8 @@ object GlobalValues {
 
     fun resize(direction: Direction? = null) {
         if (sheet != null) {
-            val width = ((((sheet!!.spriteWidth * GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!) * 2) * 100) / 100).toInt()
-            val height = ((((sheet!!.spriteHeight * GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!) * if (GlobalValues.optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!) 2 else 1) * 100) / 100).toInt()
+            val width = ((((sheet!!.spriteWidth * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!) * 2) * 100) / 100).toInt()
+            val height = ((((sheet!!.spriteHeight * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!) * if (optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!) 2 else 1) * 100) / 100).toInt()
 
             frame!!.minimumSize = Dimension(abs(width), abs(height))
             frame!!.setSize(abs(width), abs(height))
@@ -204,7 +237,7 @@ object GlobalValues {
 
     fun configureSpriteSheet(sheet: SpriteSheet) {
         this.sheet = sheet
-        GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("action", this.sheet!!.spriteMap.keys.first())
+        optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("action", this.sheet!!.spriteMap.keys.first())
         resize()
     }
 

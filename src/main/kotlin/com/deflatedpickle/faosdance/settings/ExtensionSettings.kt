@@ -57,6 +57,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
             tabPanel.add(JLabel(name).apply { isOpaque = false }, BorderLayout.WEST)
             tabPanel.add(JCheckBox().apply {
                 GlobalValues.extensionCheckBoxList!!.add(this)
+                this.isEnabled = false
 
                 if (GlobalValues.optionsMap.getMap("extensions")!!.getOption<List<String>>("enabled")!!.contains(name)) {
                     this.isSelected = true

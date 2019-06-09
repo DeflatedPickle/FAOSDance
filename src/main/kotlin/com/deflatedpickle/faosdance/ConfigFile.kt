@@ -45,7 +45,7 @@ object ConfigFile {
                     "frame" to GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("frame")
                 ),
                 // Rotation
-                "roation" to hashMapOf(
+                "rotation" to hashMapOf(
                     "z" to GlobalValues.optionsMap.getMap("sprite")!!.getMap("rotation")!!.getOption<Int>("z")
                 ),
                 // Size
@@ -100,6 +100,8 @@ object ConfigFile {
         if (GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet") != "") {
             GlobalValues.sheet = SpriteSheet(GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet")!!)
         }
+
+        GlobalValues.rootMap = GlobalValues.optionsMap
 
         return true
     }

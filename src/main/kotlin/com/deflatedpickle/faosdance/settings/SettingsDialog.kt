@@ -72,7 +72,7 @@ class SettingsDialog(owner: Frame) : JDialog(
     }
 
     fun triggerWidgets() {
-        if (GlobalValues.optionsMap.getMap("sprite")!!.getOption<SpriteSheet>("sheet") == null) {
+        if (GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet") == "") {
             for (i in this.widgets) {
                 i.isEnabled = false
             }

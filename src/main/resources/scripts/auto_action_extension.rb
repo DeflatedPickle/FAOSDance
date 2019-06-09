@@ -20,15 +20,15 @@ class AutoActionExtension < DanceExtension
       case @selection_type_combobox.getSelectedIndex
       when 0
         # Iterative
-        action_index = @action_list.find_index GlobalValues.optionsMap.getMap("sprite").getMap("animation").getOption "action"
+        action_index = @action_list.find_index GlobalValues.getOption "sprite.animation.action"
         if action_index > @animation_length
-          GlobalValues.optionsMap.getMap("sprite").getMap("animation").setOption "action", @action_list[0]
+          GlobalValues.setOption "sprite.animation.action", @action_list[0]
         else
-          GlobalValues.optionsMap.getMap("sprite").getMap("animation").setOption "action", @action_list[action_index + 1]
+          GlobalValues.setOption "sprite.animation.action", @action_list[action_index + 1]
         end
       when 1
         # Random
-        GlobalValues.optionsMap.getMap("sprite").getMap("animation").setOption "action", @action_list.sample
+        GlobalValues.setOption "sprite.animation.action", @action_list.sample
       end
     end
   end

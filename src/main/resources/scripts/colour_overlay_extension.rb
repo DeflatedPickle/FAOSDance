@@ -130,7 +130,7 @@ class ColourOverlayExtension < DanceExtension
     graphics = @coloured_sprite.createGraphics
 
     graphics.composite = AlphaComposite.getInstance(AlphaComposite::SRC_OVER, @alpha)
-    graphics.drawImage GlobalValues.getSheet.getSpriteMap[GlobalValues.optionsMap.getMap("sprite").getMap("animation").getOption("action")][GlobalValues.optionsMap.getMap("sprite").getMap("animation").getOption("frame")], 0, 0, nil
+    graphics.drawImage GlobalValues.getSheet.getSpriteMap[GlobalValues.getOption "sprite.animation.action"][GlobalValues.getOption "sprite.animation.frame"], 0, 0, nil
     graphics.setComposite AlphaComposite::SrcAtop
     graphics.setColor @colour
     graphics.fillRect 0, 0, width, height
