@@ -33,7 +33,7 @@ fun main() {
 
         // Enable scripts in the config
         for (i in ExtensionSettings.extensionList) {
-            if (GlobalValues.enabledExtensions.contains(i.getInstanceVariable("@name").asJavaString())) {
+            if (GlobalValues.optionsMap.getMap("extensions")!!.getOption<List<String>>("enabled")!!.contains(i.getInstanceVariable("@name").asJavaString())) {
                 i.setInstanceVariable("@enabled", RubyThread.ruby.getTrue())
             }
         }
@@ -61,16 +61,11 @@ fun main() {
         frame.pack()
         frame.isVisible = true
 
-        if (!config) {
-            GlobalValues.initPositions()
-        }
-        else {
-            GlobalValues.resize()
-        }
+        GlobalValues.initPositions()
 
-        frame.setLocation(GlobalValues.xPosition, GlobalValues.yPosition)
+        frame.setLocation(GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.getOption<Int>("x")!!, GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.getOption<Int>("y")!!)
 
-        if (!config) {
+        if (GlobalValues.optionsMap.getMap("settings")!!.getOption<Boolean>("open_on_start")!!) {
             val dialog = SettingsDialog(frame)
             dialog.triggerWidgets()
             dialog.setLocationRelativeTo(frame)

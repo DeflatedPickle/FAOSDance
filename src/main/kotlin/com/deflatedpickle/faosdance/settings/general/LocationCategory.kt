@@ -25,7 +25,7 @@ class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             this,
             this.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.location.x")}:"),
-            GlobalValues.xPosition,
+            GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.getOption<Int>("x")!!,
             GlobalValues.effectiveSize!!.width,
             0.0
         ).apply {
@@ -37,18 +37,17 @@ class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                             (it.source as JSpinner).model.value as Int,
                             GlobalValues.frame!!.y
                         )
-                        GlobalValues.xPosition = (it.source as JSpinner).model.value as Int
+                        GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.setOption("x", (it.source as JSpinner).model.value as Int)
                     }
                     (it.source as JSpinner).model.value is Double -> {
                         GlobalValues.frame!!.setLocation(
                             ((it.source as JSpinner).model.value as Double).roundToInt(),
                             GlobalValues.frame!!.y
                         )
-                        ((it.source as JSpinner).model.value as Double).roundToInt()
-                        GlobalValues.xPosition = ((it.source as JSpinner).model.value as Double).roundToInt()
+                        GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.setOption("x", ((it.source as JSpinner).model.value as Double).roundToInt())
                     }
                 }
-                GlobalValues.updateScripts("xPosition", GlobalValues.xPosition)
+                GlobalValues.updateScripts("window.location.x", GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.getOption<Int>("x")!!)
             }
         }
         this.settings.widgets.add(xLocationWidgets!!.first)
@@ -60,7 +59,7 @@ class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             this,
             this.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.location.y")}:"),
-            GlobalValues.yPosition,
+            GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.getOption<Int>("y")!!,
             GlobalValues.effectiveSize!!.height,
             0.0
         ).apply {
@@ -72,17 +71,17 @@ class LocationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
                             GlobalValues.frame!!.x,
                             (it.source as JSpinner).model.value as Int
                         )
-                        GlobalValues.yPosition = (it.source as JSpinner).model.value as Int
+                        GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.setOption("y", (it.source as JSpinner).model.value as Int)
                     }
                     (it.source as JSpinner).model.value is Double -> {
                         GlobalValues.frame!!.setLocation(
                             GlobalValues.frame!!.x,
                             ((it.source as JSpinner).model.value as Double).roundToInt()
                         )
-                        GlobalValues.yPosition = ((it.source as JSpinner).model.value as Double).roundToInt()
+                        GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.setOption("y", ((it.source as JSpinner).model.value as Double).roundToInt())
                     }
                 }
-                GlobalValues.updateScripts("yPosition", GlobalValues.yPosition)
+                GlobalValues.updateScripts("window.location.y", GlobalValues.optionsMap.getMap("window")!!.getMap("location")!!.getOption<Int>("y")!!)
             }
         }
         this.settings.widgets.add(yLocationWidgets!!.first)

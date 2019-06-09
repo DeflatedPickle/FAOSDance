@@ -1,0 +1,50 @@
+[window]
+solid=true
+always_on_top=true
+
+[window.location]
+x=0
+y=0
+
+# -----
+
+[settings]
+open_on_start=true
+
+# -----
+
+[sprite]
+visible=true
+scaling_type="Bilinear"
+opacity=1.0
+toggle_held=true
+sheet=""
+
+[sprite.animation]
+action=""
+fps=8
+play=true
+rewind=false
+frame=0
+
+[sprite.rotation]
+z=0
+
+[sprite.size]
+width=1
+height=1
+
+# -----
+
+[reflection]
+visible=true
+padding=0.0
+
+[reflection.fade]
+height=0.65
+opacity=0.25
+
+# -----
+
+[extensions]
+enabled=[]

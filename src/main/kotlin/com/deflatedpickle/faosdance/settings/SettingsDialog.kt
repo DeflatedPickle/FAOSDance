@@ -2,6 +2,7 @@ package com.deflatedpickle.faosdance.settings
 
 import com.deflatedpickle.faosdance.ConfigFile
 import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.SpriteSheet
 import com.deflatedpickle.faosdance.settings.general.GeneralSettings
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Dimension
@@ -71,8 +72,12 @@ class SettingsDialog(owner: Frame) : JDialog(
     }
 
     fun triggerWidgets() {
-        if (GlobalValues.sheet == null) {
+        if (GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet") == "") {
             for (i in this.widgets) {
+                i.isEnabled = false
+            }
+
+            for (i in GlobalValues.extensionCheckBoxList!!) {
                 i.isEnabled = false
             }
         }
@@ -81,7 +86,7 @@ class SettingsDialog(owner: Frame) : JDialog(
     override fun setVisible(b: Boolean) {
         for (i in ExtensionSettings.extensionList) {
             val name = i.getInstanceVariable("@name").asJavaString()
-            if (GlobalValues.enabledExtensions.contains(name)) {
+            if (GlobalValues.optionsMap.getMap("extensions")!!.getOption<List<String>>("enabled")!!.contains(name)) {
                 for (c in GlobalValues.extensionPanelMap[name]!!.components) {
                     c.isEnabled = true
                 }

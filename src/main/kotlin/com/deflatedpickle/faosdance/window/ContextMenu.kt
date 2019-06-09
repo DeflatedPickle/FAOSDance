@@ -35,7 +35,7 @@ class ContextMenu : JPopupMenu() {
 
             addActionListener {
                 val dialog = SettingsDialog(GlobalValues.frame!!)
-                dialog.triggerWidgets()
+                // dialog.triggerWidgets()
                 dialog.setLocationRelativeTo(GlobalValues.frame!!)
 
                 dialog.isVisible = true

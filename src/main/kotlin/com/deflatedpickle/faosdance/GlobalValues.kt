@@ -1,10 +1,10 @@
 package com.deflatedpickle.faosdance
 
 import com.deflatedpickle.faosdance.settings.SettingsDialog
-import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.SystemUtils
 import org.jruby.RubyBoolean
 import org.jruby.RubyObject
+import org.jruby.ir.Tuple
 import java.awt.*
 import java.awt.image.BufferedImage
 import java.io.BufferedInputStream
@@ -13,6 +13,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.util.zip.ZipInputStream
 import javax.swing.*
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object GlobalValues {
@@ -26,11 +27,16 @@ object GlobalValues {
     }
 
     lateinit var configFile: File
+    lateinit var langProperties: File
     val scriptsFolder = if (ClassLoader.getSystemResource("icon.png").protocol == "jar") {
         File(homePath, "scripts")
-    }
-    else {
+    } else {
         File(ClassLoader.getSystemResource("scripts").path)
+    }
+    val configFolder = if (ClassLoader.getSystemResource("icon.png").protocol == "jar") {
+        File(homePath, "config")
+    } else {
+        File(ClassLoader.getSystemResource("config").path)
     }
 
     init {
@@ -40,21 +46,17 @@ object GlobalValues {
 
     fun createEnviromentFiles() {
         homePath?.mkdir()
-        configFile = File(homePath, "config.toml").apply {
-            if (!this.isFile) {
-                this.createNewFile()
-            }
-        }
 
         // It's a loop in case I decide to add more user folders, or move the lang folder out of the program
-        for (i in listOf(scriptsFolder)) {
+        for (i in listOf(scriptsFolder, configFolder)) {
             if (!i.isDirectory) {
                 i.mkdir()
             }
 
             val fileList = i.listFiles().map { it.name }
 
-            val zipInputStream = ZipInputStream(GlobalValues::class.java.protectionDomain.codeSource.location.openStream())
+            val zipInputStream =
+                ZipInputStream(GlobalValues::class.java.protectionDomain.codeSource.location.openStream())
 
             while (true) {
                 try {
@@ -74,12 +76,14 @@ object GlobalValues {
                             }
                         }
                     }
-                }
-                catch (e: IOException) {
+                } catch (e: IOException) {
                     break
                 }
             }
         }
+
+        configFile = File(homePath, "config/config.toml")
+        langProperties = File(homePath, "config/lang.properties")
     }
 
     fun loadScripts() {
@@ -95,6 +99,42 @@ object GlobalValues {
         RubyThread.queue = scripts
     }
 
+    // For extensions to use
+    @JvmStatic
+    val optionsMap = NestedHashMap<String, Any>()
+
+    var rootMap = optionsMap
+    fun parseOption(option: String): Tuple<NestedHashMap<String, Any>?, String?> {
+        val items = option.split(".")
+        for (i in items) {
+            if (i == items.last()) {
+                return Tuple(rootMap, items.last())
+            }
+            else {
+                if (rootMap[i] is NestedHashMap<*, *>) {
+                    rootMap = rootMap[i] as NestedHashMap<String, Any>
+                    parseOption(items.subList(items.indexOf(i), items.size).joinToString("."))
+                }
+            }
+        }
+
+        return Tuple(null, null)
+    }
+
+    @JvmStatic
+    fun getOption(option: String): Any? {
+        rootMap = optionsMap
+        val parse = parseOption(option)
+        return parse.a!![parse.b!!]
+    }
+
+    @JvmStatic
+    fun setOption(option: String, value: Any) {
+        rootMap = optionsMap
+        val parse = parseOption(option)
+        parse.a!![parse.b!!] = value
+    }
+
     @JvmStatic
     val icon = ImageIcon(ClassLoader.getSystemResource("icon.png"), "FAOSDance")
 
@@ -104,64 +144,7 @@ object GlobalValues {
     @JvmStatic
     var sheet: SpriteSheet? = null
     @JvmStatic
-    var currentAction = ""
-    @JvmStatic
     var mutableSprite: BufferedImage? = null
-
-    @JvmStatic
-    var opacity = 1.0
-
-    @JvmStatic
-    var animFrame = 0
-
-    @JvmStatic
-    var play = true
-
-    @JvmStatic
-    var isReflectionVisible = true
-    @JvmStatic
-    var reflectionPadding = 0.0
-
-    @JvmStatic
-    var fadeHeight = 0.65f
-    @JvmStatic
-    var fadeOpacity = 0.25f
-
-    @JvmStatic
-    var xPosition = 0
-    @JvmStatic
-    var yPosition = 0
-
-    @JvmStatic
-    var xMultiplier = 0.5
-    @JvmStatic
-    var yMultiplier = 0.5
-
-    // var xRotation = 0
-    // var yRotation = 0
-    @JvmStatic
-    var zRotation = 0
-
-    @JvmStatic
-    var fps = 8
-    @JvmStatic
-    var rewind = false
-
-    @JvmStatic
-    var isVisible = true
-    @JvmStatic
-    var isSolid = true
-    @JvmStatic
-    var isTopLevel = true
-    @JvmStatic
-    var isToggleHeld = true
-
-    var enabledExtensions = mutableListOf<String>()
-        @JvmStatic
-        get
-
-    @JvmStatic
-    var scalingType: ScalingType = ScalingType.BILINEAR
 
     var currentPath = System.getProperty("user.home")
         @JvmStatic
@@ -190,8 +173,8 @@ object GlobalValues {
 
     fun initPositions() {
         effectiveSize = getEffectiveScreenSize(frame!!)
-        xPosition = effectiveSize!!.width / 2
-        yPosition = effectiveSize!!.height / 2
+        optionsMap.getMap("window")!!.getMap("location")!!["x"] = effectiveSize!!.width / 2
+        optionsMap.getMap("window")!!.getMap("location")!!["y"] = effectiveSize!!.height / 2
     }
 
     fun <E : Enum<E>> enumToReadableNames(enum: Class<E>): Array<String> {
@@ -221,36 +204,43 @@ object GlobalValues {
     }
 
     fun resize(direction: Direction? = null) {
-        val width = ((((sheet!!.spriteWidth * xMultiplier) * 2) * 100) / 100).toInt()
-        val height = ((((sheet!!.spriteHeight * yMultiplier) * if (isReflectionVisible) 2 else 1) * 100) / 100).toInt()
+        if (sheet != null) {
+            val width =
+                ((((sheet!!.spriteWidth * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!) * 2) * 100) / 100).toInt()
+            val height =
+                ((((sheet!!.spriteHeight * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!) * if (optionsMap.getMap(
+                        "reflection"
+                    )!!.getOption<Boolean>("visible")!!
+                ) 2 else 1) * 100) / 100).toInt()
 
-        frame!!.minimumSize = Dimension(width, height)
-        frame!!.setSize(width, height)
+            frame!!.minimumSize = Dimension(abs(width), abs(height))
+            frame!!.setSize(abs(width), abs(height))
 
-        // TODO: Clean this up
-        when (direction) {
-            Direction.HORIZONTAL -> {
-                frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
-                oldWidth = frame!!.width
+            // TODO: Clean this up
+            when (direction) {
+                Direction.HORIZONTAL -> {
+                    frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
+                    oldWidth = frame!!.width
+                }
+                Direction.VERTICAL -> {
+                    frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
+                    oldHeight = frame!!.height
+                }
+                Direction.BOTH -> {
+                    frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
+                    oldWidth = frame!!.width
+                    frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
+                    oldHeight = frame!!.height
+                }
             }
-            Direction.VERTICAL -> {
-                frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
-                oldHeight = frame!!.height
-            }
-            Direction.BOTH -> {
-                frame!!.setLocation(frame!!.x - ((frame!!.width - oldWidth) / 2), frame!!.y)
-                oldWidth = frame!!.width
-                frame!!.setLocation(frame!!.x, frame!!.y - ((frame!!.height - oldHeight) / 2))
-                oldHeight = frame!!.height
-            }
+
+            effectiveSize = getEffectiveScreenSize(frame!!)
         }
-
-        effectiveSize = getEffectiveScreenSize(frame!!)
     }
 
     fun configureSpriteSheet(sheet: SpriteSheet) {
-        GlobalValues.sheet = sheet
-        currentAction = GlobalValues.sheet!!.spriteMap.keys.first()
+        this.sheet = sheet
+        optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("action", this.sheet!!.spriteMap.keys.first())
         resize()
     }
 

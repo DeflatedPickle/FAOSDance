@@ -28,11 +28,11 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
 
         this.panel.layout = gridBagLayout
         (this.titleComponent as JCheckBox).apply {
-            isSelected = GlobalValues.isVisible
+            isSelected = GlobalValues.optionsMap.getMap("sprite")!!.getOption<Boolean>("visible")!!
 
             addActionListener {
-                GlobalValues.isVisible = this.isSelected
-                GlobalValues.updateScripts("isVisible", GlobalValues.isVisible)
+                GlobalValues.optionsMap.getMap("sprite")!!.setOption("visible", this.isSelected)
+                GlobalValues.updateScripts("sprite.visible", GlobalValues.optionsMap.getMap("sprite")!!.getOption<Boolean>("visible")!!)
 
                 for (i in this@SpriteCategory.panel.components) {
                     i.isEnabled = this.isSelected
@@ -57,12 +57,11 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
         // Scaling type drop-down
         val scalingValues = GlobalValues.enumToReadableNames(ScalingType::class.java)
         scalingTypeCombobox = JComboBox<String>(scalingValues).apply {
-            selectedIndex = scalingValues.indexOf(GlobalValues.sanatizeEnumValue(GlobalValues.scalingType.name))
+            selectedIndex = scalingValues.indexOf(GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("scaling_type")!!)
 
             addActionListener {
-                GlobalValues.scalingType =
-                    ScalingType.valueOf(GlobalValues.unsanatizeEnumValue(((it.source as JComboBox<*>).selectedItem as String)))
-                GlobalValues.updateScripts("scalingType", GlobalValues.scalingType)
+                GlobalValues.optionsMap.getMap("sprite")!!.setOption("scaling_type", (it.source as JComboBox<*>).selectedItem as String)
+                GlobalValues.updateScripts("sprite.scaling_type", GlobalValues.optionsMap.getMap("sprite")!!.getOption<ScalingType>("scaling_type")!!)
             }
 
             gridBagLayout.setConstraints(this, GridBagConstraints().apply {
@@ -78,13 +77,13 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
             this.panel,
             gridBagLayout,
             JLabel("${Lang.bundle.getString("settings.sprite.opacity")}:"),
-            GlobalValues.opacity,
+            GlobalValues.optionsMap.getMap("sprite")!!.getOption<Double>("opacity")!!,
             1.0,
             0.1
         ).apply {
             third.addChangeListener {
-                GlobalValues.opacity = (it.source as JSpinner).model.value as Double
-                GlobalValues.updateScripts("opacity", GlobalValues.opacity)
+                GlobalValues.optionsMap.getMap("sprite")!!.setOption("opacity", (it.source as JSpinner).model.value as Double)
+                GlobalValues.updateScripts("sprite.opacity", GlobalValues.optionsMap.getMap("sprite")!!.getOption<Double>("opacity")!!)
             }
         }
         this.settings.widgets.add(opacityWidgets!!.first)
@@ -92,11 +91,11 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
         this.settings.widgets.add(opacityWidgets!!.third)
 
         toggleHeldCheckbox = JCheckBox(Lang.bundle.getString("settings.sprite.toggled_held")).apply {
-            isSelected = GlobalValues.isToggleHeld
+            isSelected = GlobalValues.optionsMap.getMap("sprite")!!.getOption<Boolean>("toggle_held")!!
 
             addActionListener {
-                GlobalValues.isToggleHeld = this.isSelected
-                GlobalValues.updateScripts("isToggleHeld", GlobalValues.isToggleHeld)
+                GlobalValues.optionsMap.getMap("sprite")!!.setOption("toggle_held", this.isSelected)
+                GlobalValues.updateScripts("sprite.toggle_held", GlobalValues.optionsMap.getMap("sprite")!!.getOption<Boolean>("toggle_held")!!)
             }
 
             gridBagLayout.setConstraints(this,

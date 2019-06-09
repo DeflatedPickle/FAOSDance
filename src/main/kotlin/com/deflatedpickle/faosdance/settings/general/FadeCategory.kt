@@ -23,13 +23,13 @@ class FadeCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             this,
             this.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.reflection.fade.height")}:"),
-            GlobalValues.fadeHeight,
+            GlobalValues.optionsMap.getMap("reflection")!!.getMap("fade")!!.getOption<Double>("height")!!,
             0.9,
             0.1
         ).apply {
             third.addChangeListener {
-                GlobalValues.fadeHeight = ((it.source as JSpinner).model.value as Double).toFloat()
-                GlobalValues.updateScripts("fadeHeight", GlobalValues.fadeHeight)
+                GlobalValues.optionsMap.getMap("reflection")!!.getMap("fade")!!.setOption("height", ((it.source as JSpinner).model.value as Double).toFloat())
+                GlobalValues.updateScripts("reflection.fade.height", GlobalValues.optionsMap.getMap("reflection")!!.getMap("fade")!!.getOption<Double>("height")!!)
             }
         }
         this.settings.widgets.add(fadeHeightWidgets!!.first)
@@ -40,13 +40,13 @@ class FadeCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             this,
             this.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.reflection.fade.opacity")}:"),
-            GlobalValues.fadeOpacity,
+            GlobalValues.optionsMap.getMap("reflection")!!.getMap("fade")!!.getOption<Double>("opacity")!!,
             0.9,
             0.1
         ).apply {
             third.addChangeListener {
-                GlobalValues.fadeOpacity = ((it.source as JSpinner).model.value as Double).toFloat()
-                GlobalValues.updateScripts("fadeOpacity", GlobalValues.fadeOpacity)
+                GlobalValues.optionsMap.getMap("reflection")!!.getMap("fade")!!.setOption("opacity", ((it.source as JSpinner).model.value as Double).toFloat())
+                GlobalValues.updateScripts("reflection.fade.opacity", GlobalValues.optionsMap.getMap("reflection")!!.getMap("fade")!!.getOption<Double>("opacity")!!)
             }
         }
         this.settings.widgets.add(fadeOpacityWidgets!!.first)

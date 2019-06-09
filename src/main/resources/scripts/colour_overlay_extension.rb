@@ -14,13 +14,14 @@ class ColourOverlayExtension < DanceExtension
     super "Colour Overlay", "Applies RGB values to the sprite", "DeflatedPickle"
 
     @default = 0.0
+    @loop_var = 0
 
     @red = 0
     @green = 0
     @blue = 0
     @alpha = 0.5
 
-    @rainbow = false
+    @rainbow_enabled = false
     @red_offset = 2
     @green_offset = 0
     @blue_offset = 4
@@ -30,14 +31,13 @@ class ColourOverlayExtension < DanceExtension
 
     # https://krazydad.com/tutorials/makecolors.php
     @frequency = 0.14
-    @loop_var = 0
 
     @amplitude = 255 / 2
     @centre = 255 / 2
   end
 
   def during_draw_sprite(graphics)
-    if @rainbow
+    if @rainbow_enabled
       if @loop_var < 42
         @loop_var += 1
 
@@ -65,59 +65,125 @@ class ColourOverlayExtension < DanceExtension
     @red_widgets = FAOSDanceSettings.createOptionInteger panel, "Red:", @default, 255, 0.0
     @red_widgets.third.addChangeListener {|it|
       @red = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      GlobalValues.setOption "colour_overlay-red", @red
     }
+    if @enabled
+      @red_widgets.third.setValue GlobalValues.getOption("colour_overlay-red")
+    end
 
     @green_widgets = FAOSDanceSettings.createOptionInteger panel, "Green:", @default, 255, 0.0
     @green_widgets.third.addChangeListener {|it|
       @green = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      GlobalValues.setOption "colour_overlay-green", @green
     }
+    if @enabled
+      @green_widgets.third.setValue GlobalValues.getOption("colour_overlay-green")
+    end
 
     @blue_widgets = FAOSDanceSettings.createOptionInteger panel, "Blue:", @default, 255, 0.0
     @blue_widgets.third.addChangeListener {|it|
       @blue = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      GlobalValues.setOption "colour_overlay-blue", @blue
     }
+    if @enabled
+      @blue_widgets.third.setValue GlobalValues.getOption("colour_overlay-blue")
+    end
 
     alpha_widgets = FAOSDanceSettings.createOptionDouble panel, "Alpha:", @alpha, 1.0, 0.0
     alpha_widgets.third.addChangeListener {|it|
       @alpha = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+      GlobalValues.setOption "colour_overlay-alpha", @alpha
     }
+    if @enabled
+      alpha_widgets.third.setValue GlobalValues.getOption("colour_overlay-alpha")
+    end
 
     rainbow_border = FAOSDanceSettings.createBorderPanel panel, "Rainbow", true
     rainbow_border.titleComponent.addActionListener {|it|
-      @rainbow = it.source.to_java(javax::swing::JCheckBox).isSelected
+      @rainbow_enabled = it.source.to_java(javax::swing::JCheckBox).isSelected
+      GlobalValues.setOption "colour_overlay-rainbow-visible", @rainbow_enabled
     }
+    if @enabled
+      @rainbow_enabled = rainbow_border.titleComponent.to_java(javax::swing::JCheckBox).isSelected
+      rainbow_border.titleComponent.setSelected GlobalValues.getOption("filter-box_blur-rainbow-visible")
+    end
     rainbow_panel = rainbow_border.panel
 
-    FAOSDanceSettings.createOptionDouble(rainbow_panel, "Frequency:", @frequency, 3.0, 0.1).third.addChangeListener {|it|
+    frequency_widgets = FAOSDanceSettings.createOptionDouble(rainbow_panel, "Frequency:", @frequency, 3.0, 0.1)
+    frequency_widgets.third.addChangeListener {|it|
       @frequency = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+      GlobalValues.setOption "colour_overlay-rainbow-frequency", @frequency
     }
+    if @enabled
+      frequency_widgets.third.setValue GlobalValues.getOption("colour_overlay-rainbow-frequency")
+    end
 
     FAOSDanceSettings.createSeparator(rainbow_panel)
 
-    FAOSDanceSettings.createOptionInteger(rainbow_panel, "Red Offset:", @frequency, 8, -8).third.addChangeListener {|it|
+    red_offset_widgets = FAOSDanceSettings.createOptionInteger(rainbow_panel, "Red Offset:", @frequency, 8, -8)
+    red_offset_widgets.third.addChangeListener {|it|
       @red_offset = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      GlobalValues.setOption "colour_overlay-rainbow-red_offset", @red_offset
       @loop_var = 0
     }
+    if @enabled
+      frequency_widgets.third.setValue GlobalValues.getOption("colour_overlay-rainbow-red_offset")
+    end
 
-    FAOSDanceSettings.createOptionInteger(rainbow_panel, "Green Offset:", @frequency, 8, -8).third.addChangeListener {|it|
+    green_offset_widgets = FAOSDanceSettings.createOptionInteger(rainbow_panel, "Green Offset:", @frequency, 8, -8)
+    green_offset_widgets.third.addChangeListener {|it|
       @green_offset = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      GlobalValues.setOption "colour_overlay-rainbow-green_offset", @green_offset
       @loop_var = 0
     }
+    if @enabled
+      green_offset_widgets.third.setValue GlobalValues.getOption("colour_overlay-rainbow-green_offset")
+    end
 
-    FAOSDanceSettings.createOptionInteger(rainbow_panel, "Blue Offset:", @frequency, 8, -8).third.addChangeListener {|it|
+    blue_offset_widgets = FAOSDanceSettings.createOptionInteger(rainbow_panel, "Blue Offset:", @frequency, 8, -8)
+    blue_offset_widgets.third.addChangeListener {|it|
       @blue_offset = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      GlobalValues.setOption "colour_overlay-rainbow-blue_offset", @blue_offset
       @loop_var = 0
     }
+    if @enabled
+      blue_offset_widgets.third.setValue GlobalValues.getOption("colour_overlay-rainbow-blue_offset")
+    end
 
     FAOSDanceSettings.createSeparator(rainbow_panel)
 
-    FAOSDanceSettings.createOptionDouble(rainbow_panel, "Amplitude:", @amplitude, 360.0, 1.0).third.addChangeListener {|it|
+    amplitude_widgets = FAOSDanceSettings.createOptionDouble(rainbow_panel, "Amplitude:", @amplitude, 360.0, 1.0)
+    amplitude_widgets.third.addChangeListener {|it|
       @amplitude = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+      GlobalValues.setOption "colour_overlay-rainbow-amplitude", @amplitude
     }
+    if @enabled
+      amplitude_widgets.third.setValue GlobalValues.getOption("colour_overlay-rainbow-amplitude")
+    end
 
-    FAOSDanceSettings.createOptionDouble(rainbow_panel, "Centre:", @centre, 360.0, 1.0).third.addChangeListener {|it|
+    centre_widgets = FAOSDanceSettings.createOptionDouble(rainbow_panel, "Centre:", @centre, 360.0, 1.0)
+    centre_widgets.third.addChangeListener {|it|
       @centre = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+      GlobalValues.setOption "colour_overlay-rainbow-centre", @centre
     }
+    if @enabled
+      centre_widgets.third.setValue GlobalValues.getOption("colour_overlay-rainbow-centre")
+    end
+  end
+
+  def enable
+    GlobalValues.setOption "colour_overlay-red", @red
+    GlobalValues.setOption "colour_overlay-green", @green
+    GlobalValues.setOption "colour_overlay-blue", @blue
+    GlobalValues.setOption "colour_overlay-alpha", @alpha
+
+    GlobalValues.setOption "colour_overlay-rainbow-visible", @rainbow_enabled
+    GlobalValues.setOption "colour_overlay-rainbow-red_offset", @red_offset
+    GlobalValues.setOption "colour_overlay-rainbow-green_offset", @green_offset
+    GlobalValues.setOption "colour_overlay-rainbow-blue_offset", @blue_offset
+    GlobalValues.setOption "colour_overlay-rainbow-frequency", @frequency
+    GlobalValues.setOption "colour_overlay-rainbow-amplitude", @amplitude
+    GlobalValues.setOption "colour_overlay-rainbow-centre", @centre
   end
 
   def create_image
@@ -130,7 +196,7 @@ class ColourOverlayExtension < DanceExtension
     graphics = @coloured_sprite.createGraphics
 
     graphics.composite = AlphaComposite.getInstance(AlphaComposite::SRC_OVER, @alpha)
-    graphics.drawImage GlobalValues.getSheet.getSpriteMap[GlobalValues.getCurrentAction][GlobalValues.getAnimFrame], 0, 0, nil
+    graphics.drawImage GlobalValues.getSheet.getSpriteMap[GlobalValues.getOption "sprite.animation.action"][GlobalValues.getOption "sprite.animation.frame"], 0, 0, nil
     graphics.setComposite AlphaComposite::SrcAtop
     graphics.setColor @colour
     graphics.fillRect 0, 0, width, height

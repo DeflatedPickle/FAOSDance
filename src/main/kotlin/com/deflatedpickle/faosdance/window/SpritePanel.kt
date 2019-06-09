@@ -30,27 +30,29 @@ class SpritePanel : JPanel() {
             }
         }
 
-        GlobalValues.timer = Timer(1000 / GlobalValues.fps, ActionListener {
+        GlobalValues.timer = Timer(1000 / GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("fps")!!, ActionListener {
             if (GlobalValues.sheet != null) {
-                if (GlobalValues.play) {
-                    if (GlobalValues.rewind) {
-                        GlobalValues.animFrame--
+                if (GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Boolean>("play")!!) {
+                    if (GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Boolean>("rewind")!!) {
+                        val frame = GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("frame")!!
+                        GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("frame", frame - 1)
 
-                        if (GlobalValues.animFrame <= 0) {
-                            GlobalValues.animFrame = 7
+                        if (GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("frame")!! <= 0) {
+                            GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("frame", 7)
                         }
                     } else {
-                        GlobalValues.animFrame++
+                        val frame = GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("frame")!!
+                        GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("frame", frame + 1)
 
-                        if (GlobalValues.animFrame >= 8) {
-                            GlobalValues.animFrame = 0
+                        if (GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("frame")!! >= 8) {
+                            GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("frame", 0)
                         }
                     }
 
-                    GlobalValues.animationControls?.second?.value = GlobalValues.animFrame
+                    GlobalValues.animationControls?.second?.value = GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("frame")!!
                 }
 
-                GlobalValues.mutableSprite = GlobalValues.sheet!!.spriteMap[GlobalValues.currentAction]!![GlobalValues.animFrame]
+                GlobalValues.mutableSprite = GlobalValues.sheet!!.spriteMap[GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<String>("action")!!]!![GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<Int>("frame")!!]
 
                 GlobalValues.frame!!.revalidate()
                 GlobalValues.frame!!.repaint()
@@ -65,7 +67,7 @@ class SpritePanel : JPanel() {
         if (GlobalValues.sheet == null) return
 
         val g2D = g as Graphics2D
-        g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, when (GlobalValues.scalingType) {
+        g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, when (ScalingType.valueOf(GlobalValues.unsanatizeEnumValue(GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("scaling_type")!!))) {
             ScalingType.BILINEAR -> RenderingHints.VALUE_INTERPOLATION_BILINEAR
             ScalingType.BICUBIC -> RenderingHints.VALUE_INTERPOLATION_BICUBIC
             ScalingType.NEAREST_NEIGHBOR -> RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
@@ -78,33 +80,34 @@ class SpritePanel : JPanel() {
         }
 
         // Change the opacity
-        g2D.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, GlobalValues.opacity.toFloat())
+        g2D.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, GlobalValues.optionsMap.getMap("sprite")!!.getOption<Double>("opacity")!!.toFloat())
 
         // Rotate the matrix
         g2D.rotate(
-            Math.toRadians(GlobalValues.zRotation.toDouble()),
+            Math.toRadians(GlobalValues.optionsMap.getMap("sprite")!!.getMap("rotation")!!.getOption<Int>("z")!!.toDouble()),
             (this.width / 2).toDouble(),
             (this.height / 2).toDouble()
         )
 
         // Translate to the centre
         g2D.translate(
-            (this.width - GlobalValues.sheet!!.spriteWidth * GlobalValues.xMultiplier) / 2,
-            (this.height - GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2
+            (this.width - GlobalValues.sheet!!.spriteWidth * GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!) / 2,
+            (this.height - GlobalValues.sheet!!.spriteHeight * GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!) / 2
         )
 
         // Translate upwards the size of the sprite plus the reflection padding
-        if (GlobalValues.isReflectionVisible) {
+        if (GlobalValues.optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!) {
             g2D.translate(
                 0.0,
-                -(GlobalValues.sheet!!.spriteHeight * GlobalValues.yMultiplier) / 2 - GlobalValues.reflectionPadding
+                -(GlobalValues.sheet!!.spriteHeight * GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!) / 2 - GlobalValues.optionsMap.getMap("reflection")!!.getOption<Double>("padding")!!
             )
         }
         // Scale the sprite
-        g2D.scale(GlobalValues.xMultiplier, GlobalValues.yMultiplier)
+        // println(GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!)
+        g2D.scale(GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!, GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!)
 
         // Draw the sprite
-        if (GlobalValues.isVisible) {
+        if (GlobalValues.optionsMap.getMap("sprite")!!.getOption<Boolean>("visible")!!) {
             val sprite = BufferedImage(
                 GlobalValues.sheet!!.spriteWidth,
                 GlobalValues.sheet!!.spriteHeight,
@@ -142,13 +145,13 @@ class SpritePanel : JPanel() {
         // Move to the bottom of the sprite
         g2D.translate(
             0.0,
-            (GlobalValues.sheet!!.spriteHeight) * 2 + (GlobalValues.reflectionPadding)
+            (GlobalValues.sheet!!.spriteHeight) * 2 + (GlobalValues.optionsMap.getMap("reflection")!!.getOption<Double>("padding")!!)
         )
         // Flip the matrix, so the reflection is upside down
         g2D.scale(1.0, -1.0)
 
         // Create a new image for the reflection
-        if (GlobalValues.isReflectionVisible) {
+        if (GlobalValues.optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!) {
             val reflection = BufferedImage(
                 GlobalValues.sheet!!.spriteWidth,
                 GlobalValues.sheet!!.spriteHeight,
@@ -178,11 +181,11 @@ class SpritePanel : JPanel() {
             // Apply a gradient paint, so the reflection fades out
             reflectionGraphics.paint = GradientPaint(
                 0f,
-                GlobalValues.sheet!!.spriteHeight.toFloat() * GlobalValues.fadeHeight,
+                GlobalValues.sheet!!.spriteHeight.toFloat() * GlobalValues.optionsMap.getMap("reflection")!!.getMap("fade")!!.getOption<Float>("height")!!,
                 Color(0.0f, 0.0f, 0.0f, 0.0f),
                 0f,
                 GlobalValues.sheet!!.spriteHeight.toFloat(),
-                Color(0.0f, 0.0f, 0.0f, GlobalValues.fadeOpacity)
+                Color(0.0f, 0.0f, 0.0f, GlobalValues.optionsMap.getMap("reflection")!!.getMap("fade")!!.getOption<Float>("opacity")!!)
             )
             reflectionGraphics.fillRect(0, 0, GlobalValues.sheet!!.spriteWidth, GlobalValues.sheet!!.spriteHeight)
             reflectionGraphics.dispose()

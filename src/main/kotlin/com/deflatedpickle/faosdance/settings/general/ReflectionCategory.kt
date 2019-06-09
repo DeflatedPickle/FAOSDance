@@ -23,10 +23,10 @@ class ReflectionCategory(owner: Frame, val settings: SettingsDialog) :
 
         this.panel.layout = gridBagLayout
         (this.titleComponent as JCheckBox).apply {
-            isSelected = GlobalValues.isReflectionVisible
+            isSelected = GlobalValues.optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!
             addActionListener {
-                GlobalValues.isReflectionVisible = this.isSelected
-                GlobalValues.updateScripts("isReflectionVisible", GlobalValues.isReflectionVisible)
+                GlobalValues.optionsMap.getMap("reflection")!!.setOption("visible", this.isSelected)
+                GlobalValues.updateScripts("reflection.visible", GlobalValues.optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!)
 
                 for (i in this@ReflectionCategory.panel.components) {
                     i.isEnabled = this.isSelected
@@ -45,13 +45,13 @@ class ReflectionCategory(owner: Frame, val settings: SettingsDialog) :
             this.panel,
             this.panel.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.reflection.padding")}:"),
-            GlobalValues.reflectionPadding,
+            GlobalValues.optionsMap.getMap("reflection")!!.getOption<Double>("padding")!!,
             100.0,
             -100.0
         ).apply {
             third.addChangeListener {
-                GlobalValues.reflectionPadding = (it.source as JSpinner).model.value as Double
-                GlobalValues.updateScripts("reflectionPadding", GlobalValues.reflectionPadding)
+                GlobalValues.optionsMap.getMap("reflection")!!.setOption("padding", (it.source as JSpinner).model.value as Double)
+                GlobalValues.updateScripts("reflection.padding", GlobalValues.optionsMap.getMap("reflection")!!.getOption<Double>("padding")!!)
             }
         }
         this.settings.widgets.add(paddingWidgets!!.first)
