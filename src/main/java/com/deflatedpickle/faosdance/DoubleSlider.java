@@ -2,10 +2,10 @@ package com.deflatedpickle.faosdance;
 
 import javax.swing.*;
 
-public class JDoubleSlider extends JSlider {
+public class DoubleSlider extends JSlider {
     private double factor;
 
-    public JDoubleSlider(double min, double max, double value, double factor) {
+    public DoubleSlider(double min, double max, double value, double factor) {
         super((int) ((float) min * factor), (int) ((float) max * factor), (int) ((float) value * factor));
         this.factor = factor;
     }

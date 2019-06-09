@@ -1,6 +1,8 @@
 package com.deflatedpickle.faosdance;
 
 import com.deflatedpickle.faosdance.component_border.ComponentPanel;
+import com.jidesoft.swing.RangeSlider;
+import kotlin.Pair;
 import kotlin.Triple;
 
 import javax.swing.*;
@@ -41,6 +43,14 @@ public class FAOSDanceSettings {
 
     public static Triple<JButton, JSlider, JSpinner> createOptionInteger(Container parent, String name, Integer defaultNumber, Integer maxNumber, Integer minNumber) {
         return GlobalValues.INSTANCE.addLabelSliderSpinnerInteger(parent, (GridBagLayout) parent.getLayout(), name, defaultNumber, maxNumber, minNumber);
+    }
+
+    public static Triple<JButton, RangeSlider, Pair<JSpinner, JSpinner>> createOptionRangeDouble(Container parent, String name, Double highNumber, Double lowNumber, Double maxNumber, Double minNumber) {
+        return GlobalValues.INSTANCE.addLabelRangeSliderSpinnerDouble(parent, (GridBagLayout) parent.getLayout(), name, highNumber, lowNumber, maxNumber, minNumber);
+    }
+
+    public static Triple<JButton, RangeSlider, Pair<JSpinner, JSpinner>> createOptionRangeInteger(Container parent, String name, Double highNumber, Double lowNumber, Double maxNumber, Double minNumber) {
+        return GlobalValues.INSTANCE.addLabelRangeSliderSpinnerInteger(parent, (GridBagLayout) parent.getLayout(), name, highNumber, lowNumber, maxNumber, minNumber);
     }
 
     public static JSeparator createSeparator(Container parent) {

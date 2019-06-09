@@ -1,6 +1,7 @@
 package com.deflatedpickle.faosdance
 
 import com.deflatedpickle.faosdance.settings.SettingsDialog
+import com.jidesoft.swing.RangeSlider
 import org.apache.commons.lang3.SystemUtils
 import org.jruby.RubyBoolean
 import org.jruby.RubyObject
@@ -305,7 +306,7 @@ object GlobalValues {
     ): Triple<JButton, JSlider, JSpinner> {
         val slider = when (T::class) {
             Int::class -> JSlider(minNumber.toInt(), maxNumber.toInt(), defaultValue.toInt())
-            Double::class -> JDoubleSlider(
+            Double::class -> DoubleSlider(
                 minNumber.toDouble(),
                 maxNumber.toDouble(),
                 defaultValue.toDouble(),
@@ -361,29 +362,179 @@ object GlobalValues {
             }
         }
 
-        parent.add(component)
-        parent.add(slider)
-        parent.add(spinner)
-        parent.add(revertButton)
-
-        gridBagLayout.setConstraints(component, GridBagConstraints().apply {
+        parent.add(component, GridBagConstraints().apply {
             anchor = GridBagConstraints.EAST
         })
-
-        gridBagLayout.setConstraints(slider, GridBagConstraints().apply {
+        parent.add(slider, GridBagConstraints().apply {
             fill = GridBagConstraints.HORIZONTAL
             weightx = 1.0
         })
-
-        gridBagLayout.setConstraints(spinner, GridBagConstraints().apply {
+        parent.add(spinner, GridBagConstraints().apply {
             fill = GridBagConstraints.HORIZONTAL
             anchor = GridBagConstraints.EAST
         })
-
-        gridBagLayout.setConstraints(revertButton, GridBagConstraints().apply {
+        parent.add(revertButton, GridBagConstraints().apply {
             gridwidth = GridBagConstraints.REMAINDER
         })
 
         return Triple(revertButton, slider, spinner)
+    }
+
+    inline fun <reified T : Number> addComponentRangeSliderSpinner(
+        parent: Container,
+        gridBagLayout: GridBagLayout,
+        component: JComponent,
+        highValue: Number,
+        lowValue: Number,
+        maxNumber: Number,
+        minNumber: Number
+    ): Triple<JButton, RangeSlider, Pair<JSpinner, JSpinner>> {
+        val slider = when (T::class) {
+            Int::class -> RangeSlider(minNumber.toInt(), maxNumber.toInt(), lowValue.toInt(), highValue.toInt())
+            Double::class -> DoubleRangeSlider(
+                minNumber.toDouble(),
+                maxNumber.toDouble(),
+                lowValue.toDouble(),
+                highValue.toDouble(),
+                100.0
+            )
+            else -> RangeSlider()
+        }
+
+        val stepSize = when (T::class) {
+            Int::class -> 1 as T
+            Double::class -> 0.01 as T
+            else -> 0 as T
+        }
+
+        val lowSpinner = JSpinner(
+            SpinnerNumberModel(
+                lowValue.toDouble(),
+                minNumber.toDouble(),
+                maxNumber.toDouble(),
+                stepSize
+            )
+        )
+
+        val highSpinner = JSpinner(
+            SpinnerNumberModel(
+                highValue.toDouble(),
+                minNumber.toDouble(),
+                maxNumber.toDouble(),
+                stepSize
+            )
+        )
+
+        slider.lowValue = when (T::class) {
+            Int::class -> lowValue.toInt()
+            Double::class -> (lowValue.toFloat() * 100).toInt()
+            else -> 0
+        }
+        lowSpinner.value = lowValue
+
+        slider.addChangeListener {
+            lowSpinner.value = when (T::class) {
+                Int::class -> slider.lowValue
+                Double::class -> slider.lowValue.toDouble() / 100
+                else -> 0
+            }
+            highSpinner.value = when (T::class) {
+                Int::class -> slider.highValue
+                Double::class -> slider.highValue.toDouble() / 100
+                else -> 0
+            }
+        }
+        lowSpinner.addChangeListener {
+            slider.lowValue = when (T::class) {
+                Int::class -> when {
+                    lowSpinner.value is Int -> lowSpinner.value as Int
+                    lowSpinner.value is Double -> (lowSpinner.value as Double).roundToInt()
+                    else -> 0
+                }
+                Double::class -> (lowSpinner.value as Double * 100).toInt()
+                else -> 0
+            }
+        }
+        highSpinner.addChangeListener {
+            slider.highValue = when (T::class) {
+                Int::class -> when {
+                    highSpinner.value is Int -> highSpinner.value as Int
+                    highSpinner.value is Double -> (highSpinner.value as Double).roundToInt()
+                    else -> 0
+                }
+                Double::class -> (highSpinner.value as Double * 100).toInt()
+                else -> 0
+            }
+        }
+
+        val revertButton = JButton("Revert").apply {
+            addActionListener {
+                lowSpinner.value = lowValue.toDouble()
+                highSpinner.value = highValue.toDouble()
+            }
+        }
+
+        parent.add(component, GridBagConstraints().apply {
+            anchor = GridBagConstraints.EAST
+        })
+        parent.add(lowSpinner, GridBagConstraints().apply {
+            fill = GridBagConstraints.HORIZONTAL
+            weightx = 0.3
+            anchor = GridBagConstraints.EAST
+        })
+        parent.add(slider, GridBagConstraints().apply {
+            fill = GridBagConstraints.HORIZONTAL
+            weightx = 1.0
+        })
+        parent.add(highSpinner, GridBagConstraints().apply {
+            fill = GridBagConstraints.HORIZONTAL
+            weightx = 0.3
+            anchor = GridBagConstraints.EAST
+        })
+        parent.add(revertButton, GridBagConstraints().apply {
+            gridwidth = GridBagConstraints.REMAINDER
+        })
+
+        return Triple(revertButton, slider, Pair(lowSpinner, highSpinner))
+    }
+
+    fun addLabelRangeSliderSpinnerDouble(
+        parent: Container,
+        gridBagLayout: GridBagLayout,
+        name: String,
+        highValue: Number,
+        lowValue: Number,
+        maxNumber: Number,
+        minNumber: Number
+    ): Triple<JButton, RangeSlider, Pair<JSpinner, JSpinner>> {
+        return addComponentRangeSliderSpinner<Double>(
+            parent,
+            gridBagLayout,
+            JLabel(name),
+            highValue,
+            lowValue,
+            maxNumber,
+            minNumber
+        )
+    }
+
+    fun addLabelRangeSliderSpinnerInteger(
+        parent: Container,
+        gridBagLayout: GridBagLayout,
+        name: String,
+        highValue: Number,
+        lowValue: Number,
+        maxNumber: Number,
+        minNumber: Number
+    ): Triple<JButton, RangeSlider, Pair<JSpinner, JSpinner>> {
+        return addComponentRangeSliderSpinner<Int>(
+            parent,
+            gridBagLayout,
+            JLabel(name),
+            highValue,
+            lowValue,
+            maxNumber,
+            minNumber
+        )
     }
 }
