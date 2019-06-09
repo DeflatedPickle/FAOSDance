@@ -2,75 +2,116 @@ class ShakeExtension < DanceExtension
   def initialize
     super "Shake", "Shakes the sprite in random directions", "DeflatedPickle"
 
-    @shake_amount = 1
-    @shake_speed_max_x = 1.6
-    @shake_speed_max_y = 1.6
+    @amount = 1
+    @speed_max_x = 1.6
+    @speed_max_y = 1.6
 
-    @shake_speed_min_x = 1.0
-    @shake_speed_min_y = 1.0
+    @speed_min_x = 1.0
+    @speed_min_y = 1.0
 
-    @shake_x = @shake_speed_max_x
-    @shake_y = @shake_speed_max_y
+    @x = @speed_max_x
+    @y = @speed_max_y
 
-    @counter = @shake_amount
+    @counter = @amount
 
     @random_bool = [true, false]
   end
 
   def pre_draw(graphics)
     if @counter == 0
-      @counter = @shake_amount
+      @counter = @amount
 
-      @shake_x = @shake_speed_max_x
-      @shake_y = @shake_speed_max_y
+      @x = @speed_max_x
+      @y = @speed_max_y
 
       # TODO: Translate the graphics instead of the window
       GlobalValues.getFrame.setLocation @original_location.x, @original_location.y
     else
-      if @shake_x < 0
-        @shake_x *= rand @shake_speed_min_x..@shake_speed_max_x
+      if @x < 0
+        @x *= rand @speed_min_x..@speed_max_x
       end
 
       if @random_bool.sample
-        @shake_x = -@shake_x
+        @x = -@x
       end
 
-      if @shake_y < 0
-        @shake_y *= rand @shake_speed_min_y..@shake_speed_max_y
+      if @y < 0
+        @y *= rand @speed_min_y..@speed_max_y
       end
 
       if @random_bool.sample
-        @shake_y = -@shake_y
+        @y = -@y
       end
 
-      GlobalValues.getFrame.setLocation @original_location.x + @shake_x, @original_location.y + @shake_y
+      GlobalValues.getFrame.setLocation @original_location.x + @x, @original_location.y + @y
 
       @counter -= 1
     end
   end
 
   def settings(panel)
-    FAOSDanceSettings.createOptionInteger(panel, "Shake Amount:", @shake_amount, 42, 1).third.addChangeListener {|it|
-      @shake_amount = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+    shake_amount_widgets = FAOSDanceSettings.createOptionInteger(panel, "Shake Amount:", @amount, 42, 1)
+    shake_amount_widgets.third.addChangeListener {|it|
+      @amount = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      if @enabled
+        GlobalValues.setOption "shake-amount", @amount
+      end
     }
+    if @enabled
+      shake_amount_widgets.third.setValue GlobalValues.getOption("shake-amount")
+    end
 
-    FAOSDanceSettings.createOptionDouble(panel, "Max X Speed:", @shake_speed_max_x, 3.0, 0.0).third.addChangeListener {|it|
-      @shake_speed_max_x = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+    max_x_speed_widgets = FAOSDanceSettings.createOptionDouble(panel, "Max X Speed:", @speed_max_x, 3.0, 0.0)
+    max_x_speed_widgets.third.addChangeListener {|it|
+      @speed_max_x = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+      if @enabled
+        GlobalValues.setOption "shake-speed_max_x", @speed_max_x
+      end
     }
-    FAOSDanceSettings.createOptionDouble(panel, "Min X Speed:", @shake_speed_min_x, 3.0, 0.0).third.addChangeListener {|it|
-      @shake_speed_min_x = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+    if @enabled
+      max_x_speed_widgets.third.setValue GlobalValues.getOption("shake-speed_max_x")
+    end
+    min_x_speed_widgets = FAOSDanceSettings.createOptionDouble(panel, "Min X Speed:", @speed_min_x, 3.0, 0.0)
+    min_x_speed_widgets.third.addChangeListener {|it|
+      @speed_min_x = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+      if @enabled
+        GlobalValues.setOption "shake-speed_min_x", @speed_min_x
+      end
     }
+    if @enabled
+      min_x_speed_widgets.third.setValue GlobalValues.getOption("shake-speed_min_x")
+    end
 
-    FAOSDanceSettings.createOptionDouble(panel, "Max Y Speed:", @shake_speed_max_y, 3.0, 0.0).third.addChangeListener {|it|
-      @shake_speed_max_y = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+    max_y_speed_widgets = FAOSDanceSettings.createOptionDouble(panel, "Max Y Speed:", @speed_max_y, 3.0, 0.0)
+    max_y_speed_widgets.third.addChangeListener {|it|
+      @speed_max_y = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+      if @enabled
+        GlobalValues.setOption "shake-speed_max_y", @speed_max_y
+      end
     }
-    FAOSDanceSettings.createOptionDouble(panel, "Min Y Speed:", @shake_speed_min_y, 3.0, 0.0).third.addChangeListener {|it|
-      @shake_speed_min_y = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+    if @enabled
+      max_y_speed_widgets.third.setValue GlobalValues.getOption("shake-speed_max_y")
+    end
+    min_y_speed_widgets = FAOSDanceSettings.createOptionDouble(panel, "Min Y Speed:", @speed_min_y, 3.0, 0.0)
+    min_y_speed_widgets.third.addChangeListener {|it|
+      @speed_min_y = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).floatValue
+      if @enabled
+        GlobalValues.setOption "shake-speed_min_y", @speed_min_y
+      end
     }
+    if @enabled
+      min_y_speed_widgets.third.setValue GlobalValues.getOption("shake-speed_min_y")
+    end
   end
 
   def enable
     @original_location = GlobalValues.getFrame.getLocation
+
+    GlobalValues.setOption "shake-amount", @amount
+    GlobalValues.setOption "shake-speed_max_x", @speed_max_x
+    GlobalValues.setOption "shake-speed_min_x", @speed_min_x
+    GlobalValues.setOption "shake-speed_max_y", @speed_max_y
+    GlobalValues.setOption "shake-speed_min_y", @speed_min_y
   end
 end
 

@@ -21,11 +21,19 @@ class RotateExtension < DanceExtension
     increase_widgets = FAOSDanceSettings.createOptionInteger panel, "Increase:", @increase, 180, 1
     increase_widgets.third.addChangeListener {|it|
       @increase = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).doubleValue
+      if @enabled
+        GlobalValues.setOption "rotate-increase", @increase
+      end
     }
+    if @enabled
+      increase_widgets.setSelectedItem GlobalValues.getOption("rotate-increase")
+    end
   end
 
   def enable
     @original = GlobalValues.getOption "sprite.rotation.z"
+
+    GlobalValues.setOption "rotate-increase", @increase
   end
 
   def disable

@@ -35,7 +35,16 @@ class AutoActionExtension < DanceExtension
 
   def settings(panel)
     panel.add JLabel.new "Selection Type:"
-    @selection_type_combobox = JComboBox.new %w(Iterative Random).to_java
+    combo_list = %w(Iterative Random)
+    @selection_type_combobox = JComboBox.new combo_list.to_java
+    @selection_type_combobox.addActionListener {|it|
+      if @enabled
+        GlobalValues.setOption "auto_action-selection_type", it.source.to_java(javax::swing::JComboBox).getSelectedItem
+      end
+    }
+    if @enabled
+      @selection_type_combobox.setSelectedItem GlobalValues.getOption("auto_action-selection_type")
+    end
     grid_settings = GridBagConstraints.new
     grid_settings.fill = GridBagConstraints::HORIZONTAL
     grid_settings.weightx = 1.0
@@ -43,6 +52,9 @@ class AutoActionExtension < DanceExtension
     panel.add @selection_type_combobox, grid_settings
 
     @wait_widgets = FAOSDanceSettings.createOptionInteger panel, "Wait:", @wait, 144, 0
+    if @enabled
+      @wait_widgets.third.setValue GlobalValues.getOption("auto_action-wait")
+    end
 
     panel.add JLabel.new "Frames Till Next Action:"
     @progress_bar = JProgressBar.new 0, @wait
@@ -50,6 +62,9 @@ class AutoActionExtension < DanceExtension
 
     @wait_widgets.third.addChangeListener {|it|
       @wait = it.source.to_java(javax::swing::JSpinner).model.value.to_java(java::lang::Float).intValue
+      if @enabled
+        GlobalValues.setOption "auto_action-wait", @wait
+      end
       @wait_limit = @wait
       @progress_bar.setMaximum @wait
     }
@@ -58,6 +73,9 @@ class AutoActionExtension < DanceExtension
   def enable
     @action_list = GlobalValues.getSheet.spriteMap.keys
     @animation_length = GlobalValues.getSheet.spriteNumX
+
+    GlobalValues.setOption "auto_action-selection_type", "Iterative"
+    GlobalValues.setOption "auto_action-wait", @wait
   end
 end
 

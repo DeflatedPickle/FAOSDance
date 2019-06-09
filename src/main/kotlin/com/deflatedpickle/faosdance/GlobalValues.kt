@@ -30,14 +30,12 @@ object GlobalValues {
     lateinit var langProperties: File
     val scriptsFolder = if (ClassLoader.getSystemResource("icon.png").protocol == "jar") {
         File(homePath, "scripts")
-    }
-    else {
+    } else {
         File(ClassLoader.getSystemResource("scripts").path)
     }
     val configFolder = if (ClassLoader.getSystemResource("icon.png").protocol == "jar") {
         File(homePath, "config")
-    }
-    else {
+    } else {
         File(ClassLoader.getSystemResource("config").path)
     }
 
@@ -57,7 +55,8 @@ object GlobalValues {
 
             val fileList = i.listFiles().map { it.name }
 
-            val zipInputStream = ZipInputStream(GlobalValues::class.java.protectionDomain.codeSource.location.openStream())
+            val zipInputStream =
+                ZipInputStream(GlobalValues::class.java.protectionDomain.codeSource.location.openStream())
 
             while (true) {
                 try {
@@ -77,8 +76,7 @@ object GlobalValues {
                             }
                         }
                     }
-                }
-                catch (e: IOException) {
+                } catch (e: IOException) {
                     break
                 }
             }
@@ -107,15 +105,15 @@ object GlobalValues {
 
     var rootMap = optionsMap
     fun parseOption(option: String): Tuple<NestedHashMap<String, Any>?, String?> {
-        if (option.contains(".")) {
-            val items = option.split(".")
-            for (i in items) {
+        val items = option.split(".")
+        for (i in items) {
+            if (i == items.last()) {
+                return Tuple(rootMap, items.last())
+            }
+            else {
                 if (rootMap[i] is NestedHashMap<*, *>) {
                     rootMap = rootMap[i] as NestedHashMap<String, Any>
                     parseOption(items.subList(items.indexOf(i), items.size).joinToString("."))
-                }
-                else {
-                    return Tuple(rootMap, items.last())
                 }
             }
         }
@@ -207,8 +205,13 @@ object GlobalValues {
 
     fun resize(direction: Direction? = null) {
         if (sheet != null) {
-            val width = ((((sheet!!.spriteWidth * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!) * 2) * 100) / 100).toInt()
-            val height = ((((sheet!!.spriteHeight * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!) * if (optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!) 2 else 1) * 100) / 100).toInt()
+            val width =
+                ((((sheet!!.spriteWidth * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!) * 2) * 100) / 100).toInt()
+            val height =
+                ((((sheet!!.spriteHeight * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!) * if (optionsMap.getMap(
+                        "reflection"
+                    )!!.getOption<Boolean>("visible")!!
+                ) 2 else 1) * 100) / 100).toInt()
 
             frame!!.minimumSize = Dimension(abs(width), abs(height))
             frame!!.setSize(abs(width), abs(height))
