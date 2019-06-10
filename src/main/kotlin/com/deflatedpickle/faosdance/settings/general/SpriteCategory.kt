@@ -2,9 +2,9 @@ package com.deflatedpickle.faosdance.settings.general
 
 import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.ScalingType
-import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
+import com.deflatedpickle.faosdance.widgets.CollapsiblePanel
 import java.awt.FlowLayout
 import java.awt.Frame
 import java.awt.GridBagConstraints
@@ -12,7 +12,7 @@ import java.awt.GridBagLayout
 import javax.swing.*
 
 class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
-    ComponentPanel(JCheckBox(Lang.bundle.getString("settings.sprite"))) {
+    CollapsiblePanel(Lang.bundle.getString("settings.sprite")) {
     private val gridBagLayout = GridBagLayout()
 
     val animationCategory = AnimationCategory(owner, settings)
@@ -27,7 +27,7 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
         this.layout = FlowLayout()
 
         this.panel.layout = gridBagLayout
-        (this.titleComponent as JCheckBox).apply {
+        (this.titleComponent as Header).checkbox.apply {
             isSelected = GlobalValues.optionsMap.getMap("sprite")!!.getOption<Boolean>("visible")!!
 
             addActionListener {

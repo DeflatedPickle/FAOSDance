@@ -1,5 +1,7 @@
 package com.deflatedpickle.faosdance.component_border;
 
+import org.jdesktop.swingx.JXCollapsiblePane;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,6 +10,7 @@ public class ComponentPanel extends JPanel {
     protected ComponentBorder border;
     private JComponent component;
     public JPanel panel;
+    public JXCollapsiblePane outerPanel;
     private boolean transmittingAllowed;
 
     public ComponentPanel() {
@@ -19,9 +22,13 @@ public class ComponentPanel extends JPanel {
         border = new ComponentBorder(component);
         setBorder(border);
         panel = new JPanel();
+        outerPanel = new JXCollapsiblePane(JXCollapsiblePane.Direction.DOWN);
+        outerPanel.setAnimated(false);
+        outerPanel.setCollapsed(true);
+        add(outerPanel);
         setLayout(null);
         add(component);
-        add(panel);
+        outerPanel.add(panel);
         transmittingAllowed = false;
     }
 

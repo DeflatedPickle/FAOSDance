@@ -39,11 +39,11 @@ dependencies {
     implementation 'org.swinglabs:swingx:1.6.1'
 
     // implementation 'com.jidesoft:jide-oss:3.6.18'
-    implementation 'org.bidib.com.jidesoft:jide-parent:3.7.6'
+    // implementation 'org.bidib.com.jidesoft:jide-parent:3.7.6'
     implementation 'org.bidib.com.jidesoft:jide-common:3.7.6'
-    implementation 'org.bidib.com.jidesoft:jide-components:3.7.6'
-    implementation 'org.bidib.com.jidesoft:jide-dialogs:3.7.6'
-    implementation 'org.bidib.com.jidesoft:jide-grids:3.7.6'
+    // implementation 'org.bidib.com.jidesoft:jide-components:3.7.6'
+    // implementation 'org.bidib.com.jidesoft:jide-dialogs:3.7.6'
+    // implementation 'org.bidib.com.jidesoft:jide-grids:3.7.6'
 }
 
 compileKotlin {
