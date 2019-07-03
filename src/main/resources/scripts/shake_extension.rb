@@ -1,5 +1,3 @@
-java_import "com.jidesoft.swing.RangeSlider"
-
 class ShakeExtension < DanceExtension
   def initialize
     super "Shake", "Shakes the sprite in random directions", "DeflatedPickle"
@@ -19,15 +17,12 @@ class ShakeExtension < DanceExtension
     @random_bool = [true, false]
   end
 
-  def pre_draw(graphics)
+  def pre_draw_sprite(graphics)
     if @counter == 0
       @counter = @amount
 
       @x = @speed_max_x
       @y = @speed_max_y
-
-      # TODO: Translate the graphics instead of the window
-      GlobalValues.getFrame.setLocation @original_location.x, @original_location.y
     else
       if @x < 0
         @x *= rand @speed_min_x..@speed_max_x
@@ -45,10 +40,14 @@ class ShakeExtension < DanceExtension
         @y = -@y
       end
 
-      GlobalValues.getFrame.setLocation @original_location.x + @x, @original_location.y + @y
+      graphics.translate @x, @y
 
       @counter -= 1
     end
+  end
+
+  def pre_draw_reflection(graphics)
+    graphics.translate @x, @y
   end
 
   def settings(panel)
@@ -102,8 +101,6 @@ class ShakeExtension < DanceExtension
   end
 
   def enable
-    @original_location = GlobalValues.getFrame.getLocation
-
     GlobalValues.setOption "shake-amount", @amount
     GlobalValues.setOption "shake-speed_max_x", @speed_max_x
     GlobalValues.setOption "shake-speed_min_x", @speed_min_x
