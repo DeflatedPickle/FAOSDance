@@ -22,6 +22,14 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
 
         GlobalValues.extensionCheckBoxList = mutableListOf()
 
+        var longestName = 0
+        for (i in extensionList) {
+            val name = (i.getInstanceVariable("@name") as RubyString).asJavaString()
+            if (name.length - 1 > longestName) {
+                longestName = name.length - 1
+            }
+        }
+
         for (i in extensionList) {
             val name = (i.getInstanceVariable("@name") as RubyString).asJavaString()
             val description = (i.getInstanceVariable("@description") as RubyString).asJavaString()
@@ -32,6 +40,10 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
 
             mainPanel.add(JLabel(name).apply {
                 this.font = this.font.deriveFont(36f)
+                this.alignmentX = Component.CENTER_ALIGNMENT
+            })
+            mainPanel.add(JLabel("By $author").apply {
+                this.font = this.font.deriveFont(10f)
                 this.alignmentX = Component.CENTER_ALIGNMENT
             })
             mainPanel.add(JLabel(description).apply {
@@ -54,7 +66,15 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
 
             val tabPanel = JPanel()
             tabPanel.isOpaque = false
-            tabPanel.add(JLabel(name).apply { isOpaque = false }, BorderLayout.WEST)
+            tabPanel.layout = GridBagLayout()
+            tabPanel.add(JLabel(name).apply {
+                val label = this
+                this.isOpaque = false
+                this.preferredSize = this.preferredSize.apply { this.width = longestName * ((label.font.size * 100 / 1.5f) / 100).toInt() }
+            }, GridBagConstraints().apply {
+                this.anchor = GridBagConstraints.WEST
+                this.fill = GridBagConstraints.HORIZONTAL
+            })
             tabPanel.add(JCheckBox().apply {
                 GlobalValues.extensionCheckBoxList!!.add(this)
 
@@ -114,7 +134,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
 
                     i.setInstanceVariable("@enabled", RubyThread.ruby.newBoolean(this.isSelected))
                 }
-            }, BorderLayout.EAST)
+            }, GridBagConstraints())
             extensionTabbedPane.setTabComponentAt(extensionTabbedPane.tabCount - 1, tabPanel)
             GlobalValues.extensionPanelMap[name] = subPanel
         }
