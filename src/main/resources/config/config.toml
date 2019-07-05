@@ -46,5 +46,10 @@ opacity=0.25
 
 # -----
 
+[streamer_mode]
+enabled=false
+
+# -----
+
 [extensions]
 enabled=[]
