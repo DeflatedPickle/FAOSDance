@@ -169,7 +169,7 @@ object GlobalValues {
     // The current settings window
     var settingsDialog: SettingsDialog? = null
 
-    var extensionCheckBoxList: MutableList<JCheckBox>? = null
+    var widgetList: MutableList<JComponent>? = null
     val extensionPanelMap = mutableMapOf<String, JPanel>()
 
     fun initPositions() {

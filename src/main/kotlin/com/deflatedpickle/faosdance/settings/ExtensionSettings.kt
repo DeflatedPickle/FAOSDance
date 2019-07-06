@@ -3,11 +3,13 @@ package com.deflatedpickle.faosdance.settings
 import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.RubyThread
 import com.deflatedpickle.faosdance.SpriteSheet
-import com.deflatedpickle.faosdance.component_border.ComponentBorder
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import org.jruby.RubyObject
 import org.jruby.RubyString
-import java.awt.*
+import java.awt.Component
+import java.awt.Frame
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
 import javax.swing.*
 
 class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
@@ -20,7 +22,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
     init {
         this.layout = BoxLayout(this, BoxLayout.Y_AXIS)
 
-        GlobalValues.extensionCheckBoxList = mutableListOf()
+        GlobalValues.widgetList = mutableListOf()
 
         var longestName = 0
         for (i in extensionList) {
@@ -76,7 +78,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 this.fill = GridBagConstraints.HORIZONTAL
             })
             tabPanel.add(JCheckBox().apply {
-                GlobalValues.extensionCheckBoxList!!.add(this)
+                GlobalValues.widgetList!!.add(this)
 
                 if (GlobalValues.optionsMap.getMap("extensions")!!.getOption<List<String>>("enabled")!!.contains(name)) {
                     this.isSelected = true

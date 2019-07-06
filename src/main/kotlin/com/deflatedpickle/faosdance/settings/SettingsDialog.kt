@@ -77,7 +77,7 @@ class SettingsDialog(owner: Frame) : JDialog(
                 i.isEnabled = false
             }
 
-            for (i in GlobalValues.extensionCheckBoxList!!) {
+            for (i in GlobalValues.widgetList!!) {
                 i.isEnabled = false
             }
         }

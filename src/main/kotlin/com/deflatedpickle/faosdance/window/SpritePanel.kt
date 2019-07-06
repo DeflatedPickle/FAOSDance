@@ -3,7 +3,7 @@ package com.deflatedpickle.faosdance.window
 import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.RubyThread
 import com.deflatedpickle.faosdance.ScalingType
-import com.deflatedpickle.faosdance.settings.general.AnimationCategory
+import com.deflatedpickle.faosdance.settings.general.SpriteCategory
 import java.awt.*
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
@@ -25,7 +25,7 @@ class SpritePanel : JPanel() {
                 val droppedFiles = dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>
 
                 if (droppedFiles.size == 1) {
-                    AnimationCategory.loadSpriteSheet(droppedFiles[0].absolutePath)
+                    SpriteCategory.loadSpriteSheet(droppedFiles[0].absolutePath)
                 }
             }
         }

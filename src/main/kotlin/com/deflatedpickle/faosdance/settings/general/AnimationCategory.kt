@@ -7,31 +7,10 @@ import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Frame
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
-import java.awt.datatransfer.DataFlavor
-import java.awt.dnd.DnDConstants
-import java.awt.dnd.DropTarget
-import java.awt.dnd.DropTargetDropEvent
-import java.io.File
 import javax.swing.*
-import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.math.roundToInt
 
 class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
-    companion object {
-        fun loadSpriteSheet(path: String) {
-            val tempSheet = SpriteSheet(path.substringBeforeLast("."))
-
-            if (tempSheet.loadedImage && tempSheet.loadedText) {
-                GlobalValues.configureSpriteSheet(tempSheet)
-                GlobalValues.currentPath = path
-            }
-
-            for (i in GlobalValues.extensionCheckBoxList!!) {
-                i.isEnabled = true
-            }
-        }
-    }
-
     private val gridBagLayout = GridBagLayout()
 
     var actionCombobox: JComboBox<String>? = null
@@ -58,6 +37,7 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
             }
 
             gridBagLayout.setConstraints(this, GridBagConstraints().apply {
+                gridwidth = GridBagConstraints.REMAINDER
                 fill = GridBagConstraints.HORIZONTAL
                 weightx = 1.0
             })
@@ -67,43 +47,6 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
         }
         this.settings.widgets.add(actionCombobox!!)
         this.add(actionCombobox!!)
-
-        // Open button
-        this.add(JButton(Lang.bundle.getString("settings.sprite.open")).apply {
-            dropTarget = object : DropTarget() {
-                override fun drop(dtde: DropTargetDropEvent) {
-                    dtde.acceptDrop(DnDConstants.ACTION_COPY)
-                    val droppedFiles = dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>
-
-                    if (droppedFiles.size == 1) {
-                        loadSpriteSheet(droppedFiles[0].absolutePath)
-                        setActions()
-                    }
-                }
-            }
-
-            addActionListener {
-                val fileChooser = JFileChooser(GlobalValues.currentPath)
-                fileChooser.addChoosableFileFilter(
-                    FileNameExtensionFilter("PNG (*.png)", "png").also { fileChooser.fileFilter = it }
-                )
-                fileChooser.addChoosableFileFilter(
-                    FileNameExtensionFilter("JPEG (*.jpg; *.jpeg)", "jpg", "jpeg")
-                )
-                val returnValue = fileChooser.showOpenDialog(owner)
-
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    loadSpriteSheet(fileChooser.selectedFile.absolutePath)
-                    setActions()
-
-                    GlobalValues.updateScripts("sprite.sheet", GlobalValues.optionsMap.getMap("sprite")!!.getOption<SpriteSheet>("sheet")!!)
-                }
-            }
-
-            gridBagLayout.setConstraints(this, GridBagConstraints().apply {
-                gridwidth = GridBagConstraints.REMAINDER
-            })
-        })
 
         // FPS slider
         framesPerSecondWidgets = GlobalValues.addComponentSliderSpinner<Int>(
