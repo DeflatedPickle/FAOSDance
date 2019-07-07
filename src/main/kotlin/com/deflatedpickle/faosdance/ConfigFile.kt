@@ -41,7 +41,7 @@ object ConfigFile {
         }
 
         if (GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet") != "") {
-            GlobalValues.sheet = SpriteSheet(GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet")!!)
+            // GlobalValues.sheet = SpriteSheet(GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet")!!)
         }
 
         GlobalValues.rootMap = GlobalValues.optionsMap

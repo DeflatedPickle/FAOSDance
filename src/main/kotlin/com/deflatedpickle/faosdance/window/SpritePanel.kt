@@ -25,7 +25,7 @@ class SpritePanel : JPanel() {
                 val droppedFiles = dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>
 
                 if (droppedFiles.size == 1) {
-                    SpriteCategory.loadSpriteSheet(droppedFiles[0].absolutePath)
+                    SpriteCategory.loadSpriteSheet(droppedFiles[0])
                 }
             }
         }

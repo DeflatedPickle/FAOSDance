@@ -15,14 +15,49 @@ import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetDropEvent
 import java.io.File
+import java.io.InputStream
+import java.util.zip.ZipFile
 import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
 
 class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
     ComponentPanel(JCheckBox(Lang.bundle.getString("settings.sprite"))) {
     companion object {
-        fun loadSpriteSheet(path: String) {
-            val tempSheet = SpriteSheet(path.substringBeforeLast("."))
+        fun loadSpriteSheet(file: File) {
+            var path = ""
+            var image: InputStream? = null
+            var text: InputStream? = null
+
+            when {
+                file.extension in arrayOf("png", "jpg", "jpeg") -> {
+                    path = file.absolutePath
+                    image = file.inputStream()
+                    text = File("${file.absolutePath.split(".").first()}.txt").inputStream()
+                }
+                file.extension == "zip" -> {
+                    path = file.absolutePath
+                    val zipFile = ZipFile(file)
+                    val entries = zipFile.entries()
+
+                    var name = ""
+
+                    for (i in entries) {
+                        if (name == "") {
+                            name = i.name.split(".").first()
+                        }
+
+                        if (image == null && i.name == "$name.png") {
+                            image = zipFile.getInputStream(i)
+                        }
+
+                        if (text == null && i.name == "$name.txt") {
+                            text = zipFile.getInputStream(i)
+                        }
+                    }
+                }
+            }
+
+            val tempSheet = SpriteSheet(image!!, text!!)
 
             if (tempSheet.loadedImage && tempSheet.loadedText) {
                 GlobalValues.configureSpriteSheet(tempSheet)
@@ -77,7 +112,7 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
                     val droppedFiles = dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>
 
                     if (droppedFiles.size == 1) {
-                        loadSpriteSheet(droppedFiles[0].absolutePath)
+                        loadSpriteSheet(droppedFiles[0])
                         settings.generalSettings.spriteCategory.animationCategory.setActions()
                     }
                 }
@@ -91,10 +126,13 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
                 fileChooser.addChoosableFileFilter(
                     FileNameExtensionFilter("JPEG (*.jpg; *.jpeg)", "jpg", "jpeg")
                 )
+                fileChooser.addChoosableFileFilter(
+                    FileNameExtensionFilter("ZIP (*.zip)", "zip")
+                )
                 val returnValue = fileChooser.showOpenDialog(owner)
 
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    loadSpriteSheet(fileChooser.selectedFile.absolutePath)
+                    loadSpriteSheet(fileChooser.selectedFile)
                     settings.generalSettings.spriteCategory.animationCategory.setActions()
 
                     GlobalValues.updateScripts("sprite.sheet", GlobalValues.optionsMap.getMap("sprite")!!.getOption<SpriteSheet>("sheet")!!)
