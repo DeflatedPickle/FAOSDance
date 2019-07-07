@@ -2,6 +2,7 @@ package com.deflatedpickle.faosdance
 
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
+import java.io.File
 import java.util.HashMap
 
 object ConfigFile {
@@ -41,7 +42,11 @@ object ConfigFile {
         }
 
         if (GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet") != "") {
-            // GlobalValues.sheet = SpriteSheet(GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet")!!)
+            GlobalValues.sheet = SpriteSheet(
+                File("${GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet")!!}.png").inputStream(),
+                File("${GlobalValues.optionsMap.getMap("sprite")!!.getOption<String>("sheet")!!}.txt").inputStream()
+            )
+            GlobalValues.configureSpriteSheet(GlobalValues.sheet!!)
         }
 
         GlobalValues.rootMap = GlobalValues.optionsMap
