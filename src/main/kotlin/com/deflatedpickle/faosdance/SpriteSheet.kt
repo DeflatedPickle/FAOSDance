@@ -55,19 +55,12 @@ class SpriteSheet(val image: InputStream, val text: InputStream, var spriteNumX:
             spriteWidth = sheet!!.width / spriteNumX
             spriteHeight = sheet!!.height / spriteNumY!!
 
-            var gridX = 0
-            var gridY = 0
-
-            for (anim in animations.lines()) {
+            for ((gridY, anim) in animations.lines().withIndex()) {
                 spriteMap[anim] = mutableListOf()
 
-                for (frame in 1..spriteNumX) {
+                for ((gridX, frame) in (1..spriteNumX).withIndex()) {
                     spriteMap[anim]!!.add(sheet!!.getSubimage(gridX * spriteWidth, gridY * spriteHeight, spriteWidth, spriteHeight))
-                    gridX++
                 }
-
-                gridX = 0
-                gridY++
             }
         }
     }
