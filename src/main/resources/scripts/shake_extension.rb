@@ -53,10 +53,12 @@ class ShakeExtension < DanceExtension
   def settings(panel)
     shake_amount_widgets = FAOSDanceSettings.createOptionInteger(panel, "Shake Amount:", @amount, 42, 1)
 
-    grid_settings = GridBagConstraints.new
-    grid_settings.fill = GridBagConstraints::HORIZONTAL
-    grid_settings.weightx = 1.0
-    grid_settings.gridwidth = 2
+    grid_settings = GridBagConstraints.new GridBagConstraints::RELATIVE, GridBagConstraints::RELATIVE,
+                                           2, 1,
+                                           1.0, 0.0,
+                                           GridBagConstraints::CENTER, GridBagConstraints::HORIZONTAL,
+                                           Insets.new(0, 0, 0, 0),
+                                           0, 0
     panel.getLayout.setConstraints shake_amount_widgets.second, grid_settings
 
     shake_amount_widgets.third.addChangeListener {|it|

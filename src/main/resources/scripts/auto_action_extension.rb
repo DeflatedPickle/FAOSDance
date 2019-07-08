@@ -1,3 +1,4 @@
+java_import "java.awt.Insets"
 java_import "javax.swing.JLabel"
 java_import "javax.swing.JComboBox"
 java_import "javax.swing.JProgressBar"
@@ -34,7 +35,13 @@ class AutoActionExtension < DanceExtension
   end
 
   def settings(panel)
-    panel.add JLabel.new "Selection Type:"
+    grid_settings = GridBagConstraints.new GridBagConstraints::RELATIVE, GridBagConstraints::RELATIVE,
+                                           1, 1,
+                                           0.0, 0.0,
+                                           GridBagConstraints::EAST, GridBagConstraints::NONE,
+                                           Insets.new(0, 0, 0, 0),
+                                           0, 0
+    panel.add JLabel.new("Selection Type:"), grid_settings
     combo_list = %w(Iterative Random)
     @selection_type_combobox = JComboBox.new combo_list.to_java
     @selection_type_combobox.addActionListener {|it|
@@ -45,10 +52,12 @@ class AutoActionExtension < DanceExtension
     if @enabled
       @selection_type_combobox.setSelectedItem GlobalValues.getOption("auto_action-selection_type")
     end
-    grid_settings = GridBagConstraints.new
-    grid_settings.fill = GridBagConstraints::HORIZONTAL
-    grid_settings.weightx = 1.0
-    grid_settings.gridwidth = GridBagConstraints::REMAINDER
+    grid_settings = GridBagConstraints.new GridBagConstraints::RELATIVE, GridBagConstraints::RELATIVE,
+                                           GridBagConstraints::REMAINDER, 1,
+                                           1.0, 0.0,
+                                           GridBagConstraints::CENTER, GridBagConstraints::HORIZONTAL,
+                                           Insets.new(0, 0, 0, 0),
+                                           0, 0
     panel.add @selection_type_combobox, grid_settings
 
     @wait_widgets = FAOSDanceSettings.createOptionInteger panel, "Wait:", @wait, 144, 0

@@ -3,6 +3,7 @@ package com.deflatedpickle.faosdance.window
 import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.RubyThread
 import com.deflatedpickle.faosdance.ScalingType
+import com.deflatedpickle.faosdance.settings.ExtensionSettings
 import com.deflatedpickle.faosdance.settings.general.SpriteCategory
 import java.awt.*
 import java.awt.datatransfer.DataFlavor
@@ -63,6 +64,7 @@ class SpritePanel : JPanel() {
 
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
+        println(ExtensionSettings.extensionList)
 
         if (GlobalValues.sheet == null) return
 

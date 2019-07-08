@@ -4,6 +4,7 @@ import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.ScalingType
 import com.deflatedpickle.faosdance.SpriteSheet
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
+import com.deflatedpickle.faosdance.settings.ExtensionSettings
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.FlowLayout
@@ -66,6 +67,12 @@ class SpriteCategory(owner: Frame, val settings: SettingsDialog) :
 
             for (i in GlobalValues.widgetList!!) {
                 i.isEnabled = true
+            }
+
+            for ((index, i) in GlobalValues.tabButtonList.withIndex()) {
+                if (index > 0 && index < ExtensionSettings.extensionList.size * 2 - 1) {
+                    i.isEnabled = true
+                }
             }
         }
     }

@@ -170,6 +170,7 @@ object GlobalValues {
     var settingsDialog: SettingsDialog? = null
 
     var widgetList: MutableList<JComponent>? = null
+    val tabButtonList = mutableListOf<JComponent>()
     val extensionPanelMap = mutableMapOf<String, JPanel>()
 
     fun initPositions() {
