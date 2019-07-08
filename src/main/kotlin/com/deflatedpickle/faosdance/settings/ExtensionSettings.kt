@@ -214,7 +214,7 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
                 }
             }
 
-            Collections.swap(extensionList, tabIndex, tabDestination)
+            Collections.swap(RubyThread.extensions, tabIndex, tabDestination)
         }
     }
 }

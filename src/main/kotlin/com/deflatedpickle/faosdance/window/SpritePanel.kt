@@ -64,7 +64,6 @@ class SpritePanel : JPanel() {
 
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
-        println(ExtensionSettings.extensionList)
 
         if (GlobalValues.sheet == null) return
 
@@ -105,7 +104,6 @@ class SpritePanel : JPanel() {
             )
         }
         // Scale the sprite
-        // println(GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!)
         g2D.scale(GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!, GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!)
 
         // Draw the sprite

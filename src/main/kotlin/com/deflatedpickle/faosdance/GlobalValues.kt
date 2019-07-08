@@ -110,8 +110,7 @@ object GlobalValues {
         for (i in items) {
             if (i == items.last()) {
                 return Tuple(rootMap, items.last())
-            }
-            else {
+            } else {
                 if (rootMap[i] is NestedHashMap<*, *>) {
                     rootMap = rootMap[i] as NestedHashMap<String, Any>
                     parseOption(items.subList(items.indexOf(i), items.size).joinToString("."))
@@ -207,13 +206,17 @@ object GlobalValues {
 
     fun resize(direction: Direction? = null) {
         if (sheet != null) {
-            val width =
-                ((((sheet!!.spriteWidth * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!) * 2) * 100) / 100).toInt()
-            val height =
-                ((((sheet!!.spriteHeight * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!) * if (optionsMap.getMap(
-                        "reflection"
-                    )!!.getOption<Boolean>("visible")!!
-                ) 2 else 1) * 100) / 100).toInt()
+            val width = ((((sheet!!.spriteWidth
+                    * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("width")!!)
+                    * 2)
+                    * 100)
+                    / 100).toInt()
+            val height = ((((sheet!!.spriteHeight
+                    * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!
+                    + GlobalValues.optionsMap.getMap("reflection")!!.getOption<Double>("padding")!!)
+                    * if (optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!) 2 else 1)
+                    * 100)
+                    / 100).toInt()
 
             frame!!.minimumSize = Dimension(abs(width), abs(height))
             frame!!.setSize(abs(width), abs(height))

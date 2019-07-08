@@ -1,5 +1,6 @@
 package com.deflatedpickle.faosdance.settings.general
 
+import com.deflatedpickle.faosdance.Direction
 import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import com.deflatedpickle.faosdance.settings.SettingsDialog
@@ -52,6 +53,7 @@ class ReflectionCategory(owner: Frame, val settings: SettingsDialog) :
             third.addChangeListener {
                 GlobalValues.optionsMap.getMap("reflection")!!.setOption("padding", (it.source as JSpinner).model.value as Double)
                 GlobalValues.updateScripts("reflection.padding", GlobalValues.optionsMap.getMap("reflection")!!.getOption<Double>("padding")!!)
+                GlobalValues.resize(Direction.VERTICAL)
             }
         }
         this.settings.widgets.add(paddingWidgets!!.first)
