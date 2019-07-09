@@ -9,8 +9,7 @@ import java.awt.*;
 public class ComponentPanel extends JPanel {
     protected ComponentBorder border;
     private JComponent component;
-    public JPanel panel;
-    public JXCollapsiblePane outerPanel;
+    public JXCollapsiblePane panel;
     private boolean transmittingAllowed;
 
     public ComponentPanel() {
@@ -21,14 +20,14 @@ public class ComponentPanel extends JPanel {
         this.component = component;
         border = new ComponentBorder(component);
         setBorder(border);
-        panel = new JPanel();
-        outerPanel = new JXCollapsiblePane(JXCollapsiblePane.Direction.DOWN);
-        outerPanel.setAnimated(false);
-        outerPanel.setCollapsed(true);
-        add(outerPanel);
         setLayout(null);
         add(component);
-        outerPanel.add(panel);
+
+        panel = new JXCollapsiblePane(JXCollapsiblePane.Direction.DOWN);
+        panel.setLayout(new GridBagLayout());
+        // panel.setCollapsed(true);
+
+        add(panel);
         transmittingAllowed = false;
     }
 

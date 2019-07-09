@@ -3,43 +3,42 @@ package com.deflatedpickle.faosdance.widgets
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import com.deflatedpickle.faosdance.util.Lang
 import org.jdesktop.swingx.JXCollapsiblePane
+import java.awt.Dimension
 import javax.swing.JButton
 import javax.swing.JCheckBox
 import javax.swing.JPanel
+import javax.swing.UIManager
 
 open class CollapsiblePanel(title: String) : ComponentPanel() {
     class Header(title: String, collapsiblePanel: CollapsiblePanel) : JPanel() {
-        class ToggledButton(toggledText: String, untoggledText: String, collapsiblePanel: CollapsiblePanel) :
+        class ToggledButton(collapsiblePanel: CollapsiblePanel) :
             JButton() {
             var isToggled = false
 
             init {
-                this.text = untoggledText
+                val buttonSize = 24
+                this.preferredSize = Dimension(buttonSize, buttonSize)
+                this.icon = UIManager.getIcon("Tree.collapsedIcon")
 
                 addActionListener {
-                    isToggled = !isToggled
-
-                    this.text = if (isToggled) {
-                        toggledText
+                    if (isToggled) {
+                        this.icon = UIManager.getIcon("Tree.collapsedIcon")
                     } else {
-                        untoggledText
+                        this.icon = UIManager.getIcon("Tree.expandedIcon")
                     }
 
-                    collapsiblePanel.outerPanel.isCollapsed = !collapsiblePanel.outerPanel.isCollapsed
+                    collapsiblePanel.panel.isCollapsed = !collapsiblePanel.panel.isCollapsed
+                    isToggled = !isToggled
                 }
             }
         }
 
         val checkbox = JCheckBox(title)
-        val button = ToggledButton(
-            Lang.bundle.getString("settings.collapse"),
-            Lang.bundle.getString("settings.expand"),
-            collapsiblePanel
-        )
+        val button = ToggledButton(collapsiblePanel)
 
         init {
-            this.add(checkbox)
             this.add(button)
+            this.add(checkbox)
         }
     }
 

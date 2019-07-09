@@ -4,6 +4,7 @@ import com.deflatedpickle.faosdance.GlobalValues
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
+import com.deflatedpickle.faosdance.widgets.CollapsiblePanel
 import java.awt.FlowLayout
 import java.awt.Frame
 import java.awt.GridBagConstraints
@@ -11,7 +12,7 @@ import java.awt.GridBagLayout
 import javax.swing.*
 
 class ReflectionCategory(owner: Frame, val settings: SettingsDialog) :
-    ComponentPanel(JCheckBox(Lang.bundle.getString("settings.reflection"))) {
+    CollapsiblePanel(Lang.bundle.getString("settings.reflection")) {
     private val gridBagLayout = GridBagLayout()
 
     val fadeCategory = FadeCategory(owner, settings)
@@ -22,7 +23,7 @@ class ReflectionCategory(owner: Frame, val settings: SettingsDialog) :
         this.layout = FlowLayout()
 
         this.panel.layout = gridBagLayout
-        (this.titleComponent as JCheckBox).apply {
+        (this.titleComponent as Header).checkbox.apply {
             isSelected = GlobalValues.optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!
             addActionListener {
                 GlobalValues.optionsMap.getMap("reflection")!!.setOption("visible", this.isSelected)
@@ -43,7 +44,7 @@ class ReflectionCategory(owner: Frame, val settings: SettingsDialog) :
 
         paddingWidgets = GlobalValues.addComponentSliderSpinner<Double>(
             this.panel,
-            this.panel.layout as GridBagLayout,
+            this.panel.contentPane.layout as GridBagLayout,
             JLabel("${Lang.bundle.getString("settings.reflection.padding")}:"),
             GlobalValues.optionsMap.getMap("reflection")!!.getOption<Double>("padding")!!,
             100.0,
