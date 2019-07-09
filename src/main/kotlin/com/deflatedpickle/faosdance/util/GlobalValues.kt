@@ -23,7 +23,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object GlobalValues {
-    const val version = "v0.33.8-alpha"
+    const val version = "v0.35.11-alpha"
 
     @JvmStatic
     val homePath = when {
