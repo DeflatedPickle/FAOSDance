@@ -4,6 +4,8 @@ import com.deflatedpickle.faosdance.autoupdate.UpdateDialog
 import com.deflatedpickle.faosdance.autoupdate.UpdateUtil
 import com.deflatedpickle.faosdance.settings.ExtensionSettings
 import com.deflatedpickle.faosdance.settings.SettingsDialog
+import com.deflatedpickle.faosdance.util.ConfigFile
+import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.window.ApplicationWindow
 import com.deflatedpickle.faosdance.window.ContextMenu
 import com.deflatedpickle.faosdance.window.SpritePanel

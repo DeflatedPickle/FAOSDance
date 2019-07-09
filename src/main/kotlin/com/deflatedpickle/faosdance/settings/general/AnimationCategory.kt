@@ -1,6 +1,6 @@
 package com.deflatedpickle.faosdance.settings.general
 
-import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.SpriteSheet
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
@@ -121,7 +121,8 @@ class AnimationCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     fun setActions() {
         if (GlobalValues.sheet != null) {
             actionCombobox!!.model = DefaultComboBoxModel<String>(GlobalValues.sheet!!.spriteMap.keys.toTypedArray())
-            actionCombobox!!.selectedIndex = GlobalValues.sheet!!.spriteMap.keys.indexOf(GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<String>("action")!!)
+            actionCombobox!!.selectedIndex = GlobalValues.sheet!!.spriteMap.keys.indexOf(
+                GlobalValues.optionsMap.getMap("sprite")!!.getMap("animation")!!.getOption<String>("action")!!)
 
             for (i in this.settings.widgets) {
                 i.isEnabled = true

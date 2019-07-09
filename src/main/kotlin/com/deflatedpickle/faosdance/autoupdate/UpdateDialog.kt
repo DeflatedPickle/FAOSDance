@@ -1,6 +1,6 @@
 package com.deflatedpickle.faosdance.autoupdate
 
-import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.*
 import java.awt.event.ComponentAdapter

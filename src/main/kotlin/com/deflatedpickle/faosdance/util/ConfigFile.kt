@@ -1,5 +1,7 @@
-package com.deflatedpickle.faosdance
+package com.deflatedpickle.faosdance.util
 
+import com.deflatedpickle.faosdance.NestedHashMap
+import com.deflatedpickle.faosdance.SpriteSheet
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
 import java.io.File
@@ -14,7 +16,10 @@ object ConfigFile {
 
     fun writeConfig() {
         val config = TomlWriter()
-        config.write(GlobalValues.optionsMap, GlobalValues.configFile)
+        config.write(
+            GlobalValues.optionsMap,
+            GlobalValues.configFile
+        )
     }
 
     fun loadAndUseConfig(): Boolean {

@@ -1,7 +1,7 @@
 package com.deflatedpickle.faosdance.settings.general
 
 import com.deflatedpickle.faosdance.Direction
-import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang

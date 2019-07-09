@@ -1,13 +1,11 @@
 package com.deflatedpickle.faosdance.settings.general
 
-import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Frame
-import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.*
-import kotlin.math.roundToInt
 
 class FadeCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     private val gridBagLayout = GridBagLayout()

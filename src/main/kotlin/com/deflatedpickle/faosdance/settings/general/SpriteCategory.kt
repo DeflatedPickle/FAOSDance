@@ -1,6 +1,6 @@
 package com.deflatedpickle.faosdance.settings.general
 
-import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.ScalingType
 import com.deflatedpickle.faosdance.SpriteSheet
 import com.deflatedpickle.faosdance.component_border.ComponentPanel

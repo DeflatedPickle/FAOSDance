@@ -1,6 +1,6 @@
 package com.deflatedpickle.faosdance.autoupdate
 
-import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.util.GlobalValues
 import org.apache.commons.io.FileUtils
 import org.json.JSONArray
 import org.json.JSONObject

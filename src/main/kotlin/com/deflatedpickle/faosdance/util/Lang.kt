@@ -1,6 +1,5 @@
 package com.deflatedpickle.faosdance.util
 
-import com.deflatedpickle.faosdance.GlobalValues
 import java.util.*
 
 object Lang {

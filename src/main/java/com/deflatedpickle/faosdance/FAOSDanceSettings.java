@@ -1,6 +1,7 @@
 package com.deflatedpickle.faosdance;
 
 import com.deflatedpickle.faosdance.component_border.ComponentPanel;
+import com.deflatedpickle.faosdance.util.GlobalValues;
 import com.jidesoft.swing.RangeSlider;
 import kotlin.Pair;
 import kotlin.Triple;

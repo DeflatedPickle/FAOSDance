@@ -1,6 +1,6 @@
 require "java"
 
-java_import "com.deflatedpickle.faosdance.GlobalValues"
+java_import "com.deflatedpickle.faosdance.util.GlobalValues"
 java_import "com.deflatedpickle.faosdance.FAOSDance"
 java_import "com.deflatedpickle.faosdance.FAOSDanceSettings"
 

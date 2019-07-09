@@ -1,6 +1,6 @@
 package com.deflatedpickle.faosdance.window
 
-import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.event.WindowEvent

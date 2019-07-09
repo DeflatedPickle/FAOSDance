@@ -1,5 +1,6 @@
-package com.deflatedpickle.faosdance
+package com.deflatedpickle.faosdance.util
 
+import com.deflatedpickle.faosdance.*
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.jidesoft.swing.RangeSlider
 import org.apache.commons.lang3.SystemUtils
@@ -49,7 +50,10 @@ object GlobalValues {
         homePath?.mkdir()
 
         // It's a loop in case I decide to add more user folders, or move the lang folder out of the program
-        for (i in listOf(scriptsFolder, configFolder)) {
+        for (i in listOf(
+            scriptsFolder,
+            configFolder
+        )) {
             if (!i.isDirectory) {
                 i.mkdir()
             }
@@ -113,7 +117,12 @@ object GlobalValues {
             } else {
                 if (rootMap[i] is NestedHashMap<*, *>) {
                     rootMap = rootMap[i] as NestedHashMap<String, Any>
-                    parseOption(items.subList(items.indexOf(i), items.size).joinToString("."))
+                    parseOption(
+                        items.subList(
+                            items.indexOf(i),
+                            items.size
+                        ).joinToString(".")
+                    )
                 }
             }
         }
@@ -123,14 +132,16 @@ object GlobalValues {
 
     @JvmStatic
     fun getOption(option: String): Any? {
-        rootMap = optionsMap
+        rootMap =
+            optionsMap
         val parse = parseOption(option)
         return parse.a!![parse.b!!]
     }
 
     @JvmStatic
     fun setOption(option: String, value: Any) {
-        rootMap = optionsMap
+        rootMap =
+            optionsMap
         val parse = parseOption(option)
         parse.a!![parse.b!!] = value
     }
@@ -173,13 +184,18 @@ object GlobalValues {
     val extensionPanelMap = mutableMapOf<String, JPanel>()
 
     fun initPositions() {
-        effectiveSize = getEffectiveScreenSize(frame!!)
+        effectiveSize =
+            getEffectiveScreenSize(frame!!)
         optionsMap.getMap("window")!!.getMap("location")!!["x"] = effectiveSize!!.width / 2
         optionsMap.getMap("window")!!.getMap("location")!!["y"] = effectiveSize!!.height / 2
     }
 
     fun <E : Enum<E>> enumToReadableNames(enum: Class<E>): Array<String> {
-        return enum.enumConstants.map { enumItem -> sanatizeEnumValue(enumItem.name) }.toTypedArray()
+        return enum.enumConstants.map { enumItem ->
+            sanatizeEnumValue(
+                enumItem.name
+            )
+        }.toTypedArray()
     }
 
     fun sanatizeEnumValue(enumItem: String): String {
@@ -213,7 +229,7 @@ object GlobalValues {
                     / 100).toInt()
             val height = ((((sheet!!.spriteHeight
                     * optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("height")!!
-                    + GlobalValues.optionsMap.getMap("reflection")!!.getOption<Double>("padding")!!)
+                    + optionsMap.getMap("reflection")!!.getOption<Double>("padding")!!)
                     * if (optionsMap.getMap("reflection")!!.getOption<Boolean>("visible")!!) 2 else 1)
                     * 100)
                     / 100).toInt()
@@ -239,13 +255,14 @@ object GlobalValues {
                 }
             }
 
-            effectiveSize = getEffectiveScreenSize(frame!!)
+            effectiveSize =
+                getEffectiveScreenSize(frame!!)
         }
     }
 
     fun configureSpriteSheet(sheet: SpriteSheet) {
-        this.sheet = sheet
-        optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("action", this.sheet!!.spriteMap.keys.first())
+        GlobalValues.sheet = sheet
+        optionsMap.getMap("sprite")!!.getMap("animation")!!.setOption("action", GlobalValues.sheet!!.spriteMap.keys.first())
         resize()
     }
 
@@ -297,7 +314,14 @@ object GlobalValues {
         maxNumber: Int,
         minNumber: Int
     ): Triple<JButton, JSlider, JSpinner> {
-        return addComponentSliderSpinner<Int>(parent, gridBagLayout, JLabel(name), defaultValue, maxNumber, minNumber)
+        return addComponentSliderSpinner<Int>(
+            parent,
+            gridBagLayout,
+            JLabel(name),
+            defaultValue,
+            maxNumber,
+            minNumber
+        )
     }
 
     inline fun <reified T : Number> addComponentSliderSpinner(

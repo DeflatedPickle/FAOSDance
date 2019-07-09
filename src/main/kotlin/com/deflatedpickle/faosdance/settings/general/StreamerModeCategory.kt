@@ -2,15 +2,11 @@ package com.deflatedpickle.faosdance.settings.general
 
 import com.bric.colorpicker.ColorPicker
 import com.bric.colorpicker.ColorPickerMode
-import com.bric.colorpicker.ColorPickerPanel
-import com.bric.colorpicker.parts.ColorSwatch
-import com.bric.colorpicker.parts.HexField
-import com.deflatedpickle.faosdance.GlobalValues
+import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import com.deflatedpickle.faosdance.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.*
-import java.awt.image.ColorModel
 import javax.swing.*
 
 class StreamerModeCategory(owner: Frame, val settings: SettingsDialog) :

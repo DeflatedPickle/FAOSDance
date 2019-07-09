@@ -1,10 +1,10 @@
 package com.deflatedpickle.faosdance
 
+import com.deflatedpickle.faosdance.util.GlobalValues
 import org.jruby.Ruby
 import org.jruby.RubyObject
 import org.jruby.embed.IsolatedScriptingContainer
 import org.jruby.embed.LocalVariableBehavior
-import org.jruby.embed.ScriptingContainer
 
 class RubyThread : Runnable {
     companion object {

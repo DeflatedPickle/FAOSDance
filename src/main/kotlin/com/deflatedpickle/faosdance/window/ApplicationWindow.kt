@@ -1,19 +1,15 @@
 package com.deflatedpickle.faosdance.window
 
 import com.deflatedpickle.faosdance.Direction
-import com.deflatedpickle.faosdance.GlobalValues
-import com.deflatedpickle.faosdance.SpriteSheet
+import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Color
 import java.awt.Point
-import java.awt.Window
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.JFrame
-import javax.swing.SwingUtilities
-import javax.swing.UIManager
 
 class ApplicationWindow : JFrame(Lang.bundle.getString("window.title")) {
     var ctrlHeld = false

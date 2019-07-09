@@ -2,6 +2,8 @@ package com.deflatedpickle.faosdance.settings
 
 import com.deflatedpickle.faosdance.*
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
+import com.deflatedpickle.faosdance.util.GlobalValues
+import com.deflatedpickle.faosdance.util.Icons
 import com.deflatedpickle.faosdance.util.Lang
 import org.jruby.RubyObject
 import org.jruby.RubyString
