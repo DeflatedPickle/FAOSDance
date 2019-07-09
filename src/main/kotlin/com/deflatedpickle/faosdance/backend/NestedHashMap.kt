@@ -1,4 +1,4 @@
-package com.deflatedpickle.faosdance
+package com.deflatedpickle.faosdance.backend
 
 class NestedHashMap<K, V> : HashMap<K, V>() {
     fun getMap(key: K): NestedHashMap<K, V>? {

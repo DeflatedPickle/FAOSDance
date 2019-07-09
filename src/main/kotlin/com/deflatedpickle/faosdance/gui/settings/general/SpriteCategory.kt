@@ -1,11 +1,11 @@
-package com.deflatedpickle.faosdance.settings.general
+package com.deflatedpickle.faosdance.gui.settings.general
 
 import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.ScalingType
-import com.deflatedpickle.faosdance.SpriteSheet
+import com.deflatedpickle.faosdance.backend.SpriteSheet
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
-import com.deflatedpickle.faosdance.settings.ExtensionSettings
-import com.deflatedpickle.faosdance.settings.SettingsDialog
+import com.deflatedpickle.faosdance.gui.settings.ExtensionSettings
+import com.deflatedpickle.faosdance.gui.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.FlowLayout
 import java.awt.Frame

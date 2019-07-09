@@ -1,6 +1,7 @@
-package com.deflatedpickle.faosdance.settings
+package com.deflatedpickle.faosdance.gui.settings
 
-import com.deflatedpickle.faosdance.*
+import com.deflatedpickle.faosdance.backend.RubyThread
+import com.deflatedpickle.faosdance.backend.SpriteSheet
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
 import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.util.Icons

@@ -1,7 +1,11 @@
 package com.deflatedpickle.faosdance.util
 
 import com.deflatedpickle.faosdance.*
-import com.deflatedpickle.faosdance.settings.SettingsDialog
+import com.deflatedpickle.faosdance.backend.Direction
+import com.deflatedpickle.faosdance.backend.NestedHashMap
+import com.deflatedpickle.faosdance.backend.RubyThread
+import com.deflatedpickle.faosdance.backend.SpriteSheet
+import com.deflatedpickle.faosdance.gui.settings.SettingsDialog
 import com.jidesoft.swing.RangeSlider
 import org.apache.commons.lang3.SystemUtils
 import org.jruby.RubyBoolean

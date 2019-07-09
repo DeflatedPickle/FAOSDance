@@ -1,8 +1,8 @@
-package com.deflatedpickle.faosdance.settings
+package com.deflatedpickle.faosdance.gui.settings
 
 import com.deflatedpickle.faosdance.util.ConfigFile
 import com.deflatedpickle.faosdance.util.GlobalValues
-import com.deflatedpickle.faosdance.settings.general.GeneralSettings
+import com.deflatedpickle.faosdance.gui.settings.general.GeneralSettings
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Dimension
 import java.awt.Frame

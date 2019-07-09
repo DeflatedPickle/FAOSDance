@@ -1,6 +1,6 @@
-package com.deflatedpickle.faosdance.settings.general
+package com.deflatedpickle.faosdance.gui.settings.general
 
-import com.deflatedpickle.faosdance.settings.SettingsDialog
+import com.deflatedpickle.faosdance.gui.settings.SettingsDialog
 import java.awt.Frame
 import javax.swing.BoxLayout
 import javax.swing.JPanel

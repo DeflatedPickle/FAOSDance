@@ -1,7 +1,7 @@
-package com.deflatedpickle.faosdance.settings.general
+package com.deflatedpickle.faosdance.gui.settings.general
 
 import com.deflatedpickle.faosdance.util.GlobalValues
-import com.deflatedpickle.faosdance.settings.SettingsDialog
+import com.deflatedpickle.faosdance.gui.settings.SettingsDialog
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Frame
 import java.awt.GridBagLayout

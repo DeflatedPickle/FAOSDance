@@ -1,4 +1,4 @@
-package com.deflatedpickle.faosdance
+package com.deflatedpickle.faosdance.backend
 
 import com.deflatedpickle.faosdance.util.GlobalValues
 import org.jruby.Ruby

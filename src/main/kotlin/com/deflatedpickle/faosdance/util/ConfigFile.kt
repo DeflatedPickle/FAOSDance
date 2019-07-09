@@ -1,7 +1,7 @@
 package com.deflatedpickle.faosdance.util
 
-import com.deflatedpickle.faosdance.NestedHashMap
-import com.deflatedpickle.faosdance.SpriteSheet
+import com.deflatedpickle.faosdance.backend.NestedHashMap
+import com.deflatedpickle.faosdance.backend.SpriteSheet
 import com.moandjiezana.toml.Toml
 import com.moandjiezana.toml.TomlWriter
 import java.io.File

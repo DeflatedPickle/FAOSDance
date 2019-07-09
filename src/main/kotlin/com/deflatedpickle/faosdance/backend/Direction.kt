@@ -1,4 +1,4 @@
-package com.deflatedpickle.faosdance
+package com.deflatedpickle.faosdance.backend
 
 enum class Direction {
     HORIZONTAL,

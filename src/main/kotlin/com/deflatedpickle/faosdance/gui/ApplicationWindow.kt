@@ -1,6 +1,6 @@
-package com.deflatedpickle.faosdance.window
+package com.deflatedpickle.faosdance.gui
 
-import com.deflatedpickle.faosdance.Direction
+import com.deflatedpickle.faosdance.backend.Direction
 import com.deflatedpickle.faosdance.util.GlobalValues
 import com.deflatedpickle.faosdance.util.Lang
 import java.awt.Color
