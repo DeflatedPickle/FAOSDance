@@ -1,10 +1,8 @@
 package com.deflatedpickle.faosdance.settings
 
-import com.deflatedpickle.faosdance.GlobalValues
-import com.deflatedpickle.faosdance.Icons
-import com.deflatedpickle.faosdance.RubyThread
-import com.deflatedpickle.faosdance.SpriteSheet
+import com.deflatedpickle.faosdance.*
 import com.deflatedpickle.faosdance.component_border.ComponentPanel
+import com.deflatedpickle.faosdance.util.Lang
 import org.jruby.RubyObject
 import org.jruby.RubyString
 import java.awt.*
@@ -13,6 +11,18 @@ import javax.swing.*
 
 class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
     val extensionTabbedPane = JTabbedPane(JTabbedPane.LEFT)
+
+    val reloadExtensionButton = JButton(Lang.bundle.getString("settings.extensions.reload_all")).apply {
+        addActionListener {
+            GlobalValues.loadScripts()
+            JOptionPane.showMessageDialog(
+                GlobalValues.frame,
+                Lang.bundle.getString("settings.extensions.reload_all.message"),
+                GlobalValues.frame!!.title,
+                JOptionPane.INFORMATION_MESSAGE
+            )
+        }
+    }
 
     companion object {
         val extensionList = mutableListOf<RubyObject>()
@@ -146,6 +156,9 @@ class ExtensionSettings(owner: Frame, val settings: SettingsDialog) : JPanel() {
         }
 
         this.add(extensionTabbedPane)
+
+        this.settings.widgets.add(reloadExtensionButton)
+        this.add(reloadExtensionButton)
     }
 
     class MovementPanel(val tabbedPanel: JTabbedPane, panel: JPanel) : JPanel() {
