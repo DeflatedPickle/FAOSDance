@@ -13,12 +13,30 @@ import kotlin.math.roundToInt
 class ScaleCategory(owner: Frame, val settings: SettingsDialog) : JPanel() {
     private val gridBagLayout = GridBagLayout()
 
+    var bothScaleWidgets: Triple<JComponent, JSlider, JSpinner>? = null
     var xScaleWidgets: Triple<JComponent, JSlider, JSpinner>? = null
     var yScaleWidgets: Triple<JComponent, JSlider, JSpinner>? = null
 
     init {
         this.layout = gridBagLayout
         this.border = BorderFactory.createTitledBorder(Lang.bundle.getString("settings.size"))
+
+        bothScaleWidgets = GlobalValues.addComponentSliderSpinner<Double>(
+            this,
+            this.layout as GridBagLayout,
+            JLabel("${Lang.bundle.getString("settings.size.both")}:"),
+            GlobalValues.optionsMap.getMap("sprite")!!.getMap("size")!!.getOption<Double>("both")!!,
+            GlobalValues.maxSize,
+            -GlobalValues.maxSize
+        ).apply {
+            third.addChangeListener {
+                xScaleWidgets!!.third.value = third.value
+                yScaleWidgets!!.third.value = third.value
+            }
+        }
+        this.settings.widgets.add(bothScaleWidgets!!.first)
+        this.settings.widgets.add(bothScaleWidgets!!.second)
+        this.settings.widgets.add(bothScaleWidgets!!.third)
 
         xScaleWidgets = GlobalValues.addComponentSliderSpinner<Double>(
             this,
